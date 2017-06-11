@@ -1,0 +1,20 @@
+{
+  "name": "mikeshellard",
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "resources/assets/bower",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "^3.3.6",
+    "trumbowyg": "^2.1.0",
+    "summernote": "develop"
+  }
+}

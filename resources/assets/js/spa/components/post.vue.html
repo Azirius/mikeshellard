@@ -1,0 +1,17 @@
+<div>
+    <div class="jumbotron">
+        <div class="container">
+            <h1 v-html="post.title"></h1>
+        </div>
+    </div>
+    <div class="container">
+        <div class="blog-container">
+            <p class="blog-post-meta">
+                <i class="fa fa-user"></i>
+                <span v-if="post.user"><a href="/profile/{{ post.user.slug }}" v-text="post.user.name"></a></span>
+                <i class="fa fa-calendar"></i><span v-text="post.nice_created_at"></span>
+            </p>
+            <article class="blog-post clearfix" v-html="post.body"></article>
+        </div>
+    </div>
+</div>

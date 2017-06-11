@@ -1,0 +1,11 @@
+{
+    "name": "reflex/query-filters",
+    "description": "Add query filters to Eloquent Models, copied from https://github.com/laracasts/Dedicated-Query-String-Filtering",
+    "autoload": {
+        "psr-4":    {
+            "Reflex\\QueryFiltering\\": "src/"
+        }
+    },
+    "minimum-stability": "dev",
+    "licence": "MIT"
+}

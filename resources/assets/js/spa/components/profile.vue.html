@@ -1,0 +1,25 @@
+<div>
+    <div class="jumbotron">
+        <div class="container">
+            <h1><span v-if="user.gravatar">{{{ user.gravatar.medium }}}</span> {{ user.name }}</h1>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="alert alert-info" v-if="posts.length == 0 && loading_posts == false">
+                There are no posts
+            </div>
+            <div class="blog-container" v-for="post in posts" transition="fade">
+                <h2 class="blog-post-title">
+                    <a href="/article/{{ post.slug }}" v-html="post.title"></a>
+                </h2>
+                <p class="blog-post-meta">
+                    <i class="fa fa-user"></i> <a href="/profile/{{ post.user.slug }}" v-text="post.user.name"></a>
+                    <i class="fa fa-calendar"></i> <span v-text="post.nice_created_at"></span>
+                </p>
+                <article class="blog-post clearfix" v-html="post.body"></article>
+                <hr v-if="$index + 1 < posts.length" />
+            </div>
+        </div>
+    </div>
+</div>
