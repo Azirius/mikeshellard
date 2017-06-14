@@ -24,13 +24,14 @@
     </script>
 
     <style>
-        /*.jumbotron {
+        .jumbotron {
             font-family: 'Poiret One';
         }
 
         body {
             font-family: 'Muli';
-        }*/
+            margin-bottom: 50px;
+        }
 
         .fa-btn {
             margin-right: 6px;

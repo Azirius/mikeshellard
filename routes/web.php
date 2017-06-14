@@ -6,7 +6,11 @@ Route::resource('article', 'ArticleController', ['only' => ['index', 'show']]);
 Route::resource('reviews', 'ReviewController', ['only' => ['index', 'show']]);
 Route::get('profile/{user}', 'ProfileController@show');
 
+Route::post('comment/{comment}/feature', 'CommentController@feature');
+
 Route::group(['middleware' => 'auth'], function () {
+    Route::post('article/{article}/comments', 'CommentController@store');
+    
     Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
         Route::resource('article', 'ArticleController');
     });

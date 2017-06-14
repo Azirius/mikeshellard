@@ -14,9 +14,9 @@ class Article extends Model
         'title', 'slug', 'body', 'user_id', 'score'
     ];
 
-    protected $with = ['user'];
+    protected $with = ['user', 'comments'];
 
-    protected $appends = ['nice_created_at', 'nice_updated_at', 'body_trimmed'];
+    protected $appends = ['nice_created_at', 'nice_updated_at', 'body_trimmed', 'featured_comment'];
 
     public static function boot()
     {
@@ -25,6 +25,16 @@ class Article extends Model
         static::saving(function ($article) {
             $article->slug = str_slug($article->title);
         });
+    }
+
+    public function featuredComment()
+    {
+        return $this->comments()->whereFeatured(true)->first();
+    }
+
+    public function getFeaturedCommentAttribute()
+    {
+        return $this->featuredComment();
     }
 
     /**
@@ -40,6 +50,11 @@ class Article extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
     }
 
     // public function getScoreAttribute()

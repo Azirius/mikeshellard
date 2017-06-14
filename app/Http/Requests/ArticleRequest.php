@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Article;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Http\FormRequest;
 
 class ArticleRequest extends FormRequest
@@ -30,7 +31,8 @@ class ArticleRequest extends FormRequest
             'score' => 'nullable|numeric|digits_between:0,10',
         ];
 
-        $article = $this->route()->getParameter('article');
+        $article = $this->route()->parameter('article');
+
         if ($article && $article->exists()) {
             $rules['title'] = 'required|unique:articles,title,' . $article->id;
         }
@@ -41,10 +43,10 @@ class ArticleRequest extends FormRequest
     public function persist(Article $article = null)
     {
         if ($article && $article->exists()) {
-            $article->update($request->all());
+            $article->update($this->all());
             return $article;
         }
 
-        return Auth::user()->articles()->create($request->all());
+        return Auth::user()->articles()->create($this->all());
     }
 }

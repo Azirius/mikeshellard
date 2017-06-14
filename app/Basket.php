@@ -13,13 +13,19 @@ class Basket extends Model
     protected $fillable = ['user_id'];
 
     /**
+     * Always eager load these
+     * @var array
+     */
+    protected $with = ['items'];
+
+    /**
      * Create a basket for the user
      * @param  integer $user_id User ID to create instance
      * @return Basket
      */
     public static function forUser($user_id)
     {
-        return self::firstOrCreate(['user_id' => $user_id]);
+        return self::firstOrCreate(compact('user_id'));
     }
 
     /**
@@ -111,6 +117,6 @@ class Basket extends Model
      */
     public function items()
     {
-        return $this->belongsToMany(Item::class)->withPivot('quantity');
+        return $this->belongsToMany(Item::class)->withPivot('quantity', 'id');
     }
 }

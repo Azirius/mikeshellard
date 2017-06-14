@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Http\Requests;
-use App\Article;
-use App\User;
 use Auth;
+use App\User;
+use App\Article;
+use App\Http\Requests;
+use Illuminate\Http\Request;
+use App\Http\Requests\ArticleRequest;
 
 class ArticleController extends Controller
 {
@@ -18,7 +19,10 @@ class ArticleController extends Controller
 
     public function show(Article $article)
     {
-        return view('article.view', compact('article'));
+        $comments = $article->comments;
+        $featuredComment = $article->featuredComment();
+
+        return view('article.view', compact('article', 'comments', 'featuredComment'));
     }
 
     public function create()
@@ -26,18 +30,12 @@ class ArticleController extends Controller
         return view('article.create');
     }
 
-    public function store(Request $request)
+    public function store(ArticleRequest $request)
     {
-        $this->validate($request, [
-            'title' => 'required|unique:articles',
-            'body'  => 'required|not_empty',
-            'score' => 'nullable|numeric|digits_between:0,10',
-        ]);
-
-        $article = Auth::user()->articles()->create($request->all());
+        $article = $request->persist();
 
         return redirect(route('admin.article.edit', $article))
-            ->with('status', 'Article Added!');
+            ->with('status', 'Your new article has been created!');
     }
 
     public function destroy(Article $article)
@@ -45,7 +43,7 @@ class ArticleController extends Controller
         $article->delete();
 
         return redirect(route('admin.article.index'))
-            ->with('status', 'Article destroyed!');
+            ->with('status', 'The article has been wiped from the system!');
     }
 
     public function edit(Article $article)
@@ -53,17 +51,9 @@ class ArticleController extends Controller
         return view('article.edit', compact('article'));
     }
 
-    public function update(Request $request, Article $article)
+    public function update(ArticleRequest $request, Article $article)
     {
-        $this->validate($request, [
-            'title' => 'required|unique:articles,title,' . $article->id,
-            'body'  => 'required|not_empty',
-            'score' => 'nullable|numeric|digits_between:0,10',
-        ]);
-
-        $article->update($request->all());
-
-        return redirect(route('admin.article.edit', $article))
-            ->with('status', 'Article updated');
+        return redirect(route('admin.article.edit', $request->persist($article)))
+            ->with('status', 'Article has been successfully updated!');
     }
 }

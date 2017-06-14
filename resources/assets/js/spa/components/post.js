@@ -9,7 +9,10 @@ export default {
                 name: 'post',
                 title: 'Post'
             },
-            post: {}
+            post: {},
+            comments: {},
+            featured_comment: null,
+            comment: ''
         };
     },
 
@@ -26,6 +29,19 @@ export default {
 
         setPostData(response) {
             this.post = response.data;
+            this.comments = this.post.comments;
+            this.featured_comment = this.post.featured_comment;
+        },
+
+        addComment(response) {
+            this.comments.push(response.data);
+
+            this.body = '';
+        },
+
+        addComment() {
+            this.$http.post('/article/' + this.post.slug + '/comments', {body: this.comment})
+                .then(this.addComment);
         },
 
         fetchPost(slug) {

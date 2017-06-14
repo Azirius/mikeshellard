@@ -40,6 +40,17 @@ $factory->define(App\Article::class, function (Faker\Generator $faker) {
     ];
 });
 
+$factory->define(App\Comment::class, function (Faker\Generator $faker) {
+    $user = App\User::first() ?: factory(App\User::class)->create();
+    $article = App\Article::first() ?: factory(App\Article::class)->create();
+
+    return [
+        'body' => $faker->paragraph,
+        'user_id' => $user->id,
+        'article_id' => $article->id,
+    ];
+});
+
 $factory->define(App\Item::class, function (Faker\Generator $faker) {
     return [
         'price' => 1000,
