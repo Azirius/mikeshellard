@@ -94,7 +94,7 @@
            :class="[alert ? ('alert-' + alert) : '']"
       ></div>
     </div>
-
+    
     <component :is="view"
              v-ref:spa
              :on-load="onChildLoad"

@@ -15,7 +15,7 @@ $factory->state(App\User::class, 'myself', function (Faker\Generator $faker) {
     return [
         'name' => 'Mike',
         'email' => 'contact@mikeshellard.me',
-        'remember_token' => str_random(10),
+        'api_token' => str_random(60),
     ];
 });
 
@@ -24,7 +24,7 @@ $factory->define(App\User::class, function (Faker\Generator $faker) {
         'name' => $faker->name,
         'email' => $faker->unique()->safeEmail,
         // 'password' => bcrypt(str_random(10)),
-        'remember_token' => str_random(10),
+        'api_token' => str_random(60),
     ];
 });
 
