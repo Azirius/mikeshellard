@@ -39,13 +39,14 @@ export default {
                 score: this.score
             };
 
-            this.$http.put(`/api/v1/article/${this.slug}?api_token=${mikeshellard.api_token}`, request)
+            axios.put(`/api/v1/article/${this.slug}`, request)
                 .then(this.handle, this.handle)
                 .catch(() => null);
         },
 
         handle(response) {
-            if (response.ok) {
+            console.log(response);
+            if ('OK' === response.statusText) {
                 extend(this.article, response.data.article);
                 this.$dispatch('article:updated');
                 this.close();

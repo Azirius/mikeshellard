@@ -23,13 +23,13 @@ export default {
 
         deletePost() {
             this.$dispatch('article:deleted', this.article);
-            this.$http.delete(`/api/v1/article/${this.slug}?api_token=${mikeshellard.api_token}`)
+            axios.delete(`/api/v1/article/${this.slug}`)
                 .then(this.handle, this.handle)
                 .catch(() => null);
         },
 
         handle(response) {
-            if (response.ok) {
+            if ('OK' === response.statusText) {
                 this.close();
             } else {
                 this.errors = response.data;   

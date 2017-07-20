@@ -21,7 +21,7 @@ var articles = new Vue({
 
     methods: {
         getArticles() {
-            this.$http.get('/api/v1/article')
+            axios.get('/api/v1/article')
                 .then(this.setArticles);
         },
 

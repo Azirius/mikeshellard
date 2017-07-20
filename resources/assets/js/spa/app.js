@@ -97,7 +97,7 @@ export default {
          * @return {Vue}
          */
         error(notification) {
-            return this.makeAlert('error', notification || 'Sorry, something went wrong!');
+            return this.makeAlert('danger', notification || 'Sorry, something went wrong!');
         },
 
         /**

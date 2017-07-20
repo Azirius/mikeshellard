@@ -1,6 +1,7 @@
 import PostTemplate from './post.vue.html';
+import Page from './Page.js';
 
-export default {
+export default Page.extend({
     props: ['on-load'],
 
     data() {
@@ -33,20 +34,20 @@ export default {
             this.featured_comment = this.post.featured_comment;
         },
 
-        addComment(response) {
+        pushComment(response) {
             this.comments.push(response.data);
 
-            this.body = '';
+            this.comment = '';
         },
 
         addComment() {
-            this.$http.post('/article/' + this.post.slug + '/comments', {body: this.comment})
-                .then(this.addComment);
+            axios.post('/api/v1/article/' + this.post.slug + '/comments', {body: this.comment})
+                .then(this.pushComment, response => this.$root.error(response.error));
         },
 
         fetchPost(slug) {
-            this.$http.get('/api/v1/article/' + slug)
+            axios.get('/api/v1/article/' + slug)
                 .then(this.setPostData, response => this.$root.error(response.error));
         }
     }
-}
+});

@@ -36,13 +36,13 @@ export default {
                 score: this.score
             };
 
-            this.$http.post(`/api/v1/article?api_token=${mikeshellard.api_token}`, request)
+            axios.post(`/api/v1/article`, request)
                 .then(this.handle, this.handle)
                 .catch(() => null);
         },
 
         handle(response) {
-            if (response.ok) {
+            if ('OK' === response.statusText) {
                 this.$dispatch('article:created', response.data);
                 this.close();
             } else {

@@ -4,7 +4,6 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>My Site</title>
 
@@ -19,7 +18,8 @@
     <script>
         window.mikeshellard = {
             user: {!! collect(auth()->user())->only('name', 'id', 'email')->toJson() !!},
-            api_token: '{!! collect(auth()->user())->get('api_token') !!}'
+            api_token: '{!! collect(auth()->user())->get('api_token') !!}',
+            csrf_token: '{{ csrf_token() }}'
         };
     </script>
 
@@ -88,7 +88,7 @@
     <div id="non-spa">
     @yield('content')
     </div>
-    
+
     <div id="notify-message" v-if="!!alert" :transition="fade">
       <div class="alert"
            v-text="notification"

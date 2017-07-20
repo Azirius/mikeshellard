@@ -14,8 +14,6 @@ class CanCommentOnArticles extends TestCase
     public function setUp()
     {
         parent::setUp();
-
-        $this->disableExceptionHandling();
     }
 
     /** @test */
@@ -24,7 +22,7 @@ class CanCommentOnArticles extends TestCase
         $this->signIn();
         factory(Article::class)->create(['title' => 'Example Title']);
 
-        $response = $this->post('/article/example-title/comments', [
+        $response = $this->post('/api/v1/article/example-title/comments', [
             'body' => 'Some body has commented here!',
         ]);
 
@@ -39,7 +37,7 @@ class CanCommentOnArticles extends TestCase
     {
         factory(Article::class)->create(['title' => 'Example Title']);
 
-        $response = $this->post('/article/example-title/comments', [
+        $response = $this->post('/api/v1/article/example-title/comments', [
             'body' => 'Some body has commented here!',
         ]);
 
@@ -54,7 +52,7 @@ class CanCommentOnArticles extends TestCase
         factory(Article::class)->create(['title' => 'Example Title']);
         factory(Article::class)->create(['title' => 'The one without comments']);
 
-        $this->post('/article/example-title/comments', [
+        $this->post('/api/v1/article/example-title/comments', [
             'body' => 'Some body has commented here!',
         ]);
 
@@ -68,11 +66,11 @@ class CanCommentOnArticles extends TestCase
     {
         $this->signIn();
         factory(Article::class)->create(['title' => 'Example Title']);
-        $this->post('/article/example-title/comments', [
+        $this->post('/api/v1/article/example-title/comments', [
             'body' => 'Some body has commented here!',
         ]);
 
-        $response = $this->post('/comment/1/feature');
+        $response = $this->post('/api/v1/comment/1/feature');
 
         $response->assertRedirect('/article/example-title');
 
