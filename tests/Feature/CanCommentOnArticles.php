@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\User;
 use App\Article;
 use App\Comment;
 use Tests\TestCase;
@@ -11,18 +12,13 @@ class CanCommentOnArticles extends TestCase
 {
     use DatabaseMigrations;
 
-    public function setUp()
-    {
-        parent::setUp();
-    }
-
     /** @test */
     function can_comment_while_authenticated()
     {
-        $this->signIn();
+        $user = factory(User::class)->create();
         factory(Article::class)->create(['title' => 'Example Title']);
 
-        $response = $this->post('/api/v1/article/example-title/comments', [
+        $response = $this->actingAs($user)->post('/api/v1/article/example-title/comments', [
             'body' => 'Some body has commented here!',
         ]);
 
@@ -48,11 +44,11 @@ class CanCommentOnArticles extends TestCase
     /** @test */
     function comment_only_visable_on_correct_article()
     {
-        $this->signIn();
+        $user = factory(User::class)->create();
         factory(Article::class)->create(['title' => 'Example Title']);
         factory(Article::class)->create(['title' => 'The one without comments']);
 
-        $this->post('/api/v1/article/example-title/comments', [
+        $this->actingAs($user)->post('/api/v1/article/example-title/comments', [
             'body' => 'Some body has commented here!',
         ]);
 
@@ -64,13 +60,14 @@ class CanCommentOnArticles extends TestCase
     /** @test */
     function can_feature_a_comment()
     {
-        $this->signIn();
+        $user = factory(User::class)->create();
         factory(Article::class)->create(['title' => 'Example Title']);
-        $this->post('/api/v1/article/example-title/comments', [
+        
+        $this->actingAs($user)->post('/api/v1/article/example-title/comments', [
             'body' => 'Some body has commented here!',
         ]);
 
-        $response = $this->post('/api/v1/comment/1/feature');
+        $response = $this->actingAs($user)->post('/api/v1/comment/1/feature');
 
         $response->assertRedirect('/article/example-title');
 

@@ -9,7 +9,7 @@
     
     <div class="container">
             <div class="blog-container">
-            @forelse($user->articles as $article)
+            @forelse($userArticles as $article)
                 <h2 class="blog-post-title">
                     <a href="/article/{{ $article->slug }}">{{ $article->title }}</a>
                 </h2>

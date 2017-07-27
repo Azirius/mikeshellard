@@ -3,6 +3,7 @@
 namespace Tests\Unit;
 
 use App\Item;
+use App\User;
 use App\Basket;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
@@ -15,9 +16,10 @@ class BasketTest extends TestCase
     /** @test */
     function can_get_total_item_quantity()
     {
+        $user = factory(User::class)->create();
         $item = factory(Item::class)->create();
 
-        $basket = Basket::forUser(1);
+        $basket = Basket::forUser($user);
         $basket->addItem($item);
 
         $this->assertEquals(1, $basket->totalItems());
@@ -26,12 +28,13 @@ class BasketTest extends TestCase
     /** @test */
     function can_quantify_one_item()
     {
+        $user = factory(User::class)->create();
         $itemA = factory(Item::class)->create();
         $itemB = factory(Item::class)->create();
         $itemC = factory(Item::class)->create();
         $itemD = factory(Item::class)->create();
 
-        $basket = Basket::forUser(1);
+        $basket = Basket::forUser($user);
         $basket->addItem($itemA, 1);
         $basket->addItem($itemB, 5);
         $basket->addItem($itemC, 10);
