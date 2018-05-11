@@ -91,4 +91,22 @@ class CanCommentOnArticles extends TestCase
             ->assertDontSee('Featured comment by')
             ->assertDontSee('Featured Comment');
     }
+
+    /** @test */
+    function cannot_leave_empty_comment()
+    {
+        $user = factory(User::class)->create();
+        factory(Article::class)->create(['title' => 'Example Title']);
+
+        $this->assertDatabaseMissing('articles', ['title' => 'Example Title']);
+
+        $response = $this->actingAs($user)->post('/api/v1/article/example-title/comments', [
+            'body' => null,
+        ]);
+
+        $response->assertRedirect('/article/example-title');
+        $this->get('/article/example-title')
+            ->assertDontSee('Some body has commented here!');
+        $this->assertDatabaseMissing('comments', ['body' => 'Some body has commented here!']);
+    }
 }

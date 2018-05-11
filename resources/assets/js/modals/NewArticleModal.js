@@ -26,7 +26,10 @@ export default {
             this.errors = {};
 
             this.editor.summernote('code', '');
-            this.editor.summernote('destroy');
+            (function() {
+                // Allows the Modal to close before destroying the editor instance
+                this.editor.summernote('destroy');
+            }).debounce(1000);
         },
 
         savePost() {

@@ -11,7 +11,7 @@ const { mix } = require('laravel-mix');
  |
  */
 mix.browserSync({
-    proxy: 'mikeshellard.dev',
+    proxy: 'mikeshellard.test',
     browser: "google chrome canary"
 });
 

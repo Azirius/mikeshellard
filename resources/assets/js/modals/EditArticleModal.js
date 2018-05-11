@@ -28,8 +28,12 @@ export default {
             this.article = null;
 
             this.editor.summernote('code', '');
-            this.editor.summernote('destroy');
-            this.editor = null;
+            (function() {
+                // Allows the Modal to close before destroying the editor instance
+                this.editor.summernote('destroy');
+                this.editor = null;
+            }).debounce(1000);
+
         },
 
         savePost() {
