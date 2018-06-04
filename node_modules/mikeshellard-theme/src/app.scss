@@ -1,0 +1,19 @@
+@import "../node_modules/bulma/bulma.sass";
+
+.highlight-top-bar {
+    border-top: 7px solid #1978b7;
+}
+
+div.navbar-start > a.navbar-item.is-active {
+    border-bottom: 3px solid #E36410 !important;
+}
+
+.site {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+}
+
+.site-content {
+    flex: 1;
+}
