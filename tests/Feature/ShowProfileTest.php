@@ -16,35 +16,24 @@ class ShowProfileTest extends TestCase
     /** @test */
     function can_view_a_users_profile()
     {
-        $user = factory(User::class)->create([
-            'name' => 'TestUser',
-            'email' => 'someone@example.com',
-        ]);
+        $user = factory(User::class)->create();
 
-        $response = $this->get('/profile/testuser');
+        $response = $this->get('/profile/' . $user->getRouteKey());
 
         $response->assertStatus(200);
-
-        $response->assertSee('TestUser');
+        $response->assertViewIs('pages.profile');
+        $this->assertTrue($response->data('user')->is($user));
     }
 
     /** @test */
     function can_view_a_users_articles()
     {
-        $user = factory(User::class)->create([
-            'name' => 'TestUser',
-            'email' => 'someone@example.com',
-        ]);
+        $user = factory(User::class)->create();
+        $article = factory(Article::class)->create(['user_id' => $user->id]);
 
-        factory(Article::class)->create([
-            'title' => 'Some Title',
-            'body' => 'Some body',
-            'user_id' => $user->id,
-        ]);
+        $response = $this->get('/profile/' . $user->getRouteKey());
 
-        $response = $this->get('/profile/testuser');
         $response->assertStatus(200);
-        $response->assertSee('Some Title');
-        $response->assertSee('Some body');
+        $this->assertTrue($response->data('userArticles')->contains($article));
     }
 }

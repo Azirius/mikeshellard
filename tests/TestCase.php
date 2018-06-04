@@ -5,22 +5,33 @@ namespace Tests;
 use App\User;
 use Exception;
 use App\Exceptions\Handler;
-use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Foundation\Testing\TestResponse;
+use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 
 abstract class TestCase extends BaseTestCase
 {
     use CreatesApplication;
+    
+    /**
+     * The base URL to use while testing the application.
+     *
+     * @var string
+     */
+    protected $baseUrl = 'http://localhost';
 
     public function setUp()
     {
         parent::setUp();
-    }
 
-    protected function signIn($driver = null)
-    {
-        $this->actingAs(factory(User::class)->create(), $driver);
+        TestResponse::macro('data', function ($key) {
+            return $this->original->getData()[$key];
+        });
+
+        TestResponse::macro('assertViewIs', function ($name) {
+            Assert::assertEquals($name, $this->original->name());
+        });
     }
 
     protected function disableExceptionHandling()
@@ -33,4 +44,10 @@ abstract class TestCase extends BaseTestCase
             }
         });
     }
+
+    // protected function from($url)
+    // {
+    //     session()->setPreviousUrl(url($url));
+    //     return $this;
+    // }
 }

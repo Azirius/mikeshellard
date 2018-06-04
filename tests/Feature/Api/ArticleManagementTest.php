@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Features\Api;
+namespace Tests\Feature\Api;
 
 use App\User;
 use App\Article;
@@ -16,10 +16,10 @@ class ArticleManagementTest extends TestCase
     /** @test */
     function can_create_an_article_while_authorised()
     {
-        $this->signIn('api');
+        $user = factory(User::class)->create();
         $this->disableExceptionHandling();
 
-        $response = $this->json('POST', '/api/v1/article', [
+        $response = $this->actingAs($user, 'api')->json('POST', '/api/v1/article', [
             'title' => 'Example Title',
             'body' => 'Some text',
         ]);
@@ -51,10 +51,10 @@ class ArticleManagementTest extends TestCase
     /** @test */
     function can_delete_an_article_while_authorised()
     {
-        $this->signIn('api');
+        $user = factory(User::class)->create();
         $article = factory(Article::class)->create(['title' => 'Example Title']);
 
-        $response = $this->json('DELETE', '/api/v1/article/example-title');
+        $response = $this->actingAs($user, 'api')->json('DELETE', '/api/v1/article/example-title');
 
         $response->assertSee('success');
         $this->assertDatabaseMissing('articles', ['title' => 'Example Title']);
@@ -63,7 +63,6 @@ class ArticleManagementTest extends TestCase
     /** @test */
     function cannot_delete_articles_unauthorised()
     {
-        factory(User::class)->create();
         $article = factory(Article::class)->create([
             'title' => 'Example Title',
             'body' => 'Some text',
@@ -81,13 +80,13 @@ class ArticleManagementTest extends TestCase
     /** @test */
     function can_edit_an_article_while_authorised()
     {
-        $this->signIn('api');
+        $user = factory(User::class)->create();
         $article = factory(Article::class)->create([
             'title' => 'Example Title',
             'body' => 'Some text',
         ]);
 
-        $response = $this->json('PUT', '/api/v1/article/example-title', [
+        $response = $this->actingAs($user, 'api')->json('PUT', '/api/v1/article/example-title', [
             'title' => 'Some New Title',
             'body' => 'Hello, World',
         ]);
@@ -101,7 +100,6 @@ class ArticleManagementTest extends TestCase
     /** @test */
     function cannot_edit_article_while_unauthorised()
     {
-        factory(User::class)->create();
         $article = factory(Article::class)->create([
             'title' => 'Example Title',
             'body' => 'Some text',

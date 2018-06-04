@@ -2,6 +2,7 @@ import Vue from 'vue';
 import VueResource from 'vue-resource';
 import Router from 'reflex-routing';
 import Modal from './spa/components/modal.js';
+import axios from 'axios';
 
 $.fn.isOnScreen = function () {
     var viewport = {};
@@ -31,8 +32,6 @@ function focus_caret(elem) {
     focusElement[0].setSelectionRange(0, strLength);
 }
 
-Vue.use(VueResource);
-Vue.http.headers.common['X-CSRF-TOKEN'] = $('meta[name="csrf-token"]').attr('content');
 Vue.transition('slide', {
     enter: (el, done) => $(el).slideDown({duration: 1000, done: done}),
     leave: (el, done) => $(el).slideUp({duration: 1000, done: done})
@@ -50,8 +49,14 @@ Vue.transition('fade', {
     leaveCancelled: el => $(el).stop()
 });
 
+
 (function(exports) {
     exports.Vue = Vue;
     exports.Router = Router;
     exports.focus_caret = focus_caret;
+    exports.axios = axios;
 })(window);
+
+window.axios.defaults.headers.common['X-CSRF-TOKEN'] = mikeshellard.csrf_token;
+window.axios.defaults.headers.common['Authorization'] = `Bearer ${mikeshellard.api_token}`;
+window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';

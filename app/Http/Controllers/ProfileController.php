@@ -10,6 +10,7 @@ class ProfileController extends Controller
 {
     public function show(User $user)
     {
-        return view('pages.profile', compact('user'));
+        $userArticles = $user->articles;
+        return view('pages.profile', compact('user', 'userArticles'));
     }
 }

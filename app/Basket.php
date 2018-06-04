@@ -13,13 +13,34 @@ class Basket extends Model
     protected $fillable = ['user_id'];
 
     /**
+     * Always eager load these
+     * @var array
+     */
+    protected $with = ['items'];
+
+    /**
      * Create a basket for the user
-     * @param  integer $user_id User ID to create instance
+     * @param  integer|User $user_id User ID or User model to create instance for
      * @return Basket
      */
     public static function forUser($user_id)
     {
-        return self::firstOrCreate(['user_id' => $user_id]);
+        $user_id = self::normalizeId($user_id);
+        if (! User::find($user_id)) {
+            throw new \Exception('User does not exist');
+        }
+
+        return self::firstOrCreate(compact('user_id'));
+    }
+
+    /**
+     * Normalize an ID, if an Item model is passed retrieve the ID off of the model
+     * @param  integer|Item $item_id Item ID to normalize
+     * @return integer
+     */
+    protected static function normalizeId($model)
+    {
+        return $model instanceof Model ? $model->getKey() : $model;
     }
 
     /**
@@ -30,7 +51,7 @@ class Basket extends Model
      */
     public function addItem($item_id, $quantity = 1)
     {
-        $this->items()->attach($this->normalizeId($item_id), compact('quantity'));
+        $this->items()->attach(self::normalizeId($item_id), compact('quantity'));
 
         return $this;
     }
@@ -43,7 +64,7 @@ class Basket extends Model
      */
     public function removeItem($item_id, $quantity = 1)
     {
-        $item_id = $this->normalizeId($item_id);
+        $item_id = self::normalizeId($item_id);
 
         \DB::table('basket_item')->where('item_id', $item_id)
             ->where('basket_id', $this->id)
@@ -83,7 +104,7 @@ class Basket extends Model
      */
     public function quantityForItem($item_id)
     {
-        return $this->items()->where('item_id', $this->normalizeId($item_id))->sum('quantity');
+        return $this->items()->where('item_id', self::normalizeId($item_id))->sum('quantity');
     }
 
     /**
@@ -96,21 +117,11 @@ class Basket extends Model
     }
 
     /**
-     * Normalize an ID, if an Item model is passed retrieve the ID off of the model
-     * @param  integer|Item $item_id Item ID to normalize
-     * @return integer
-     */
-    protected function normalizeId($item_id)
-    {
-        return $item_id instanceof Item ? $item_id->id : $item_id;
-    }
-
-    /**
      * Item relationships
      * @return BelongsToMany
      */
     public function items()
     {
-        return $this->belongsToMany(Item::class)->withPivot('quantity');
+        return $this->belongsToMany(Item::class)->withPivot('quantity', 'id');
     }
 }

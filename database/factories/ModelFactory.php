@@ -35,8 +35,28 @@ $factory->define(App\Article::class, function (Faker\Generator $faker) {
     return [
         'title' => $title,
         'slug'  => str_slug($title),
-        'body'  => $faker->paragraph,
         'user_id' => $user->id,
+    ];
+});
+
+$factory->define(App\ArticlePage::class, function (Faker\Generator $faker) {
+    return [
+        'subtitle'  =>  $faker->sentence,
+        'body'      =>  $faker->paragraph,
+        'article_id'=>  function () {
+            return factory(App\Article::class)->create()->id;
+        }
+    ];
+});
+
+$factory->define(App\Comment::class, function (Faker\Generator $faker) {
+    $user = App\User::first() ?: factory(App\User::class)->create();
+    $article = App\Article::first() ?: factory(App\Article::class)->create();
+
+    return [
+        'body' => $faker->paragraph,
+        'user_id' => $user->id,
+        'article_id' => $article->id,
     ];
 });
 

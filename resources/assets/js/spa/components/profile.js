@@ -1,6 +1,7 @@
 import ProfileTemplate from './profile.vue.html';
+import Page from './Page.js';
 
-export default {
+export default Page.extend({
     props: ['on-load'],
 
     data() {
@@ -31,8 +32,8 @@ export default {
         },
 
         fetchUser(slug) {
-            this.$http.get('/api/v1/user/' + slug)
+            axios.get('/api/v1/user/' + slug)
                 .then(this.setUserData, response => this.$root.error(response.error));
         }
     }
-}
+});

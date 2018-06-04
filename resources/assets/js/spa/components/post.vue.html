@@ -1,17 +1,75 @@
 <div>
-    <div class="jumbotron">
+    <div>
+        <div class="jumbotron">
+            <div class="container">
+                <h1 v-html="post.title"></h1>
+            </div>
+        </div>
         <div class="container">
-            <h1 v-html="post.title"></h1>
+            <div class="blog-container">
+                <p class="blog-post-meta">
+                    <span v-if="post.user">
+                        <i class="fa fa-user"></i>
+                        <a href="/profile/{{ post.user.slug }}" v-text="post.user.name"></a>
+                    </span>
+                    <i class="fa fa-calendar"></i><span v-text="post.nice_created_at"></span>
+                </p>
+                <article class="blog-post clearfix" v-html="post.body"></article>
+            </div>
         </div>
     </div>
+    
     <div class="container">
-        <div class="blog-container">
-            <p class="blog-post-meta">
-                <i class="fa fa-user"></i>
-                <span v-if="post.user"><a href="/profile/{{ post.user.slug }}" v-text="post.user.name"></a></span>
-                <i class="fa fa-calendar"></i><span v-text="post.nice_created_at"></span>
-            </p>
-            <article class="blog-post clearfix" v-html="post.body"></article>
+        <div v-if="!! featured_comment">
+            <h2>Featured Comment</h2>
+            <div>
+                <h3>Featured comment by {{ featured_comment.authors_name }}</h3>
+                <p class="blog-post-meta">
+                    <i class="fa fa-user"></i> <a href="/profile/{{ featured_comment.authors_slug }}">{{ featured_comment.authors_name }}</a>
+                    <i class="fa fa-calendar"></i> <span>{{ featured_comment.nice_created_at }}</span>
+                </p>
+                <div><blockquote>{{ featured_comment.body }}</blockquote></div>
+            </div>
+            <hr>
         </div>
+        
+        <h2>Your Comments</h2>
+        <div v-if="comments.length === 0">
+            <div class="alert alert-info">
+                Nobody has commented here yet!
+            </div>
+        </div>
+        <div v-else>
+            <div class="panel" v-for="comment in comments">
+                <p class="blog-post-meta">
+                    <i class="fa fa-user"></i> <a href="/profile/{{ comment.authors_slug }}">{{ comment.authors_name }}</a>
+                    <i class="fa fa-calendar"></i> <span>{{ comment.nice_created_at }}</span>
+                    <button class="btn btn-text" @click.prevent="featureComment(comment)" v-if="currentUser && ! isFeaturedComment(comment)">
+                        <i class="fa fa-thumbs-up"></i>
+                        Feature?
+                    </button>
+                </p>
+                <div>{{ comment.body }}</div>
+            </div>
+        </div>
+        
+        <h2>Add a new comment</h2>
+
+        <div v-if="currentUser">
+            <div class="form-group">
+                <label class="control-label"></label>
+                <textarea rows="10" cols="50" class="form-control" v-model="comment"></textarea>
+            </div>
+            
+            <button type="submit" class="btn btn-default btn-primary btn-small" @click="addComment">
+                <i class="fa fa-btn fa-pencil"></i> Submit Comment!
+            </button>
+        </div>
+        <div v-else>
+            <div class="panel panel-info">
+                <div class="panel-body">You need to be <a href="/login">logged in</a> to comment on these articles!</div>
+            </div>
+        </div>
+        <br>
     </div>
 </div>

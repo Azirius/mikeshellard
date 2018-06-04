@@ -4,7 +4,6 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>My Site</title>
 
@@ -19,18 +18,20 @@
     <script>
         window.mikeshellard = {
             user: {!! collect(auth()->user())->only('name', 'id', 'email')->toJson() !!},
-            api_token: '{!! collect(auth()->user())->get('api_token') !!}'
+            api_token: '{!! collect(auth()->user())->get('api_token') !!}',
+            csrf_token: '{{ csrf_token() }}'
         };
     </script>
 
     <style>
-        /*.jumbotron {
+        .jumbotron {
             font-family: 'Poiret One';
         }
 
         body {
             font-family: 'Muli';
-        }*/
+            margin-bottom: 50px;
+        }
 
         .fa-btn {
             margin-right: 6px;
@@ -52,7 +53,7 @@
 
                 <!-- Branding Image -->
                 <a class="navbar-brand" href="/">
-                    My Site
+                    Mike Shellard
                 </a>
             </div>
 
@@ -60,14 +61,17 @@
                 <!-- Left Side Of Navbar -->
                 <ul class="nav navbar-nav">
                     <li><a href="/">Home</a></li>
+                    <li><a href="/about-me">About Me</a></li>
+                    <li><a href="/about-me/audio-gear">My Audio Gear</a></li>
                 </ul>
 
                 <!-- Right Side Of Navbar -->
                 <ul class="nav navbar-nav navbar-right">
                     <!-- Authentication Links -->
-                    @if (Auth::check())
+                    @auth
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle prevent" data-toggle="dropdown" role="button" aria-expanded="false">
+                                <img src="{{ auth()->user()->gravatar['medium'] }}">
                                 {{ auth()->user()->name }} <span class="caret"></span>
                             </a>
 
@@ -78,7 +82,9 @@
                                 <li><a href="{{ url('/logout') }}"><i class="fa fa-btn fa-sign-out"></i>Logout</a></li>
                             </ul>
                         </li>
-                    @endif
+                    @else
+                        <li><a href="/login">Log In</a></li>
+                    @endauth
                 </ul>
             </div>
         </div>
@@ -87,7 +93,7 @@
     <div id="non-spa">
     @yield('content')
     </div>
-    
+
     <div id="notify-message" v-if="!!alert" :transition="fade">
       <div class="alert"
            v-text="notification"

@@ -1,7 +1,8 @@
 import queryString from 'query-string';
 import HomeTemplate from './home.vue.html';
+import Page from './Page.js';
 
-export default {
+export default Page.extend({
     props: ['on-load'],
 
     data() {
@@ -33,13 +34,11 @@ export default {
     attached() {
         this.onLoad(this);
 
-        if (this.$root.user().id == 1) {
-            let $window = $(window);
-            let $stickyEl = $('#search');
-            let elTop = $stickyEl.offset().top;
+        let $window = $(window);
+        let $stickyEl = $('#search');
+        let elTop = $stickyEl.offset().top;
 
-            $window.scroll(() => $stickyEl.toggleClass('sticky', $window.scrollTop() > elTop));
-        }
+        $window.scroll(() => $stickyEl.toggleClass('sticky', $window.scrollTop() > elTop));
     },
 
     detached() {
@@ -48,7 +47,6 @@ export default {
     },
 
     methods: {
-
         launch() {
             this.fetchNextPostSet();
             this.setUpScroll();
@@ -101,7 +99,7 @@ export default {
 
             let queryStringCompiled = queryString.stringify(urlParameters);
 
-            this.$http.get('/api/v1/article?' + queryStringCompiled)
+            axios.get('/api/v1/article?' + queryStringCompiled)
                 .then(this.addPostsToArray, response => this.$root.error(response.error));
         },
 
@@ -129,4 +127,4 @@ export default {
             this.fetchNextPostSet();
         }
     }
-};
+});

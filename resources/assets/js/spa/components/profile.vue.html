@@ -1,7 +1,7 @@
 <div>
     <div class="jumbotron">
         <div class="container">
-            <h1><span v-if="user.gravatar">{{{ user.gravatar.medium }}}</span> {{ user.name }}</h1>
+            <h1><span v-if="user.gravatar"><img :src="user.gravatar.medium" :alt="user.name" class="img-circle"></span> {{ user.name }}</h1>
         </div>
     </div>
     

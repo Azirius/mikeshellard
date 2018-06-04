@@ -4,6 +4,7 @@ namespace Tests\Unit;
 
 use App\User;
 use App\Article;
+use App\Comment;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
@@ -28,5 +29,15 @@ class ArticleTest extends TestCase
             'A Wonderful long body about some stuff that makes less sense than your usual story but since we are...',
             $article->body_trimmed
         );
+    }
+
+    /** @test */
+    function can_get_featured_comment()
+    {
+        $article = factory(Article::class)->create();
+        $comment = factory(Comment::class)->create(['article_id' => $article->id]);
+        $comment->feature();
+
+        $this->assertEquals(1, $article->featuredComment()->id);
     }
 }

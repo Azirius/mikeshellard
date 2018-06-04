@@ -1,24 +1,22 @@
 <?php
 
-namespace Tests\Features;
+namespace Tests\Feature;
 
 use App\User;
 use App\Article;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithoutMiddleware;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class ArticleManagementTest extends TestCase
 {
-    use DatabaseMigrations;
+    use RefreshDatabase;
 
     /** @test */
     function can_create_an_article_while_authorised()
     {
-        $this->signIn();
+        $user = factory(User::class)->create();
 
-        $response = $this->post('/admin/article', [
+        $response = $this->actingAs($user)->post('/admin/article', [
             'title' => 'Example Title',
             'body' => 'Some text',
         ]);
@@ -49,10 +47,10 @@ class ArticleManagementTest extends TestCase
     /** @test */
     function can_delete_an_article_while_authorised()
     {
-        $this->signIn();
+        $user = factory(User::class)->create();
         $article = factory(Article::class)->create(['title' => 'Example Title']);
 
-        $response = $this->delete('/admin/article/example-title');
+        $response = $this->actingAs($user)->delete('/admin/article/example-title');
 
         $response->assertRedirect('/admin/article');
         $this->assertDatabaseMissing('articles', ['title' => 'Example Title']);
@@ -61,7 +59,6 @@ class ArticleManagementTest extends TestCase
     /** @test */
     function cannot_delete_articles_unauthorised()
     {
-        factory(User::class)->create();
         $article = factory(Article::class)->create([
             'title' => 'Example Title',
             'body' => 'Some text',
@@ -79,13 +76,13 @@ class ArticleManagementTest extends TestCase
     /** @test */
     function can_edit_an_article_while_authorised()
     {
-        $this->signIn();
+        $user = factory(User::class)->create();
         $article = factory(Article::class)->create([
             'title' => 'Example Title',
             'body' => 'Some text',
         ]);
 
-        $response = $this->put('/admin/article/example-title', [
+        $response = $this->actingAs($user)->put('/admin/article/example-title', [
             'title' => 'Some New Title',
             'body' => 'Hello, World',
         ]);
@@ -99,7 +96,6 @@ class ArticleManagementTest extends TestCase
     /** @test */
     function cannot_edit_article_while_unauthorised()
     {
-        factory(User::class)->create();
         $article = factory(Article::class)->create([
             'title' => 'Example Title',
             'body' => 'Some text',
