@@ -22,8 +22,7 @@ elixir(function(mix) {
         .styles(['../bower/summernote/dist/summernote.css'], 'public/css/vendor.css')
        .browserify(['app.js'])
        .browserify(['spa-loader.js'], 'public/js/spa-loader.js')
-       .browserify(['modals/article.js'], 'public/js/article.js')
-       .version(['css/app.css', 'css/vendor.css', 'js/bundle.js', 'js/vendor.js', 'js/spa-loader.js', 'js/article.js'])
+       .version(['css/app.css', 'css/vendor.css', 'js/bundle.js', 'js/vendor.js', 'js/spa-loader.js'])
        .copy('resources/assets/bower/summernote/dist/font', 'public/build/css/font')
        .copy('resources/assets/less/font-awesome-4.6.3/fonts', 'public/build/css/font');
 });

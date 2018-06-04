@@ -23,6 +23,8 @@ class User extends Authenticatable
      */
     protected $hidden = ['remember_token'];
 
+    protected $appends = ['gravatar'];
+
     /**
      * Get the route key for the model.
      *
@@ -42,9 +44,20 @@ class User extends Authenticatable
         });
     }
 
+    public function getGravatarAttribute()
+    {
+        $size       =   100;
+        return ['medium' => 'https://www.gravatar.com/avatar/' . md5(strtolower(trim($this->email))) . '?s=' . $size];
+    }
+
     public function articles()
     {
         return $this->hasMany(Article::class);
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
     }
 
     public static function byEmail($email)

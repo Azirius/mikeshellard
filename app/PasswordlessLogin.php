@@ -50,11 +50,11 @@ class PasswordlessLogin
      */
     protected function validateRequest()
     {
-        $this->validate($this->request, [
-            'email' => 'required|email|exists:users'
-        ]);
-
-        return $this;
+        return tap($this, function ($instance) {
+            $instance->validate($this->request, [
+                'email' => 'required|email|exists:users'
+            ]);
+        });
     }
     /**
      * Prepare a log in token for the user.

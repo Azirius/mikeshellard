@@ -1,6 +1,4 @@
                     {!! BootForm::text('Title', 'title') !!}
-                    
-                    {!! BootForm::select('Score', 'score', ['' => 'Choose a score'] + range(0,10)) !!}
                         
                     {!! BootForm::textarea('Body', 'body')->id('summernote') !!}
 

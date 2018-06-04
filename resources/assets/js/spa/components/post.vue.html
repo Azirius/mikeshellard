@@ -8,8 +8,10 @@
         <div class="container">
             <div class="blog-container">
                 <p class="blog-post-meta">
-                    <i class="fa fa-user"></i>
-                    <span v-if="post.user"><a href="/profile/{{ post.user.slug }}" v-text="post.user.name"></a></span>
+                    <span v-if="post.user">
+                        <i class="fa fa-user"></i>
+                        <a href="/profile/{{ post.user.slug }}" v-text="post.user.name"></a>
+                    </span>
                     <i class="fa fa-calendar"></i><span v-text="post.nice_created_at"></span>
                 </p>
                 <article class="blog-post clearfix" v-html="post.body"></article>
@@ -42,6 +44,10 @@
                 <p class="blog-post-meta">
                     <i class="fa fa-user"></i> <a href="/profile/{{ comment.authors_slug }}">{{ comment.authors_name }}</a>
                     <i class="fa fa-calendar"></i> <span>{{ comment.nice_created_at }}</span>
+                    <button class="btn btn-text" @click.prevent="featureComment(comment)" v-if="currentUser && ! isFeaturedComment(comment)">
+                        <i class="fa fa-thumbs-up"></i>
+                        Feature?
+                    </button>
                 </p>
                 <div>{{ comment.body }}</div>
             </div>

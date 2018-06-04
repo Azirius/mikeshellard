@@ -32,6 +32,5 @@ mix.scripts(
 mix.styles('resources/assets/bower/summernote/dist/summernote.css', 'public/css/vendor.css');
 mix.js('resources/assets/js/app.js', 'public/js/app.js');
 mix.js('resources/assets/js/spa-loader.js', 'public/js/spa-loader.js');
-mix.js('resources/assets/js/modals/article.js', 'public/js/article.js');
 
 mix.version();

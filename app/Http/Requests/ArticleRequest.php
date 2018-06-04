@@ -2,22 +2,12 @@
 
 namespace App\Http\Requests;
 
+use App\User;
 use App\Article;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Foundation\Http\FormRequest;
 
-class ArticleRequest extends FormRequest
+class ArticleRequest extends Request
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
-    {
-        return true;
-    }
-
     /**
      * Get the validation rules that apply to the request.
      *
@@ -27,7 +17,9 @@ class ArticleRequest extends FormRequest
     {
         $rules = [
             'title' => 'required|unique:articles',
-            'body'  => 'required|not_empty',
+            // 'body'  => 'required|not_empty',
+            'pages.subtitle.*'  => 'required|not_empty',
+            'pages.body.*'  => 'required|not_empty',
             'score' => 'nullable|numeric|digits_between:0,10',
         ];
 
@@ -40,13 +32,18 @@ class ArticleRequest extends FormRequest
         return $rules;
     }
 
-    public function persist(Article $article = null)
+    public function persist(User $user, Article $article = null)
     {
         if ($article && $article->exists()) {
+            $article->updatePages(array_flatten($this->only('pages'), 1));
             $article->update($this->all());
             return $article;
         }
 
-        return Auth::user()->articles()->create($this->all());
+        $article = $user->articles()->create($this->all());
+
+        $article->addPages(array_flatten($this->only('pages'), 1));
+
+        return $article;
     }
 }

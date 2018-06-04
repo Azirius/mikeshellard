@@ -36,13 +36,29 @@ export default Page.extend({
 
         pushComment(response) {
             this.comments.push(response.data);
-
             this.comment = '';
+            this.$root.success('Your comment was successfully added!');
         },
 
         addComment() {
             axios.post('/api/v1/article/' + this.post.slug + '/comments', {body: this.comment})
-                .then(this.pushComment, response => this.$root.error(response.error));
+                .then(this.pushComment)
+                .catch(this.$root.handleError);
+        },
+
+        featureComment(comment) {
+            if (this.isFeaturedComment(comment)) {
+                this.$root.error('This comment has already been featured here!');
+                return;
+            }
+
+            axios.post('/api/v1/comment/' + comment.id + '/feature')
+                .then(() => {this.featured_comment = comment; this.$root.success('Comment featured successfully!')})
+                .catch(this.$root.handleError);
+        },
+
+        isFeaturedComment(comment) {
+            return comment.id === this.featured_comment.id;
         },
 
         fetchPost(slug) {

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Auth;
 use App\User;
 use App\Article;
+use App\ArticlePage;
 use App\Http\Requests;
 use Illuminate\Http\Request;
 use App\Http\Requests\ArticleRequest;
@@ -13,8 +14,7 @@ class ArticleController extends Controller
 {
     public function index(Article $article)
     {
-        $articles = $article->newest();
-        return view('article.index', compact('articles'));
+        return view('article.index');
     }
 
     public function show(Article $article)
@@ -32,7 +32,7 @@ class ArticleController extends Controller
 
     public function store(ArticleRequest $request)
     {
-        $article = $request->persist();
+        $article = $request->persist(Auth::user());
 
         return redirect(route('admin.article.edit', $article))
             ->with('status', 'Your new article has been created!');
@@ -53,7 +53,7 @@ class ArticleController extends Controller
 
     public function update(ArticleRequest $request, Article $article)
     {
-        return redirect(route('admin.article.edit', $request->persist($article)))
+        return redirect(route('admin.article.edit', $request->persist(Auth::user(), $article)))
             ->with('status', 'Article has been successfully updated!');
     }
 }

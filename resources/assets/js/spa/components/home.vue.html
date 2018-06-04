@@ -5,7 +5,7 @@
         </div>
     </div>
 
-    <div id="search" class="clearfix container" v-if="$root.user().id == 1">
+    <div id="search" class="clearfix container">
         <div class="pull-left col-sm-4">
             <ul class="nav nav-pills order-box">
                 <li v-for="column in columns" class="nav-item" :class="[field == column ? 'active' : '']">
@@ -32,7 +32,6 @@
                 <span class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>
                 <input type="text"
                     name="search"
-                    id="search"
                     class="form-control"
                     v-model="params.search"
                     @keyup.enter="search">

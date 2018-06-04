@@ -7,16 +7,13 @@ use App\Comment;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\CommentRequest;
 
 class CommentController extends Controller
 {
-    public function store(Request $request, Article $article)
+    public function store(CommentRequest $request, Article $article)
     {
-        $comment = Comment::create([
-            'body' => $request->body,
-            'user_id' => Auth::id(),
-            'article_id' => $article->id,
-        ]);
+        $comment = $request->persist(Auth::user());
 
         if ($request->wantsJson()) {
             return $comment;

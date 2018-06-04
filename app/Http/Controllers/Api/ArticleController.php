@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Api;
 
-use Illuminate\Http\Request;
-
 use Auth;
 use App\Article;
 use App\Http\Requests;
 use App\ArticleFilters;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ArticleRequest;
 
 class ArticleController extends Controller
 {
@@ -32,16 +32,10 @@ class ArticleController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ArticleRequest $request)
     {
-        $this->validate($request, [
-            'title' => 'required|unique:articles',
-            'body'  => 'required|not_empty',
-            'score' => 'nullable|numeric|digits_between:0,10',
-        ]);
-
         $success = true;
-        $article = Auth::guard('api')->user()->articles()->create($request->all());
+        $article = $request->persist(Auth::guard('api')->user());
 
         return json_encode(compact('article', 'success'));
     }
@@ -64,15 +58,9 @@ class ArticleController extends Controller
      * @param  Article $article
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Article $article)
+    public function update(ArticleRequest $request, Article $article)
     {
-        $this->validate($request, [
-            'title' => 'required|unique:articles,title,' . $article->id,
-            'body'  => 'required|not_empty',
-            'score' => 'nullable|numeric|digits_between:0,10',
-        ]);
-
-        $article->update($request->all());
+        $article = $request->persist(Auth::guard('api')->user(), $article);
         $success = true;
 
         return json_encode(compact('article', 'success'));

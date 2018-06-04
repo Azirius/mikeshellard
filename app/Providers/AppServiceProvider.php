@@ -15,7 +15,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Validator::extend('not_empty', function ($attribute, $value, $parameters, $validator) {
-            return strlen(strip_tags($value));
+            return ! empty(trim(strip_tags($value, '<img>')));
         });
     }
 

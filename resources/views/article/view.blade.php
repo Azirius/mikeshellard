@@ -16,19 +16,8 @@
 </div>
 
 <div class="container">
-
-    @if ($featuredComment)
-    <h2>Featured Comment</h2>
-    <div>
-        <h3>Featured comment by {{ $featuredComment->authorsName() }}</h3>
-        <p class="blog-post-meta">
-            <i class="fa fa-user"></i> <a href="/profile/{{ $featuredComment->authorsSlug() }}">{{ $featuredComment->authorsName() }}</a>
-            <i class="fa fa-calendar"></i> <span>{{ $featuredComment->nice_created_at }}</span>
-        </p>
-        <div><blockquote>{{ $featuredComment->body }}</blockquote></div>
-    </div>
-    <hr>
-    @endif
+    
+    @includeWhen($featuredComment, 'article.partials.featured-comment')
 
     <h2>Your Comments</h2>
     @if (! $comments->count())
@@ -42,15 +31,21 @@
             <p class="blog-post-meta">
                 <i class="fa fa-user"></i> <a href="/profile/{{ $comment->authorsSlug() }}">{{ $comment->authorsName() }}</a>
                 <i class="fa fa-calendar"></i> <span>{{ $comment->nice_created_at }}</span>
+                @auth
+                {!! BootForm::open()->action('/api/v1/comment/' . $comment->id . '/feature') !!}
+                    {!! BootForm::submit("<i class=\"fa fa-thumbs-up\"></i> Submit Comment!")->addClass('btn-text') !!}
+                {!! BootForm::close() !!}
+                {{-- <i class="fa"> <a href="{{ route('comment.feature', $comment) }}">Feature?</a></i> --}}
+                @endauth
             </p>
             <div>{{ $comment->body }}</div>
         </div>
     @endforeach
 
     <h2>Add a new comment</h2>
-    @if (Auth::check())
+    @auth
     {!! BootForm::open()->action('/article/' . $article->slug . '/comments') !!}
-        {!! BootForm::textarea(null, 'body')->id('summernote') !!}
+        {!! BootForm::textarea(null, 'body') !!}
 
         {!! BootForm::submit("<i class=\"fa fa-btn fa-pencil\"></i> Submit Comment!")->addClass('btn-primary btn-small') !!}
     {!! BootForm::close() !!}
@@ -58,6 +53,6 @@
         <div class="panel panel-info">
             <div class="panel-body">You need to be <a href="/login">logged in</a> to comment on these articles!</div>
         </div>
-    @endif
+    @endauth
 </div>
 @endsection

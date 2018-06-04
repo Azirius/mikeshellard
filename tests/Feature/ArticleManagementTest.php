@@ -1,17 +1,15 @@
 <?php
 
-namespace Tests\Features;
+namespace Tests\Feature;
 
 use App\User;
 use App\Article;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithoutMiddleware;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class ArticleManagementTest extends TestCase
 {
-    use DatabaseMigrations;
+    use RefreshDatabase;
 
     /** @test */
     function can_create_an_article_while_authorised()

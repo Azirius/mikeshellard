@@ -35,8 +35,17 @@ $factory->define(App\Article::class, function (Faker\Generator $faker) {
     return [
         'title' => $title,
         'slug'  => str_slug($title),
-        'body'  => $faker->paragraph,
         'user_id' => $user->id,
+    ];
+});
+
+$factory->define(App\ArticlePage::class, function (Faker\Generator $faker) {
+    return [
+        'subtitle'  =>  $faker->sentence,
+        'body'      =>  $faker->paragraph,
+        'article_id'=>  function () {
+            return factory(App\Article::class)->create()->id;
+        }
     ];
 });
 

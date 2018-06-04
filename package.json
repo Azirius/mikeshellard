@@ -19,6 +19,7 @@
     "vue": "^2.1.10"
   },
   "dependencies": {
+    "mikeshellard-theme": "^1.0.0",
     "query-string": "^4.1.0",
     "reflex-routing": "^4.0.0",
     "vue": "^1.0.21",

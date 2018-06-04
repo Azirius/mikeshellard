@@ -1,6 +1,7 @@
 import HomeComponent from './components/home.js';
 import PostComponent from './components/post.js';
 import ProfileComponent from './components/profile.js';
+import ArticleManagementComponent from './components/article-management.js';
 import {getURI, removeActiveClassFromParentListItems, addActiveClassToParentListItem} from '../helpers.js';
 
 export default {
@@ -19,7 +20,9 @@ export default {
 
                 'article/:slug': slug => this.setView('post', {slug}),
 
-                'profile/:slug': slug => this.setView('profile', slug)
+                'profile/:slug': slug => this.setView('profile', slug),
+
+                'admin/article': () => this.setView('articleManagement'),
             },
 
             router: null,
@@ -61,7 +64,8 @@ export default {
     components: {
         home: HomeComponent,
         post: PostComponent,
-        profile: ProfileComponent
+        profile: ProfileComponent,
+        articleManagement: ArticleManagementComponent
     },
 
     methods: {
@@ -89,6 +93,53 @@ export default {
             }).bind(this).debounce(2000)();
 
             return this;
+        },
+        
+        /**
+         * Handle an error, hands axios exceptions off to handleAxiosExceptions
+         * @param  {object} error Error response
+         * @return {void}       
+         */
+        handleError(error) {
+            if (error.response.data) {
+                var errors      =   error.response.data.errors.body;
+                var errorLength =   errors.length;
+                var errorMessage=   '';
+                for (var i=0; i < errorLength; i++) {
+                    errorMessage += errors[i];
+                    if (i < errorLength-1) {
+                        errorMessage += '<br>';
+                    }
+                }
+                this.error(errorMessage);
+                return;
+            }
+
+            this.handleAxiosException(error);
+        },
+
+        /**
+         * Handle an Axios exception
+         * @param  {object} error Error thrown from Axios
+         * @return {void}       
+         */
+        handleAxiosException(error) {
+            if (error.response) {
+                // The request was made and the server responded with a status code
+                // that falls out of the range of 2xx
+                console.log(error.response.data);
+                console.log(error.response.status);
+                console.log(error.response.headers);
+            } else if (error.request) {
+                // The request was made but no response was received
+                // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+                // http.ClientRequest in node.js
+                console.log(error.request);
+            } else {
+                // Something happened in setting up the request that triggered an Error
+                console.log('Error', error.message);
+            }
+            console.log(error.config);
         },
 
         /**

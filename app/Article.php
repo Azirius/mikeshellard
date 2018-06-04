@@ -14,7 +14,7 @@ class Article extends Model
         'title', 'slug', 'body', 'user_id', 'score'
     ];
 
-    protected $with = ['user', 'comments'];
+    protected $with = ['user', 'comments', 'pages'];
 
     protected $appends = ['nice_created_at', 'nice_updated_at', 'body_trimmed', 'featured_comment'];
 
@@ -57,10 +57,23 @@ class Article extends Model
         return $this->hasMany(Comment::class);
     }
 
-    // public function getScoreAttribute()
-    // {
-    //     return new Score($this->score);
-    // }
+    public function pages()
+    {
+        return $this->hasMany(ArticlePage::class);
+    }
+
+    public function addPages($pages)
+    {
+        return $this->pages()->createMany($pages);
+    }
+
+    public function updatePages($pages)
+    {
+        $this->pages()->delete();
+        $this->addPages($pages);
+
+        return $this;
+    }
 
     public function getNiceCreatedAtAttribute()
     {

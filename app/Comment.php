@@ -12,10 +12,17 @@ class Comment extends Model
 
     public function feature()
     {
-        $this->article->comments->each->featured = false;
-        $this->featured = true;
-        $this->save();
-        return $this;
+        return tap($this, function ($instance) {
+            $instance->article->comments->each->unfeature();
+            $instance->featured = true;
+        })->save();
+    }
+
+    public function unfeature()
+    {
+        return tap($this, function ($instance) {
+            $instance->featured = false;
+        })->save();
     }
 
     public function authorsName()

@@ -34,13 +34,11 @@ export default Page.extend({
     attached() {
         this.onLoad(this);
 
-        if (this.$root.user().id == 1) {
-            let $window = $(window);
-            let $stickyEl = $('#search');
-            let elTop = $stickyEl.offset().top;
+        let $window = $(window);
+        let $stickyEl = $('#search');
+        let elTop = $stickyEl.offset().top;
 
-            $window.scroll(() => $stickyEl.toggleClass('sticky', $window.scrollTop() > elTop));
-        }
+        $window.scroll(() => $stickyEl.toggleClass('sticky', $window.scrollTop() > elTop));
     },
 
     detached() {
@@ -49,7 +47,6 @@ export default Page.extend({
     },
 
     methods: {
-
         launch() {
             this.fetchNextPostSet();
             this.setUpScroll();

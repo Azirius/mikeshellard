@@ -53,7 +53,7 @@
 
                 <!-- Branding Image -->
                 <a class="navbar-brand" href="/">
-                    My Site
+                    Mike Shellard
                 </a>
             </div>
 
@@ -61,14 +61,17 @@
                 <!-- Left Side Of Navbar -->
                 <ul class="nav navbar-nav">
                     <li><a href="/">Home</a></li>
+                    <li><a href="/about-me">About Me</a></li>
+                    <li><a href="/about-me/audio-gear">My Audio Gear</a></li>
                 </ul>
 
                 <!-- Right Side Of Navbar -->
                 <ul class="nav navbar-nav navbar-right">
                     <!-- Authentication Links -->
-                    @if (Auth::check())
+                    @auth
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle prevent" data-toggle="dropdown" role="button" aria-expanded="false">
+                                <img src="{{ auth()->user()->gravatar['medium'] }}">
                                 {{ auth()->user()->name }} <span class="caret"></span>
                             </a>
 
@@ -79,7 +82,9 @@
                                 <li><a href="{{ url('/logout') }}"><i class="fa fa-btn fa-sign-out"></i>Logout</a></li>
                             </ul>
                         </li>
-                    @endif
+                    @else
+                        <li><a href="/login">Log In</a></li>
+                    @endauth
                 </ul>
             </div>
         </div>

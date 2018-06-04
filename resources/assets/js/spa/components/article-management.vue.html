@@ -1,0 +1,72 @@
+<div>
+    <delete-article-modal :show.sync="displayDeleteArticleModal"></delete-article-modal>
+
+    <div id="admin-article-search" class="clearfix container">
+        <div class="pull-left col-sm-4">
+            <ul class="nav nav-pills order-box">
+                <li v-for="column in columns" class="nav-item" :class="[field == column ? 'active' : '']">
+                    <a class="nav-link" @click="sortBy(column)">
+                        {{ $key | capitalize }}
+                        <i class="fa fa-arrow-circle-up" v-show="field == column && reverse == false"></i>
+                        <i class="fa fa-arrow-circle-down" v-show="field == column && reverse == true"></i>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="pull-left col-sm-1">
+            <div class="input-group input-group-lg">
+                <select class="form-control" v-model="queryParams.paginate" @change="rePaginate">
+                    <option :value="5">5</option>
+                    <option :value="10">10</option>
+                    <option :value="20">20</option>
+                    <option :value="100">100</option>
+                </select>
+            </div>
+        </div>
+        <div class="pull-right col-sm-7">
+            <div class="input-group input-group-lg">
+                <span class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>
+                <input type="text"
+                    name="search"
+                    class="form-control"
+                    v-model="queryParams.search"
+                    @keyup.enter="search">
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-9 article-admin-column">
+                <div class="alert alert-info" v-if="posts.length == 0 && loading_posts == false">
+                    There are no posts. <a href="/admin/article/create">Make one!</a>
+                </div>
+                <div v-for="post in posts" :transition="fade" style="margin: 20px">
+                    <h1><a href="/article/{{ post.slug }}" v-text="post.title"></a></h1>
+                    <div v-html="post.body"></div>
+                    <div style="background-color: #ededed; padding: 5px; margin-bottom: 10px; text-align: right">
+                        <a href="/admin/article/{{ post.slug }}/edit" class="btn btn-default">Edit</a>
+                        <button class="btn btn-link" @click.stop.prevent="showDeleteArticleModal(post)">Delete</button>
+                    </div>
+                </div>
+                <div class="loading-articles text-center" v-if="loading_posts" transition="fade">
+                    <i class="fa fa-refresh fa-spin fa-4x"></i>
+                    <br>
+                    <p class="text text-info">Loading Posts....</p>
+                </div>
+                <div id="admin-article-bottom"></div>
+            </div>
+            <div class="col-sm-3">
+                <h2>Options</h2>
+                <ul style="list-style-type: none;">
+                    <li>
+                        <a href="/admin/article/create">
+                            <i class="fa fa-pencil"></i>
+                            Create new Article    
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
