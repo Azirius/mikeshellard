@@ -26,8 +26,6 @@ class CreateBasketsTable extends Migration
      */
     public function down()
     {
-        Schema::table('baskets', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('baskets');
     }
 }

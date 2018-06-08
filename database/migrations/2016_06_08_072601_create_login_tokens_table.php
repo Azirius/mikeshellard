@@ -27,6 +27,6 @@ class CreateLoginTokensTable extends Migration
      */
     public function down()
     {
-        Schema::drop('login_tokens');
+        Schema::dropIfExists('login_tokens');
     }
 }

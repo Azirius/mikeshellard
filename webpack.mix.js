@@ -15,11 +15,11 @@ mix.browserSync({
     browser: "google chrome canary"
 });
 
-mix.copy('resources/assets/less/font-awesome-4.6.3/fonts', 'public/css/font');
+// mix.copy('resources/assets/less/font-awesome-4.6.3/fonts', 'public/css/font');
 mix.copy('resources/assets/bower/summernote/dist/font', 'public/css/font');
-mix.copy('resources/assets/bower/bootstrap/fonts', 'public/css/font');
+// mix.copy('resources/assets/bower/bootstrap/fonts', 'public/css/font');
 
-mix.less('resources/assets/less/app.less', 'public/css');
+mix.sass('resources/assets/less/app.scss', 'public/css');
 mix.scripts(
     [
         'resources/assets/bower/jquery/dist/jquery.js',
@@ -30,6 +30,7 @@ mix.scripts(
     'public/js/vendor.js'
 );
 mix.styles('resources/assets/bower/summernote/dist/summernote.css', 'public/css/vendor.css');
+mix.styles('node_modules/mikeshellard-theme/dist/login.css', 'public/css/login.css');
 mix.js('resources/assets/js/app.js', 'public/js/app.js');
 mix.js('resources/assets/js/spa-loader.js', 'public/js/spa-loader.js');
 

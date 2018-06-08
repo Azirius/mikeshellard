@@ -43,7 +43,7 @@ export default {
             }
 
             removeActiveClassFromParentListItems();
-            addActiveClassToParentListItem(`li > a[href="${uri}"]`);
+            addActiveClassToParentListItem(`a[href="${uri}"]`);
 
             return response;
         });

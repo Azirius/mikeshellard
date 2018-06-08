@@ -11,6 +11,7 @@ export default Page.extend({
                 title: 'Post'
             },
             post: {},
+            author: {},
             comments: {},
             featured_comment: null,
             comment: ''
@@ -30,6 +31,7 @@ export default Page.extend({
 
         setPostData(response) {
             this.post = response.data;
+            this.author = this.post.user;
             this.comments = this.post.comments;
             this.featured_comment = this.post.featured_comment;
         },

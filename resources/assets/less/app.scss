@@ -1,7 +1,10 @@
-@import "../bower/bootstrap/less/bootstrap";
-@import "font-awesome-4.6.3/less/font-awesome";
-@fa-font-path: "/css/font";
-@icon-font-path: "/css/font/";
+@import "../mikeshellard-theme/src/app.scss";
+@import "./spacing.scss";
+// /*@import "../bower/bootstrap/less/bootstrap";*/
+// /*@import "font-awesome-4.6.3/less/font-awesome";*/
+
+/*@fa-font-path: "/css/font";*/
+/*@icon-font-path: "/css/font/";*/
 
 .article-admin-column img {
     max-width: 100%;

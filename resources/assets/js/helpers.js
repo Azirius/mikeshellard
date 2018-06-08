@@ -20,11 +20,11 @@ export function getURI() {
 }
 
 export function removeActiveClassFromParentListItems() {
-    $('#app-navbar-collapse ul').children('li.active').removeClass('active');
+    $('a.navbar-item.is-active').removeClass('is-active');
 }
 
 export function addActiveClassToParentListItem(element) {
-    $(element).parent().filter('li').addClass('active');
+    $(element).addClass('is-active');
 }
 
 export function extend(to, from) {
