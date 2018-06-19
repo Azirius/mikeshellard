@@ -1,11 +1,13 @@
 import ModalTemplate from './modal.vue.html';
 
 export default {
-    props: ['show', 'onClose'],
+    props: ['show'],
+
+    name: 'Modal',
 
     methods: {
         close() {
-            this.onClose();
+            this.$emit('close');
         }
     },
 

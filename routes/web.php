@@ -27,3 +27,6 @@ Route::resource('reviews', 'ReviewController', ['only' => ['index', 'show']]);
 Route::get('about-me', 'AboutController@index');
 Route::get('about-me/audio-gear', 'AboutController@audioPage');
 Route::get('profile/{user}', 'ProfileController@show');
+Route::get('pagination.html', function () {
+    return view('pagination');
+});

@@ -2,6 +2,7 @@
 
 Route::group(['prefix' => 'v1'], function () {
     Route::resource('user', 'Api\UserController', ['only' => ['show']]);
+    Route::put('user/update-email', 'Api\UserController@updateEmail');
     
     Route::resource('article', 'Api\ArticleController', ['only' => ['index', 'show']]);
 

@@ -1,11 +1,11 @@
-<section class="section site-content">
+    <section class="section site-content">
     <div class="container">
-        <div id="search" class="clearfix tabs is-toggle">
-            <div class="pull-left col-sm-4">
-                <ul class="nav nav-pills order-box">
+        <div id="search" class="is-clearfix tabs is-toggle">
+            <div class="pull-left">
+                <ul>
                     <li v-for="column in columns" :class="[field == column ? 'is-active' : '']">
                         <a @click="sortBy(column)">
-                            {{ $key | capitalize }}
+                            {{ column }}
                             <span class="icon is-small" v-show="field == column">
                                 <i class="fas fa-arrow-circle-up" v-show="field == column && reverse == false"></i>
                                 <i class="fas fa-arrow-circle-down" v-show="field == column && reverse == true"></i>
@@ -45,24 +45,24 @@
         
         <div class="container">
             <hr/>
-            <div class="alert alert-info" v-if="posts.length == 0 && loading_posts == false">
+            <div class="notification is-info" v-if="posts.length == 0 && loading_posts == false">
                 There are no posts
             </div>
-            <div class="blog-container" v-for="post in posts" :transition="fade">
+            <div class="blog-container" v-for="post in posts">
                 <h1 class="title">
-                    <a href="/article/{{ post.slug }}" v-html="post.title"></a>
+                    <a :href="'/article/' + post.slug" v-html="post.title"></a>
                 </h1>
                 <p class="blog-post-meta">
-                    <i class="fa fa-user"></i> <a href="/profile/{{ post.user.slug }}" v-text="post.user.name"></a>
+                    <i class="fa fa-user"></i> <a :href="'/profile/' + post.user.slug" v-text="post.user.name"></a>
                     <i class="fa fa-calendar"></i> <span v-text="post.nice_created_at"></span>
                 </p>
                 <hr>
                 <p class="blog-post" v-html="post.pages[0].body"></p>
             </div>
-            <div class="loading-articles has-text-centered" v-if="loading_posts" transition="fade">
+            <div class="loading-articles has-text-centered" v-if="loading_posts">
                 <i class="fas fa-spinner fa-spin fa-4x"></i>
                 <br>
-                <div class="is-info">Loading Posts....</div>
+                <div class="text-info">Loading Posts....</div>
             </div>
             <div id="bottom"></div>
         </div>

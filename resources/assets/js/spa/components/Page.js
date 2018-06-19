@@ -1,4 +1,3 @@
-
 export default Vue.extend({
     computed: {
         currentUser() {

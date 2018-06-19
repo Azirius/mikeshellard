@@ -1,8 +1,9 @@
 import Vue from 'vue';
-import VueResource from 'vue-resource';
 import Router from 'reflex-routing';
 import Modal from './spa/components/modal.js';
 import axios from 'axios';
+
+Vue.component('Modal', Modal);
 
 $.fn.isOnScreen = function () {
     var viewport = {};
@@ -32,25 +33,8 @@ function focus_caret(elem) {
     focusElement[0].setSelectionRange(0, strLength);
 }
 
-Vue.transition('slide', {
-    enter: (el, done) => $(el).slideDown({duration: 1000, done: done}),
-    leave: (el, done) => $(el).slideUp({duration: 1000, done: done})
-});
-
-Vue.component('Modal', Modal);
-
-Vue.transition('fade', {
-    // element is already inserted into the DOM
-    // call done when animation finishes.
-    enter: (el, done) => $(el).css('opacity', 0).animate({ opacity: 1 }, 700, done),
-    enterCancelled: el => $(el).stop(),
-    // same as enter
-    leave: (el, done) => $(el).animate({ opacity: 0 }, 700, done),
-    leaveCancelled: el => $(el).stop()
-});
-
-
 (function(exports) {
+    exports.eventHub = new Vue;
     exports.Vue = Vue;
     exports.Router = Router;
     exports.focus_caret = focus_caret;

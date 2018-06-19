@@ -16,7 +16,7 @@ class Article extends Model
 
     protected $with = ['user', 'comments', 'pages'];
 
-    protected $appends = ['nice_created_at', 'nice_updated_at', 'body_trimmed', 'featured_comment'];
+    protected $appends = ['nice_created_at', 'nice_updated_at', 'body_trimmed', 'featured_comment', 'comment_count'];
 
     public static function boot()
     {
@@ -25,6 +25,24 @@ class Article extends Model
         static::saving(function ($article) {
             $article->slug = str_slug($article->title);
         });
+    }
+
+    public static function preparePages($request)
+    {
+        $pages = collect();
+        $subtitles = collect($request->only('subtitle'))->values()->flatten()->toArray();
+        $i = 0;
+
+        collect($request->only('body'))->flatten()->each(function ($value, $index) use ($pages, $subtitles, $i) {
+            $pages[] = ['body' => $value, 'subtitle' => $subtitles[$i++]];
+        });
+
+        return $pages->toArray();
+    }
+
+    public function getCommentCountAttribute()
+    {
+        return $this->comments()->count();
     }
 
     public function featuredComment()
@@ -54,7 +72,7 @@ class Article extends Model
 
     public function comments()
     {
-        return $this->hasMany(Comment::class);
+        return $this->hasMany(Comment::class)->latest();
     }
 
     public function pages()

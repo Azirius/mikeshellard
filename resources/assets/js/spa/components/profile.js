@@ -11,13 +11,14 @@ export default Page.extend({
                 title: 'User'
             },
             user: {},
-            posts: {}
+            posts: {},
+            dataLoaded: false
         };
     },
 
     template: ProfileTemplate,
 
-    attached() {
+    created() {
         this.onLoad(this);
     },
 
@@ -29,6 +30,7 @@ export default Page.extend({
         setUserData(response) {
             this.user = response.data;
             this.posts = response.data.articles;
+            this.dataLoaded = true;
         },
 
         fetchUser(slug) {

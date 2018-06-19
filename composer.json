@@ -15,6 +15,7 @@
         "fideloper/proxy": "~4.0"
     },
     "require-dev": {
+        "ahuggins/open-on-make": "^0.0.16",
         "fzaninotto/faker": "~1.4",
         "mockery/mockery": "0.9.*",
         "phpunit/phpunit": "~7.0",

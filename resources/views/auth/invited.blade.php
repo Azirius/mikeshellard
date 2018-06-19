@@ -1,13 +1,13 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <div class="row">
-        <div class="col-md-8 col-md-offset-2">
-            <div class="alert alert-info">
-                You have been sent an invite for your login! Check your emails
-            </div>
-        </div>
+<section class="section site-content">
+    <div class="container">
+        <h1 class="title has-bottom-highlight">Invitation Sent!</h1>
+        <p>
+            You have been sent an invite for your login! Please check your emails and click the link within to 
+            access your account!
+        </p>
     </div>
-</div>
+</section>
 @endsection

@@ -13,8 +13,6 @@
     "tests"
   ],
   "dependencies": {
-    "bootstrap": "^3.3.6",
-    "trumbowyg": "^2.1.0",
-    "summernote": "develop"
+    "summernote": "^0.8.10"
   }
 }

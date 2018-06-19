@@ -10,12 +10,13 @@
                     </a>
 @push('page-scripts')
     $(function() {
-            var actual = $('textarea[name="body"]');
+            alert('fires');
+            var actual = $('textarea[name="pages[][body]"]');
 
-            actual.attr('required', false)
+            actual.each.attr('required', false)
                 .hide();
 
-            var editor = $('#summernote').summernote({
+            var editor = $('.summernote').summernote({
                 height: 500,
                 defaultFontName: 'Tahoma',
                 codemirror: {

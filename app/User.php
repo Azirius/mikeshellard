@@ -47,7 +47,10 @@ class User extends Authenticatable
     public function getGravatarAttribute()
     {
         $size       =   100;
-        return ['medium' => 'https://www.gravatar.com/avatar/' . md5(strtolower(trim($this->email))) . '?s=' . $size];
+        return [
+            'medium' => 'https://www.gravatar.com/avatar/' . md5(strtolower(trim($this->email))) . '?s=' . $size,
+            'large' => 'https://www.gravatar.com/avatar/' . md5(strtolower(trim($this->email))) . '?s=' . $size * 2
+        ];
     }
 
     public function articles()

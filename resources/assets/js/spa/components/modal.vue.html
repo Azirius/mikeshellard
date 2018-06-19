@@ -1,5 +1,8 @@
-<div class="modal-mask" @click="close" v-show="show" transition="modal">
-    <div class="modal-container" @click.stop>
-        <slot></slot>
+<transition name="modal-fade">
+    <div class="modal is-active" v-show="show">
+        <div class="modal-background" @click="close" transition="modal"></div>
+        <div class="modal-container" @click.stop>
+            <slot></slot>
+        </div>
     </div>
-</div>
+</transition>

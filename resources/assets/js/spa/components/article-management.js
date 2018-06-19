@@ -14,14 +14,15 @@ export default Page.extend({
                 name: 'article-management',
                 title: 'Article Management'
             },
-            displayDeleteArticleModal: false,
+            showDeleteArticleModalState: false,
             posts: [],
-            field: 'created',
+            loading_posts: false,
+            field: 'Created',
             reverse: true,
             columns: {
-                published: 'created',
-                title: 'title',
-                author: 'name'
+                published: 'Created',
+                title: 'Title',
+                author: 'Name'
             },
             queryParams: {
                 page: 1,
@@ -34,7 +35,7 @@ export default Page.extend({
 
     template: ArticleManagementTemplate,
 
-    attached() {
+    mounted() {
         this.onLoad(this);
         
         let $window = $(window);
@@ -42,11 +43,14 @@ export default Page.extend({
         let elTop = $stickyEl.offset().top;
 
         $window.scroll(() => $stickyEl.toggleClass('sticky', $window.scrollTop() > elTop));
+
+        eventHub.$on('article:deleted', this.removeArticle);
     },
 
-    detached() {
+    destroyed() {
         this.removeScroll();
         this.resetPostData();
+        eventHub.$off('article:deleted');
     },
 
     methods: {
@@ -131,15 +135,18 @@ export default Page.extend({
         },
 
         showDeleteArticleModal(article) {
-            this.$broadcast('delete-modal:open', article);
-            this.displayDeleteArticleModal = true;
+            eventHub.$emit('delete-modal:open', article);
+            this.showDeleteArticleModalState = true;
         },
-    },
 
-    events: {
-        'article:deleted': function (article) {
-            this.posts.$remove(article);
+        hideDeleteArticleModel() {
+            this.showDeleteArticleModalState = false;
+        },
+
+        removeArticle(article) {
+            var index = this.posts.indexOf(article);
+            this.posts.splice(index, 1);
             this.$root.success('Article successfully deleted!');
-        }
+        },
     }
 });

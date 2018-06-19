@@ -18,8 +18,8 @@ class ArticleRequest extends Request
         $rules = [
             'title' => 'required|unique:articles',
             // 'body'  => 'required|not_empty',
-            'pages.subtitle.*'  => 'required|not_empty',
-            'pages.body.*'  => 'required|not_empty',
+            'subtitle.*'  => 'required',
+            'body.*'  => 'required|not_empty',
             'score' => 'nullable|numeric|digits_between:0,10',
         ];
 
@@ -34,15 +34,17 @@ class ArticleRequest extends Request
 
     public function persist(User $user, Article $article = null)
     {
+        $pages = Article::preparePages($this);
+
         if ($article && $article->exists()) {
-            $article->updatePages(array_flatten($this->only('pages'), 1));
-            $article->update($this->all());
+            $article->updatePages($pages);
+            $article->update($this->except(['body', 'subtitle']));
             return $article;
         }
 
-        $article = $user->articles()->create($this->all());
+        $article = $user->articles()->create($this->except(['body', 'subtitle']));
 
-        $article->addPages(array_flatten($this->only('pages'), 1));
+        $article->addPages($pages);
 
         return $article;
     }

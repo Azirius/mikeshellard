@@ -13,12 +13,12 @@ export default Page.extend({
             },
             posts: [],
             loading_posts: false,
-            field: 'created',
+            field: 'Created',
             reverse: true,
             columns: {
-                published: 'created',
-                title: 'title',
-                author: 'name'
+                published: 'Created',
+                title: 'Title',
+                author: 'Name'
             },
             params: {
                 page: 1,
@@ -31,7 +31,7 @@ export default Page.extend({
 
     template: HomeTemplate,
 
-    attached() {
+    mounted() {
         this.onLoad(this);
 
         let $window = $(window);
@@ -41,7 +41,7 @@ export default Page.extend({
         $window.scroll(() => $stickyEl.toggleClass('sticky', $window.scrollTop() > elTop));
     },
 
-    detached() {
+    destroyed() {
         this.removeScroll();
         this.resetPostData();
     },

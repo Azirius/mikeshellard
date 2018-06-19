@@ -2,6 +2,7 @@ import HomeComponent from './components/home.js';
 import PostComponent from './components/post.js';
 import ProfileComponent from './components/profile.js';
 import ArticleManagementComponent from './components/article-management.js';
+import DashboardComponent from './components/dashboard.js';
 import {getURI, removeActiveClassFromParentListItems, addActiveClassToParentListItem} from '../helpers.js';
 
 export default {
@@ -23,13 +24,15 @@ export default {
                 'profile/:slug': slug => this.setView('profile', slug),
 
                 'admin/article': () => this.setView('articleManagement'),
+
+                'dashboard': () => this.setView('dashboard')
             },
 
             router: null,
         }
     },
 
-    attached() {
+    mounted() {
         this.router = new Router(this.routes);
 
         this.router.after((router, route, uri, response) => {
@@ -54,6 +57,7 @@ export default {
             e.preventDefault();
             history.pushState(null, null, e.target.href);
             app.route();
+            // $('body').removeClass('site').addClass('site');
         });
 
         history.replaceState(null, document.title, document.location.href);
@@ -65,7 +69,8 @@ export default {
         home: HomeComponent,
         post: PostComponent,
         profile: ProfileComponent,
-        articleManagement: ArticleManagementComponent
+        articleManagement: ArticleManagementComponent,
+        dashboard: DashboardComponent
     },
 
     methods: {
@@ -84,8 +89,8 @@ export default {
          * @return {Vue}
          */
         makeAlert(type, notification) {
-            this.notification = notification || '';
             this.setAlert(type);
+            this.notification = notification || '';
 
             (function () {
                 this.setAlert();
@@ -102,20 +107,33 @@ export default {
          */
         handleError(error) {
             if (error.response.data) {
-                var errors      =   error.response.data.errors.body;
-                var errorLength =   errors.length;
-                var errorMessage=   '';
-                for (var i=0; i < errorLength; i++) {
-                    errorMessage += errors[i];
-                    if (i < errorLength-1) {
-                        errorMessage += '<br>';
-                    }
-                }
-                this.error(errorMessage);
-                return;
+                return this.handleValidationError(error);
             }
 
             this.handleAxiosException(error);
+        },
+
+        handleValidationError(error) {
+            var errors      =   error.response.data.errors;
+            var errorMessage=   '';
+
+            for (var key in errors) {
+                var currentError=   errors[key];
+                var errorLength =   currentError.length;
+
+                if (typeof currentError === 'string') {
+                    errorMessage += '<p>' + currentError + '<p>';
+                } else {
+                    for (var i=0; i < errorLength; i++) {
+                        errorMessage += currentError[i];
+                        if (i < errorLength-1) {
+                            errorMessage += '<br>';
+                        }
+                    }
+                }
+            }
+
+            this.error(errorMessage);
         },
 
         /**

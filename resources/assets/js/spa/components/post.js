@@ -1,5 +1,8 @@
 import PostTemplate from './post.vue.html';
 import Page from './Page.js';
+import Pagination from '../../Pagination.js';
+
+Vue.component('Pagination', Pagination);
 
 export default Page.extend({
     props: ['on-load'],
@@ -20,7 +23,7 @@ export default Page.extend({
 
     template: PostTemplate,
 
-    attached() {
+    created() {
         this.onLoad(this);
     },
 
@@ -60,7 +63,7 @@ export default Page.extend({
         },
 
         isFeaturedComment(comment) {
-            return comment.id === this.featured_comment.id;
+            return comment.id === (this.featured_comment && this.featured_comment.id);
         },
 
         fetchPost(slug) {

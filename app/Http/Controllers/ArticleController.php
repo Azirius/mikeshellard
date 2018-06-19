@@ -26,8 +26,14 @@ class ArticleController extends Controller
     }
 
     public function create()
-    {
-        return view('article.create');
+    {   
+        $pages = Article::preparePages(collect(['body' => old('body'), 'subtitle' => old('subtitle')]));
+
+        // print_r(old('subtitle')) . '<br>';
+        // print_r(old('body')) . '<br>';
+        // print_r($pages);
+
+        return view('article.create', compact('pages'));
     }
 
     public function store(ArticleRequest $request)
