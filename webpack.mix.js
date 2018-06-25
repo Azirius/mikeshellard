@@ -11,8 +11,12 @@ const { mix } = require('laravel-mix');
  |
  */
 mix.browserSync({
-    proxy: 'mikeshellard.test',
-    browser: "google chrome canary"
+    // proxy: 'mikeshellard.test',
+    proxy: 'http://mikeshellard.test/',
+    host: 'mikeshellard.test',
+    open: 'external',
+    browser: 'google chrome canary',
+    notify: false
 });
 
 mix.sass('resources/assets/less/app.scss', 'public/css');

@@ -44,6 +44,7 @@
                                     &nbsp;
                                     My Profile
                                 </a>
+                                @can('manage-articles')
                                 <a href="{{ url(route('admin.article.index')) }}" class="navbar-item">
                                     <i class="fa fa-btn fa-archive"></i>
                                     &nbsp;
@@ -54,6 +55,7 @@
                                     &nbsp;
                                     Add Article
                                 </a>
+                                @endcan
                                 <hr class="navbar-divider">
                                 <a href="{{ url('/logout') }}" class="navbar-item">
                                     <i class="fa fa-btn fa-sign-out-alt"></i>

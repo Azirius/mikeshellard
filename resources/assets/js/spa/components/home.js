@@ -69,7 +69,7 @@ export default Page.extend({
                 if ($('#bottom').isOnScreen()) {
                     this.fetchNextPostSet();
                 }
-            }).debounce(1000))
+            }).debounce(1000));
         },
 
         addPostsToArray(response) {
@@ -86,6 +86,10 @@ export default Page.extend({
             this.loading_posts = false;
         },
 
+        loadPosts(queryString) {
+            return axios.get('/api/v1/article?' + queryString);
+        },
+
         fetchNextPostSet() {
             if (this.loading_posts) {
                 return;
@@ -97,9 +101,7 @@ export default Page.extend({
 
             urlParameters[this.field] = this.reverse ? 'desc' : 'asc';
 
-            let queryStringCompiled = queryString.stringify(urlParameters);
-
-            axios.get('/api/v1/article?' + queryStringCompiled)
+            this.loadPosts(queryString.stringify(urlParameters))
                 .then(this.addPostsToArray, response => this.$root.error(response.error));
         },
 

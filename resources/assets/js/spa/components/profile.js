@@ -10,9 +10,8 @@ export default Page.extend({
                 name: 'user',
                 title: 'User'
             },
-            user: {},
-            posts: {},
-            dataLoaded: false
+            user: null,
+            posts: {}
         };
     },
 
@@ -30,12 +29,14 @@ export default Page.extend({
         setUserData(response) {
             this.user = response.data;
             this.posts = response.data.articles;
-            this.dataLoaded = true;
+        },
+
+        loadUser(slug) {
+            return axios.get('/api/v1/user/' + slug);
         },
 
         fetchUser(slug) {
-            axios.get('/api/v1/user/' + slug)
-                .then(this.setUserData, response => this.$root.error(response.error));
+            this.loadUser(slug).then(this.setUserData, response => this.$root.error(response.error));
         }
     }
 });

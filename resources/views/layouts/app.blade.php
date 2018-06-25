@@ -11,9 +11,11 @@
     <title>Mike Shellard</title>
 
     <!-- Theme CSS -->
-    {{-- <link href="{{ mix('css/vendor.css') }}" rel="stylesheet"> --}}
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+    <link rel="stylesheet" 
+        href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" 
+        integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" 
+        crossorigin="anonymous">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote-lite.css" rel="stylesheet">
 
     <script>
@@ -46,6 +48,7 @@
             <component :is="view"
                      ref="spa"
                      :on-load="onChildLoad"
+                     class="site-container"
             ></component>
         </transition>
         
@@ -76,7 +79,7 @@
                         </span>
                     </p>
                     
-                    <p class="copyright text-muted">Copyright &copy; Mike Shellard THIS YEAR</p>
+                    <p class="copyright text-muted">Copyright &copy; Mike Shellard 2018</p>
                 </div>
             </div>
         </footer>

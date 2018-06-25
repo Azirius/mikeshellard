@@ -33,7 +33,7 @@
             </div>
         </div>
         <div v-else>
-            <div class="panel panel-info">
+            <div class="m-b-md">
                 <div class="panel-body">You need to be <a href="/login">logged in</a> to comment on these articles!</div>
             </div>
         </div>
@@ -50,7 +50,7 @@
         
         <h2 class="subtitle">Comments</h2>
         <div v-if="0 === comments.length">
-            <div class="alert alert-info">
+            <div class="notification is-info">
                 Nobody has commented here yet!
             </div>
         </div>
@@ -68,7 +68,7 @@
                                 <i class="fa m-r-xs fa-thumbs-up"></i>
                                 Feature?
                             </button>
-                            <span class="has-text-primary m-l-md" v-else>
+                            <span class="has-text-primary m-l-md" v-else-if="isFeaturedComment(comment)">
                                 <i class="fas m-r-xxs fa-thumbs-up"></i>
                                 Featured!
                             </span>
