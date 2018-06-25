@@ -35,3 +35,4 @@ Route::get('profile/{user}', 'ProfileController@show');
 Route::get('pagination.html', function () {
     return view('pagination');
 });
+Route::resource('register', 'RegistrationController')->middleware('guest');
