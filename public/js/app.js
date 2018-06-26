@@ -13665,6 +13665,14 @@ $.fn.isOnScreen = function () {
     return bounds.top <= viewport.bottom && bounds.bottom >= viewport.top;
 };
 
+$(function () {
+    $('.navbar-burger').click(function (e) {
+        var target = $('#' + $(this).data('target'));
+        target.toggleClass('is-active');
+        $(this).toggleClass('is-active');
+    });
+});
+
 /**
  * Focus caret on an element
  *

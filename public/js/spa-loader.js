@@ -696,10 +696,13 @@ window.app = app;
         });
 
         $('#app-container').on('click', 'a:not(.prevent)', function (e) {
+            // Hide navbar drop down on 'mobile'
+            $('.navbar-burger').removeClass('is-active');
+            $('#navMenu').removeClass('is-active');
+
             e.preventDefault();
             history.pushState(null, null, e.target.href);
             app.route();
-            // $('body').removeClass('site').addClass('site');
         });
 
         history.replaceState(null, document.title, document.location.href);

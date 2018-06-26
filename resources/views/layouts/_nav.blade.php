@@ -3,13 +3,13 @@
                 <a href="/" class="navbar-item is-size-4">
                     Mike Shellard
                 </a>
-                <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+                <a role="button" class="navbar-burger prevent" aria-label="menu" aria-expanded="false" data-target="navMenu">
                     <span aria-hidden="true"></span>
                     <span aria-hidden="true"></span>
                     <span aria-hidden="true"></span>
                 </a>
             </div>
-            <div class="navbar-menu">
+            <div class="navbar-menu" id="navMenu">
                 <div class="navbar-start">
                     <a href="/" class="navbar-item{{ Request::path() == '/' ? ' is-active' : '' }}">
                         Home
