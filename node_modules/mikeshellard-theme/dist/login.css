@@ -1,1 +1,35 @@
-.is-boxed-form{width:400px;border-radius:5px;background-color:#fff;-webkit-box-shadow:0 2px 6px 0 rgba(0,0,0,.2);box-shadow:0 2px 6px 0 rgba(0,0,0,.2);padding:15px}.is-login-page{background-color:#ddd}.is-login-footer{background-color:#f1f2f4;margin:15px -15px -15px;padding:10px;border-radius:0 0 5px 5px}.is-login-header{padding:10px;margin-bottom:10px}.is-form-footer{padding:10px}.has-flex-end{-webkit-box-pack:end!important;-ms-flex-pack:end!important;justify-content:flex-end!important}
+.is-boxed-form {
+  width: 400px;
+  border-radius: 5px;
+  background-color: #fff;
+  -webkit-box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.2);
+          box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.2);
+  padding: 15px;
+}
+
+.is-login-page {
+  background-color: #ddd;
+}
+
+.is-login-footer {
+  background-color: #f1f2f4;
+  margin: 15px -15px -15px -15px;
+  padding: 10px;
+  border-radius: 0 0 5px 5px;
+}
+
+.is-login-header {
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.is-form-footer {
+  padding: 10px;
+}
+
+.has-flex-end {
+  -webkit-box-pack: end !important;
+      -ms-flex-pack: end !important;
+          justify-content: flex-end !important;
+}
+

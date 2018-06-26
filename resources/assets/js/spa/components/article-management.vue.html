@@ -2,7 +2,7 @@
     <div class="container">
         <delete-article-modal :show="showDeleteArticleModalState" @close="hideDeleteArticleModel()"></delete-article-modal>
         
-        <div id="admin-article-search" class="tabs is-toggle">
+        <div id="admin-article-search" class="is-hidden-touch tabs is-toggle">
             <div class="pull-left">
                 <ul>
                     <li v-for="column in columns" :class="[field == column ? 'is-active' : '']">
