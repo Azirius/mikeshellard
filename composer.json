@@ -6,7 +6,6 @@
     "type": "project",
     "require": {
         "php": ">=7.0.0",
-        "adamwathan/bootforms": "^0.8.0",
         "fideloper/proxy": "~4.0",
         "guzzlehttp/guzzle": "^6.2",
         "laravel/framework": "5.6.*",

@@ -168,7 +168,6 @@ return [
          * Package Service Providers...
          */
         Laravel\Tinker\TinkerServiceProvider::class,
-        AdamWathan\BootForms\BootFormsServiceProvider::class,
         
         /*
          * Application Service Providers...
@@ -228,8 +227,6 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
-        
-        'BootForm' => AdamWathan\BootForms\Facades\BootForm::class,
 
     ],
 

@@ -17,5 +17,6 @@ class AdminSeeder extends Seeder
 
         Bouncer::allow('subscriber')->to('comment-on-articles');
         Bouncer::allow('subscriber')->to('feature-a-comment');
+        Bouncer::assign('subscriber')->to(App\User::find(1));
     }
 }

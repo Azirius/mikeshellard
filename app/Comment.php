@@ -35,6 +35,11 @@ class Comment extends Model
         return $this->user->slug;
     }
 
+    public function authorsAvatar($size = 'medium')
+    {
+        return $this->user->gravatar[$size];
+    }
+
     public function article()
     {
         return $this->belongsTo(Article::class);
