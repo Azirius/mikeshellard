@@ -25,6 +25,10 @@ Route::group(['middleware' => 'guest'], function () {
     Route::post('login', 'Auth\SessionController@doLogin');
     Route::get('login/invited', 'Auth\SessionController@postLogin');
     Route::get('auth/token/{token}', 'Auth\SessionController@validateToken');
+
+    Route::get('register', 'RegistrationController@index');
+    Route::post('register', 'RegistrationController@store');
+    Route::get('register/created', 'RegistrationController@created');
 });
 
 Route::get('/', 'HomeController@index');
@@ -35,4 +39,3 @@ Route::get('profile/{user}', 'ProfileController@show');
 Route::get('pagination.html', function () {
     return view('pagination');
 });
-Route::resource('register', 'RegistrationController')->middleware('guest');

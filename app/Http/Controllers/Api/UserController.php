@@ -18,7 +18,14 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        return $user->with('articles')->first();
+        return $user->load(['articles', 'comments' => function ($query) {
+            return $query->limit(10)->with('article');
+        }]);
+    }
+
+    public function getUsersAbilities(User $user)
+    {
+        return $user->getAbilities();
     }
 
     public function updateEmail()

@@ -11,7 +11,8 @@ export default Page.extend({
                 title: 'User'
             },
             user: null,
-            posts: {}
+            posts: null,
+            abilities: null
         };
     },
 
@@ -24,6 +25,7 @@ export default Page.extend({
     methods: {
         launch(slug) {
             this.fetchUser(slug);
+            this.fetchUserAbilities(slug);
         },
 
         setUserData(response) {
@@ -36,7 +38,37 @@ export default Page.extend({
         },
 
         fetchUser(slug) {
-            this.loadUser(slug).then(this.setUserData, response => this.$root.error(response.error));
+            this.loadUser(slug)
+                .then(this.setUserData, response => this.$root.error(response.error));
+        },
+
+        setUserAbilities(response) {
+            var abilities = response.data.map(abilitiy => {
+                return abilitiy.name;
+            });
+
+            this.abilities = abilities;
+        },
+
+        loadUserAbilities(slug) {
+            return axios.get('/api/v1/user/' + slug + '/abilities');
+        },
+
+        fetchUserAbilities(slug) {
+            this.loadUserAbilities(slug)
+                .then(this.setUserAbilities, response => this.$root.error(response.error));
+        },
+
+        can(abilitiy) {
+            var canUser = false;
+
+            this.abilities.forEach(currentAbility => {
+                if (abilitiy === currentAbility) {
+                    canUser = true;
+                }
+            });
+
+            return canUser;
         }
     }
 });

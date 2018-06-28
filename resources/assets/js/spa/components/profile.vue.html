@@ -1,4 +1,4 @@
-<div v-if="user">
+<div v-if="user && abilities">
     <section class="hero is-medium is-info">
         <div class="hero-body">
             <div class="container">
@@ -22,20 +22,39 @@
         <br>
         <div class="container container-into-hero">
             <div class="card">
-                <div class="card-content">    
-                    <h1 class="title is-2 has-bottom-highlight">{{ user.name }}'s Posts!</h1>
-                    <div v-if="posts.length == 0">
-                        This user has no posts!
+                <div class="card-content">
+                    <div v-if="can('manage-articles') && posts" class="m-b-lg">
+                        <h1 class="title is-2 has-bottom-highlight">{{ user.name }}'s Posts!</h1>
+                        <div v-if="posts.length == 0">
+                            {{ user.name }} currently has no posts!
+                        </div>
+                        <div class="blog-container" v-for="(post, index) in posts">
+                            <h3 class="blog-post-title">
+                                <a :href="'/article/' + post.slug " v-html="post.title"></a>
+                            </h3>
+                            <p class="blog-post-meta">
+                                <i class="fa fa-calendar"></i> Published <span v-text="post.nice_created_at"></span>
+                                <i class="fas fa-comments m-l-xs"></i> <span v-text="post.comment_count"></span> Comment{{ post.comment_count === 0 || post.comment_count > 1 ? 's' : '' }}
+                            </p>
+                            <hr v-if="index + 1 < posts.length" />
+                        </div>
                     </div>
-                    <div class="blog-container" v-for="(post, index) in posts">
-                        <h3 class="blog-post-title">
-                            <a :href="'/article/' + post.slug " v-html="post.title"></a>
-                        </h3>
-                        <p class="blog-post-meta">
-                            <i class="fa fa-calendar"></i> Published <span v-text="post.nice_created_at"></span>
-                            <i class="fas fa-comments m-l-xs"></i> <span v-text="post.comment_count"></span> Comment{{ post.comment_count === 0 || post.comment_count > 1 ? 's' : '' }}
-                        </p>
-                        <hr v-if="index + 1 < posts.length" />
+                    <div>
+                        <h1 class="title is-2 has-bottom-highlight">{{ user.name }}'s 10 most recent comments</h1>
+                        <div v-if="0 === user.comments.length" class="notification is-info">
+                            {{ user.name }} has not actually commented on anything!
+                        </div>
+                        <div v-for="(comment, index) in user.comments" class="m-t-lg" :class="[1 === (index % 2) ? 'has-text-left' : 'has-text-right']">
+                            <p class="blog-post-meta">
+                                <i class="fa fa-calendar"></i> Comment Published <span v-text="comment.nice_created_at"></span>
+                            </p>
+                            <p class="m-t-md">
+                                {{ comment.body }}
+                            </p>
+                            <small class="is-muted m-t-md">
+                                Posted on <a :href="'/article/' + comment.article.slug">{{ comment.article.title }}</a>
+                            </small>
+                        </div>
                     </div>
                 </div>
             </div>

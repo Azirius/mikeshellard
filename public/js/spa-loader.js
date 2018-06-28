@@ -1418,7 +1418,8 @@ module.exports = "<section class=\"section site-content\">\n    <div class=\"con
                 title: 'User'
             },
             user: null,
-            posts: {}
+            posts: null,
+            abilities: null
         };
     },
 
@@ -1433,6 +1434,7 @@ module.exports = "<section class=\"section site-content\">\n    <div class=\"con
     methods: {
         launch: function launch(slug) {
             this.fetchUser(slug);
+            this.fetchUserAbilities(slug);
         },
         setUserData: function setUserData(response) {
             this.user = response.data;
@@ -1447,6 +1449,34 @@ module.exports = "<section class=\"section site-content\">\n    <div class=\"con
             this.loadUser(slug).then(this.setUserData, function (response) {
                 return _this.$root.error(response.error);
             });
+        },
+        setUserAbilities: function setUserAbilities(response) {
+            var abilities = response.data.map(function (abilitiy) {
+                return abilitiy.name;
+            });
+
+            this.abilities = abilities;
+        },
+        loadUserAbilities: function loadUserAbilities(slug) {
+            return axios.get('/api/v1/user/' + slug + '/abilities');
+        },
+        fetchUserAbilities: function fetchUserAbilities(slug) {
+            var _this2 = this;
+
+            this.loadUserAbilities(slug).then(this.setUserAbilities, function (response) {
+                return _this2.$root.error(response.error);
+            });
+        },
+        can: function can(abilitiy) {
+            var canUser = false;
+
+            this.abilities.forEach(function (currentAbility) {
+                if (abilitiy === currentAbility) {
+                    canUser = true;
+                }
+            });
+
+            return canUser;
         }
     }
 }));
@@ -1456,7 +1486,7 @@ module.exports = "<section class=\"section site-content\">\n    <div class=\"con
 /***/ "./resources/assets/js/spa/components/profile.vue.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div v-if=\"user\">\n    <section class=\"hero is-medium is-info\">\n        <div class=\"hero-body\">\n            <div class=\"container\">\n                <h1 class=\"is-1 title\">\n                    {{ user.name }}'s Profile\n                </h1>\n            </div>\n        </div>\n    </section>\n    <section class=\"section site-content\">\n        <img :src=\"user.gravatar.large\"\n            alt=\"Avatar\" \n            class=\"avatar is-hidden-mobile\" \n            style=\"position: relative; \n            z-index: 2; \n            float: left; \n            left: 75%; \n            margin-top: -260px; \n            border: 3px solid #fff\"\n        >\n        <br>\n        <div class=\"container container-into-hero\">\n            <div class=\"card\">\n                <div class=\"card-content\">    \n                    <h1 class=\"title is-2 has-bottom-highlight\">{{ user.name }}'s Posts!</h1>\n                    <div v-if=\"posts.length == 0\">\n                        This user has no posts!\n                    </div>\n                    <div class=\"blog-container\" v-for=\"(post, index) in posts\">\n                        <h3 class=\"blog-post-title\">\n                            <a :href=\"'/article/' + post.slug \" v-html=\"post.title\"></a>\n                        </h3>\n                        <p class=\"blog-post-meta\">\n                            <i class=\"fa fa-calendar\"></i> Published <span v-text=\"post.nice_created_at\"></span>\n                            <i class=\"fas fa-comments m-l-xs\"></i> <span v-text=\"post.comment_count\"></span> Comment{{ post.comment_count === 0 || post.comment_count > 1 ? 's' : '' }}\n                        </p>\n                        <hr v-if=\"index + 1 < posts.length\" />\n                    </div>\n                </div>\n            </div>\n        </div>\n    </section>\n</div>\n";
+module.exports = "<div v-if=\"user && abilities\">\n    <section class=\"hero is-medium is-info\">\n        <div class=\"hero-body\">\n            <div class=\"container\">\n                <h1 class=\"is-1 title\">\n                    {{ user.name }}'s Profile\n                </h1>\n            </div>\n        </div>\n    </section>\n    <section class=\"section site-content\">\n        <img :src=\"user.gravatar.large\"\n            alt=\"Avatar\" \n            class=\"avatar is-hidden-mobile\" \n            style=\"position: relative; \n            z-index: 2; \n            float: left; \n            left: 75%; \n            margin-top: -260px; \n            border: 3px solid #fff\"\n        >\n        <br>\n        <div class=\"container container-into-hero\">\n            <div class=\"card\">\n                <div class=\"card-content\">\n                    <div v-if=\"can('manage-articles') && posts\" class=\"m-b-lg\">\n                        <h1 class=\"title is-2 has-bottom-highlight\">{{ user.name }}'s Posts!</h1>\n                        <div v-if=\"posts.length == 0\">\n                            {{ user.name }} currently has no posts!\n                        </div>\n                        <div class=\"blog-container\" v-for=\"(post, index) in posts\">\n                            <h3 class=\"blog-post-title\">\n                                <a :href=\"'/article/' + post.slug \" v-html=\"post.title\"></a>\n                            </h3>\n                            <p class=\"blog-post-meta\">\n                                <i class=\"fa fa-calendar\"></i> Published <span v-text=\"post.nice_created_at\"></span>\n                                <i class=\"fas fa-comments m-l-xs\"></i> <span v-text=\"post.comment_count\"></span> Comment{{ post.comment_count === 0 || post.comment_count > 1 ? 's' : '' }}\n                            </p>\n                            <hr v-if=\"index + 1 < posts.length\" />\n                        </div>\n                    </div>\n                    <div>\n                        <h1 class=\"title is-2 has-bottom-highlight\">{{ user.name }}'s 10 most recent comments</h1>\n                        <div v-if=\"0 === user.comments.length\" class=\"notification is-info\">\n                            {{ user.name }} has not actually commented on anything!\n                        </div>\n                        <div v-for=\"(comment, index) in user.comments\" class=\"m-t-lg\" :class=\"[1 === (index % 2) ? 'has-text-left' : 'has-text-right']\">\n                            <p class=\"blog-post-meta\">\n                                <i class=\"fa fa-calendar\"></i> Comment Published <span v-text=\"comment.nice_created_at\"></span>\n                            </p>\n                            <p class=\"m-t-md\">\n                                {{ comment.body }}\n                            </p>\n                            <small class=\"is-muted m-t-md\">\n                                Posted on <a :href=\"'/article/' + comment.article.slug\">{{ comment.article.title }}</a>\n                            </small>\n                        </div>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </section>\n</div>\n";
 
 /***/ }),
 

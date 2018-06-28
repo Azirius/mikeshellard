@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
     
-    <title>Mike Shellard &dash; Login</title>
+    <title>Mike Shellard &dash; Register</title>
 
     <!-- Theme CSS -->
     
@@ -31,14 +31,26 @@
         <div class="hero-body">
             <div class="container">
                 <div class="columns is-centered">
-                    <form action="/login" method="POST">
+                    <form action="/register" method="POST">
                         {{ csrf_field() }}
                         <div class="is-login-header">
-                            <h3 class="title has-text-grey">Login</h3>
-                            <p class="subtitle has-text-grey">Login to access more stuff</p>
+                            <h3 class="title has-text-grey">Register</h3>
+                            <p class="subtitle has-text-grey">Register to access more stuff</p>
                         </div>
                         <div class="is-boxed-form">
                                     
+                            <div class="field">
+                                <div class="control has-icons-left">
+                                    <input type="text" class="input is-m{{ $errors->first('name') ? ' is-danger':'' }}" name="name" placeholder="Your Name" value="{{ old('name') }}" required>
+                                    <span class="icon is-small is-left">
+                                        <i class="far fa-id-card"></i>
+                                    </span>
+                                </div>
+                                @if ($errors->first('name'))
+                                <div class="help is-danger has-text-left">{{ $errors->first('name') }}</div>
+                                @endif
+                            </div>
+
                             <div class="field">
                                 <div class="control has-icons-left">
                                     <input type="email" class="input is-m{{ $errors->first('email') ? ' is-danger':'' }}" name="email" placeholder="Your Email" value="{{ old('email') }}" required>
@@ -54,7 +66,7 @@
                             <div class="is-login-footer">
                                 <div class="field is-grouped has-flex-end">
                                     <div class="control">
-                                        <button class="button is-link is-submit">Submit</button>
+                                        <button class="button is-link is-submit">Register</button>
                                     </div>
                                     <div class="control">
                                         <a href="/" class="button is-text is-cancel">Cancel</a>
@@ -64,9 +76,9 @@
                         </div>
 
                         <div class="has-text-centered is-fullwidth is-form-footer">
-                            <a href="/register">Sign Up</a>
+                            <a href="/login">Or Login</a>
                             &nbsp; &bull; &nbsp;
-                            <a href="/help#no-password">No Password?</a>
+                            <a href="/help/no-password">No Password?</a>
                         </div>
                     </form>
 

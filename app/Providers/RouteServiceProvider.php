@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use App\Article;
+use App\User;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 
@@ -25,10 +25,6 @@ class RouteServiceProvider extends ServiceProvider
     public function boot()
     {
         parent::boot();
-
-        Route::bind('review', function ($articleSlug) {
-            return Article::whereSlug($articleSlug)->whereNotNull('score')->firstOrFail();
-        });
     }
 
     /**

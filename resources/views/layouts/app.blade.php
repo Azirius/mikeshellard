@@ -31,7 +31,7 @@
     <div id="app-container" class="site-container" v-cloak>
         @include('layouts._nav')
         
-        <div id="non-spa">
+        <div id="non-spa" class="site-container">
         @yield('content')
         </div>
         
