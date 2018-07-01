@@ -105,7 +105,7 @@ class Article extends Model
 
     public function getBodyTrimmedAttribute()
     {
-        return str_limit($this->body, 100);
+        return str_limit($this->pages[0]->body, 100);
     }
 
     public function scopeNewest($builder)

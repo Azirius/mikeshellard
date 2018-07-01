@@ -1,8 +1,8 @@
-import HomeComponent from './components/home.js';
-import PostComponent from './components/post.js';
-import ProfileComponent from './components/profile.js';
-import ArticleManagementComponent from './components/article-management.js';
-import DashboardComponent from './components/dashboard.js';
+import HomePage from './pages/home.js';
+import PostPage from './pages/post.js';
+import ProfilePage from './pages/profile.js';
+import ArticleManagementPage from './pages/article-management.js';
+import DashboardPage from './pages/dashboard.js';
 import {getURI, removeActiveClassFromParentListItems, addActiveClassToParentListItem} from '../helpers.js';
 
 export default {
@@ -69,11 +69,11 @@ export default {
     },
 
     components: {
-        home: HomeComponent,
-        post: PostComponent,
-        profile: ProfileComponent,
-        articleManagement: ArticleManagementComponent,
-        dashboard: DashboardComponent
+        home: HomePage,
+        post: PostPage,
+        profile: ProfilePage,
+        articleManagement: ArticleManagementPage,
+        dashboard: DashboardPage
     },
 
     methods: {

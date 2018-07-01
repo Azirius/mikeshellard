@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import Pagination from './Pagination.js';
+import Pagination from './spa/components/Pagination.js';
 import axios from 'axios';
 
 Vue.component('Pagination', Pagination);

@@ -1,7 +1,9 @@
 import PostTemplate from './post.vue.html';
-import Page from './Page.js';
-import Pagination from '../../Pagination.js';
+import Page from './../components/Page.js';
+import ArticlePost from './../components/ArticlePost.js';
+import Pagination from './../components/Pagination.js';
 
+Vue.component('ArticlePost', ArticlePost)
 Vue.component('Pagination', Pagination);
 
 export default Page.extend({

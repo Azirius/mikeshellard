@@ -13112,11 +13112,39 @@ module.exports = g;
 
 /***/ }),
 
-/***/ "./resources/assets/js/Pagination.js":
+/***/ "./resources/assets/js/pagination-page-only.js":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__pagination_template_vue_html__ = __webpack_require__("./resources/assets/js/pagination-template.vue.html");
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__("./node_modules/vue/dist/vue.common.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__spa_components_Pagination_js__ = __webpack_require__("./resources/assets/js/spa/components/Pagination.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_axios__ = __webpack_require__("./node_modules/axios/index.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_axios__);
+
+
+
+
+__WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('Pagination', __WEBPACK_IMPORTED_MODULE_1__spa_components_Pagination_js__["a" /* default */]);
+
+var app = new __WEBPACK_IMPORTED_MODULE_0_vue___default.a({
+    'el': '#app-container'
+});
+
+(function (exports) {
+    exports.Vue = __WEBPACK_IMPORTED_MODULE_0_vue___default.a;
+    exports.axios = __WEBPACK_IMPORTED_MODULE_2_axios___default.a;
+    exports.app = app;
+})(window);
+
+/***/ }),
+
+/***/ "./resources/assets/js/spa/components/Pagination.js":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__pagination_template_vue_html__ = __webpack_require__("./resources/assets/js/spa/components/pagination-template.vue.html");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__pagination_template_vue_html___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__pagination_template_vue_html__);
 
 
@@ -13227,35 +13255,7 @@ module.exports = g;
 
 /***/ }),
 
-/***/ "./resources/assets/js/pagination-page-only.js":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__("./node_modules/vue/dist/vue.common.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Pagination_js__ = __webpack_require__("./resources/assets/js/Pagination.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_axios__ = __webpack_require__("./node_modules/axios/index.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_axios__);
-
-
-
-
-__WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('Pagination', __WEBPACK_IMPORTED_MODULE_1__Pagination_js__["a" /* default */]);
-
-var app = new __WEBPACK_IMPORTED_MODULE_0_vue___default.a({
-    'el': '#app-container'
-});
-
-(function (exports) {
-    exports.Vue = __WEBPACK_IMPORTED_MODULE_0_vue___default.a;
-    exports.axios = __WEBPACK_IMPORTED_MODULE_2_axios___default.a;
-    exports.app = app;
-})(window);
-
-/***/ }),
-
-/***/ "./resources/assets/js/pagination-template.vue.html":
+/***/ "./resources/assets/js/spa/components/pagination-template.vue.html":
 /***/ (function(module, exports) {
 
 module.exports = "<div>\n    <div class=\"pagination-focus\">\n        <slot v-for=\"item in itemsToDisplay\" :item=\"item\" name=\"pagination-item\"></slot>\n    </div>\n    <br>\n    <nav class=\"pagination\" role=\"navigation\" aria-label=\"pagination\">\n        <ul class=\"pagination-list\">\n            <li>\n                <a class=\"pagination-link\" @click=\"goToFirstPage\" :disabled=\"isOnFirstPage()\">First Page</a>\n            </li>\n            <li v-for=\"page in pages\" :key=\"page\">\n                <a class=\"pagination-link\" :class=\"{'is-current': (page) === currentPage}\" @click=\"goToThisPage(page)\" v-text=\"page\"></a>\n                \n            </li>\n            <li>\n                <a class=\"pagination-link\" @click=\"goToLastPage\" :disabled=\"isOnLastPage()\">Last Page</a>\n            </li>\n        </ul>\n    </nav>\n</div>\n";

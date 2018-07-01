@@ -52,11 +52,13 @@
                         There are no posts. <a href="/admin/article/create">Make one!</a>
                     </div>
                     <div v-for="post in posts" style="margin: 20px">
-                        <h1 class="title"><a :href="'/article/' + post.slug " v-text="post.title"></a></h1>
-                        <h1 class="subtitle">
-                            Posted: {{ post.nice_created_at }}
-                        </h1>
-                        <div class="m-b-md" v-html="post.pages[0].body"></div>
+                        <article-post :user="post.user" :post="post" class="m-b-md">
+                            <template slot="post-body">
+                                {{ post.body_trimmed }}
+                                <br>
+                                <span class="has-text-grey m-t-md">Click the title to read on.</span>
+                            </template>
+                        </article-post>
                         <div class="m-b-m" style="background-color: #ededed; padding: 5px; text-align: right">
                             <a :href="'/admin/article/' + post.slug + '/edit'" class="button is-primary">Edit</a>
                             <button class="button is-text" @click.stop.prevent="showDeleteArticleModal(post)">Delete</button>

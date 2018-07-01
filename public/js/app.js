@@ -13645,7 +13645,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_reflex_routing__ = __webpack_require__("./node_modules/reflex-routing/dist/main.module.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_reflex_routing___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_reflex_routing__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__spa_components_modal_js__ = __webpack_require__("./resources/assets/js/spa/components/modal.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__spa_components_Modal_js__ = __webpack_require__("./resources/assets/js/spa/components/Modal.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_axios__ = __webpack_require__("./node_modules/axios/index.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_axios__);
 
@@ -13653,7 +13653,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 
-__WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('Modal', __WEBPACK_IMPORTED_MODULE_2__spa_components_modal_js__["a" /* default */]);
+__WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('Modal', __WEBPACK_IMPORTED_MODULE_2__spa_components_Modal_js__["a" /* default */]);
 
 $.fn.isOnScreen = function () {
     var viewport = {};
@@ -13705,7 +13705,7 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
 /***/ }),
 
-/***/ "./resources/assets/js/spa/components/modal.js":
+/***/ "./resources/assets/js/spa/components/Modal.js":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

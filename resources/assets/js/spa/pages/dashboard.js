@@ -1,7 +1,7 @@
 import DashboardTemplate from './dashboard.vue.html';
 import ChangeEmailModal from '../modals/ChangeEmailModal.js';
 import GravatarModal from '../modals/GravatarModal.js';
-import Page from './Page.js';
+import Page from './../components/Page.js';
 
 Vue.component('ChangeEmailModal', ChangeEmailModal);
 Vue.component('GravatarModal', GravatarModal);

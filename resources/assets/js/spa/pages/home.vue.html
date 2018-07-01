@@ -48,16 +48,14 @@
             <div class="notification is-info" v-if="posts.length == 0 && loading_posts == false">
                 There are no posts
             </div>
-            <div class="blog-container" v-for="post in posts">
-                <h1 class="title">
-                    <a :href="'/article/' + post.slug" v-html="post.title"></a>
-                </h1>
-                <p class="blog-post-meta">
-                    <i class="fa fa-user"></i> <a :href="'/profile/' + post.user.slug" v-text="post.user.name"></a>
-                    <i class="fa fa-calendar"></i> <span v-text="post.nice_created_at"></span>
-                </p>
-                <hr>
-                <p class="blog-post" v-html="post.pages[0].body"></p>
+            <div class="blog-container" v-for="(post, index) in posts">
+                <article-post :user="post.user" :post="post" class="m-b-lg">
+                    <template slot="post-body">
+                        {{ post.body_trimmed }}
+                        <br>
+                        <span class="has-text-grey m-t-md">Click the title to read on.</span>
+                    </template>
+                </article-post>
             </div>
             <div class="loading-articles has-text-centered" v-if="loading_posts">
                 <i class="fas fa-spinner fa-spin fa-4x"></i>

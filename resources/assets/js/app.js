@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Router from 'reflex-routing';
-import Modal from './spa/components/modal.js';
+import Modal from './spa/components/Modal.js';
 import axios from 'axios';
 
 Vue.component('Modal', Modal);

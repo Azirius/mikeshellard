@@ -1,5 +1,8 @@
 import ProfileTemplate from './profile.vue.html';
-import Page from './Page.js';
+import Page from './../components/Page.js';
+import ArticlePost from './../components/ArticlePost.js';
+
+Vue.component('ArticlePost', ArticlePost)
 
 export default Page.extend({
     props: ['on-load'],

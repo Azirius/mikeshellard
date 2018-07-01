@@ -1,9 +1,6 @@
 import queryString from 'query-string';
-import DeleteArticleModal from '../modals/DeleteArticleModal.js';
-import ArticleManagementTemplate from './article-management.vue.html';
-import Page from './Page.js';
-
-Vue.component('DeleteArticleModal', DeleteArticleModal);
+import HomeTemplate from './home.vue.html';
+import Page from './../components/Page.js';
 
 export default Page.extend({
     props: ['on-load'],
@@ -11,10 +8,9 @@ export default Page.extend({
     data() {
         return {
             view: {
-                name: 'article-management',
-                title: 'Article Management'
+                name: 'home',
+                title: 'Home'
             },
-            showDeleteArticleModalState: false,
             posts: [],
             loading_posts: false,
             field: 'Created',
@@ -24,7 +20,7 @@ export default Page.extend({
                 title: 'Title',
                 author: 'Name'
             },
-            queryParams: {
+            params: {
                 page: 1,
                 search: '',
                 paginate: 5
@@ -33,24 +29,21 @@ export default Page.extend({
         };
     },
 
-    template: ArticleManagementTemplate,
+    template: HomeTemplate,
 
     mounted() {
         this.onLoad(this);
-        
+
         let $window = $(window);
-        let $stickyEl = $('#admin-article-search');
+        let $stickyEl = $('#search');
         let elTop = $stickyEl.offset().top;
 
         $window.scroll(() => $stickyEl.toggleClass('sticky', $window.scrollTop() > elTop));
-
-        eventHub.$on('article:deleted', this.removeArticle);
     },
 
     destroyed() {
         this.removeScroll();
         this.resetPostData();
-        eventHub.$off('article:deleted');
     },
 
     methods: {
@@ -64,7 +57,7 @@ export default Page.extend({
         },
 
         setUpScroll() {
-            if ($('#admin-article-bottom').isOnScreen()) {
+            if ($('#bottom').isOnScreen()) {
                 this.fetchNextPostSet();
             }
 
@@ -73,10 +66,10 @@ export default Page.extend({
                     return;
                 }
 
-                if ($('#admin-article-bottom').isOnScreen()) {
+                if ($('#bottom').isOnScreen()) {
                     this.fetchNextPostSet();
                 }
-            }).debounce(1000))
+            }).debounce(1000));
         },
 
         addPostsToArray(response) {
@@ -87,10 +80,14 @@ export default Page.extend({
                 this.last_page = true;
             } else {
                 posts.forEach(post => this.posts.push(post));
-                this.queryParams.page++;
+                this.params.page++;
             }
 
             this.loading_posts = false;
+        },
+
+        loadPosts(queryString) {
+            return axios.get('/api/v1/article?' + queryString);
         },
 
         fetchNextPostSet() {
@@ -100,26 +97,24 @@ export default Page.extend({
 
             this.loading_posts = true;
 
-            let urlParameters = this.queryParams;
+            let urlParameters = this.params;
 
             urlParameters[this.field] = this.reverse ? 'desc' : 'asc';
 
-            let queryStringCompiled = queryString.stringify(urlParameters);
-
-            axios.get('/api/v1/article?' + queryStringCompiled)
+            this.loadPosts(queryString.stringify(urlParameters))
                 .then(this.addPostsToArray, response => this.$root.error(response.error));
         },
 
         resetPostData() {
             this.posts = [];
-            this.queryParams.page = 1;
+            this.params.page = 1;
             this.last_page = false;
         },
 
         sortBy(field) {
             this.resetPostData();
             this.reverse = this.field === field ? !this.reverse : true;
-            delete this.queryParams[this.field];
+            delete this.params[this.field];
             this.field = field;
             this.fetchNextPostSet();
         },
@@ -132,21 +127,6 @@ export default Page.extend({
         rePaginate() {
             this.resetPostData();
             this.fetchNextPostSet();
-        },
-
-        showDeleteArticleModal(article) {
-            eventHub.$emit('delete-modal:open', article);
-            this.showDeleteArticleModalState = true;
-        },
-
-        hideDeleteArticleModel() {
-            this.showDeleteArticleModalState = false;
-        },
-
-        removeArticle(article) {
-            var index = this.posts.indexOf(article);
-            this.posts.splice(index, 1);
-            this.$root.success('Article successfully deleted!');
-        },
+        }
     }
 });
