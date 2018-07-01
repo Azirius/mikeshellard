@@ -15,7 +15,7 @@ export default Page.extend({
                 name: 'post',
                 title: 'Post'
             },
-            post: {},
+            post: null,
             author: {},
             comments: {},
             featured_comment: null,

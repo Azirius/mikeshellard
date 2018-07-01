@@ -51,7 +51,7 @@
                     <div class="notification is-info" v-if="posts.length == 0 && loading_posts == false">
                         There are no posts. <a href="/admin/article/create">Make one!</a>
                     </div>
-                    <div v-for="post in posts" style="margin: 20px">
+                    <div v-for="post in posts">
                         <article-post :user="post.user" :post="post" class="m-b-md">
                             <template slot="post-body">
                                 {{ post.body_trimmed }}
@@ -73,10 +73,10 @@
                 </div>
                 <div class="column">
                     <h2 class="title">Options</h2>
-                    <ul style="list-style-type: none;">
+                    <ul>
                         <li>
                             <a href="/admin/article/create">
-                                <i class="fa fa-pencil"></i>
+                                <i class="fas fa-edit"></i>
                                 Create new Article    
                             </a>
                         </li>

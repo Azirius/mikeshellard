@@ -1,7 +1,9 @@
 import ProfileTemplate from './profile.vue.html';
 import Page from './../components/Page.js';
 import ArticlePost from './../components/ArticlePost.js';
+import Avatar from './../components/Avatar.js';
 
+Vue.component('Avatar', Avatar)
 Vue.component('ArticlePost', ArticlePost)
 
 export default Page.extend({

@@ -28,7 +28,7 @@
                     <div class="navbar-end" aria-label="dropdown navigation">
                         <div class="navbar-item has-dropdown is-hoverable">
                             <a class="navbar-link">
-                                <img src="{{ auth()->user()->gravatar['medium'] }}" class="image is-24x24 avatar">
+                                <avatar size="small"></avatar>
                                 &nbsp;
                                 {{ auth()->user()->name }} 
                             </a>

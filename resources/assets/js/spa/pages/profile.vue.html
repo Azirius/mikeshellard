@@ -9,16 +9,11 @@
         </div>
     </section>
     <section class="section site-content">
-        <img :src="user.gravatar.large"
+        <avatar :user="user" size="large" avatar-class="is-hidden-mobile avatar-has-profile"></avatar>
+        <!-- <img :src="user.gravatar.large"
             alt="Avatar" 
-            class="avatar is-hidden-mobile" 
-            style="position: relative; 
-            z-index: 2; 
-            float: left; 
-            left: 75%; 
-            margin-top: -260px; 
-            border: 3px solid #fff"
-        >
+            class="avatar is-hidden-mobile avatar-has-profile"
+        > -->
         <br>
         <div class="container container-into-hero">
             <div class="card">

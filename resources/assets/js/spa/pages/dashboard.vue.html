@@ -11,16 +11,7 @@
     <section class="section site-content">
         <change-email-modal :user="currentUser" :show="showChangeEmailModalState" @close="hideChangeEmailModel()"></change-email-modal>
         <gravatar-modal :show="showChangeAvatarModalState" @close="hideGravatarModal()"></gravatar-modal>
-        <img :src="currentUser.gravatar.large"
-            alt="Avatar" 
-            class="avatar is-hidden-mobile" 
-            style="position: relative; 
-            z-index: 2; 
-            float: left; 
-            left: 75%; 
-            margin-top: -260px; 
-            border: 3px solid #fff"
-        >
+        <avatar :user="currentUser" size="large" avatar-class="is-hidden-mobile avatar-has-profile"></avatar>
         <div class="container container-into-hero">
             <div class="card">
                 <div class="card-content">    
