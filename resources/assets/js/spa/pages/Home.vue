@@ -1,0 +1,194 @@
+<template>
+    <section class="section site-content">
+        <div class="container">
+            <pinned>
+                <div class="tabs is-toggle is-hidden-touch">
+                    <div class="pull-left">
+                        <ul>
+                            <li v-for="column in columns" :class="[field == column ? 'is-active' : '']">
+                                <a @click="sortBy(column)">
+                                    {{ column }}
+                                    <span class="icon is-small" v-show="field == column">
+                                        <i class="fas fa-arrow-circle-up" v-show="field == column && reverse == false"></i>
+                                        <i class="fas fa-arrow-circle-down" v-show="field == column && reverse == true"></i>
+                                    </span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="pull-right">
+                        <div class="field has-addons">
+                            <div class="control">
+                                <span class="select">
+                                    <select v-model="params.paginate" @change="rePaginate">
+                                        <option :value="5">5</option>
+                                        <option :value="10">10</option>
+                                        <option :value="20">20</option>
+                                        <option :value="100">100</option>
+                                    </select>
+                                </span>
+                            </div>
+                            <div class="control">
+                                <input name="search"
+                                    class="input"
+                                    v-model="params.search"
+                                    @keyup.enter="search"
+                                    placeholder="Find an article">
+                            </div>
+                            <div class="control">
+                                <a class="button is-info">
+                                    <i class="fa fa-search"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </pinned>
+            
+            <div class="container">
+                <hr/>
+                <div class="notification is-info" v-if="0 === posts.length && false === loading_posts">
+                    There are no posts
+                </div>
+                <div class="blog-container" v-for="(post, index) in posts">
+                    <article-post :user="post.user" :post="post" class="m-b-lg">
+                        <template slot="post-body">
+                            <div class="m-b-xs">{{ post.body_trimmed }}</div>
+                            <a :href="'/article/' + post.slug" class="has-text-grey">Click to read on...</a>
+                        </template>
+                    </article-post>
+                </div>
+                <div class="loading-articles has-text-centered" v-if="loading_posts">
+                    <i class="fas fa-spinner fa-spin fa-4x"></i>
+                    <br>
+                    <div class="has-text-info">Loading Posts....</div>
+                </div>
+                <div id="bottom"></div>
+            </div>
+        </div>
+    </section>    
+</template>
+
+<script>
+import queryString from 'query-string';
+import Page from './../components/Page.js';
+
+export default Page.extend({
+    data() {
+        return {
+            view: {
+                name: 'home',
+                title: 'Home'
+            },
+            posts: [],
+            loading_posts: false,
+            field: 'Created',
+            reverse: true,
+            columns: {
+                published: 'Created',
+                title: 'Title',
+                author: 'Name'
+            },
+            params: {
+                page: 1,
+                search: '',
+                paginate: 5
+            },
+            last_page: false
+        };
+    },
+
+    destroyed() {
+        this.removeScroll();
+        this.resetPostData();
+    },
+
+    methods: {
+        launch() {
+            this.fetchNextPostSet();
+        },
+
+        childSetUp() {
+            this.setUpScroll();
+        },
+
+        removeScroll() {
+            $(window).off('scroll');
+        },
+
+        setUpScroll() {
+            if ($('#bottom').isOnScreen()) {
+                this.fetchNextPostSet();
+            }
+
+            $(window).scroll((() => {
+                if (this.last_page) {
+                    return;
+                }
+
+                if ($('#bottom').isOnScreen()) {
+                    this.fetchNextPostSet();
+                }
+            }).debounce(1000));
+        },
+
+        addPostsToArray(response) {
+            let posts = response.data.data;
+
+            if (! posts || 0 === posts.length) {
+                this.$root.info('You have reached the last page!');
+                this.last_page = true;
+            } else {
+                posts.forEach(post => this.posts.push(post));
+                this.params.page++;
+            }
+
+            this.loading_posts = false;
+        },
+
+        loadPosts(queryString) {
+            return axios.get('/api/v1/article?' + queryString);
+        },
+
+        fetchNextPostSet() {
+            if (this.loading_posts) {
+                return;
+            }
+
+            this.loading_posts = true;
+
+            let urlParameters = this.params;
+
+            urlParameters[this.field] = this.reverse ? 'desc' : 'asc';
+
+            this.loadPosts(queryString.stringify(urlParameters))
+                .then(this.addPostsToArray, response => this.$root.error(response.error));
+        },
+
+        resetPostData() {
+            this.posts = [];
+            this.params.page = 1;
+            this.last_page = false;
+        },
+
+        sortBy(field) {
+            this.resetPostData();
+            this.reverse = this.field === field ? !this.reverse : true;
+            delete this.params[this.field];
+            this.field = field;
+            this.fetchNextPostSet();
+        },
+
+        search() {
+            this.resetPostData();
+            this.fetchNextPostSet();
+        },
+
+        rePaginate() {
+            this.resetPostData();
+            this.fetchNextPostSet();
+        }
+    }
+});
+</script>

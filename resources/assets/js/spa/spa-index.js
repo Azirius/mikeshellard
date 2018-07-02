@@ -1,8 +1,8 @@
-import HomePage from './pages/home.js';
-import PostPage from './pages/post.js';
-import ProfilePage from './pages/profile.js';
-import ArticleManagementPage from './pages/article-management.js';
-import DashboardPage from './pages/dashboard.js';
+import HomePage from './pages/Home.vue';
+import PostPage from './pages/Post.vue';
+import ProfilePage from './pages/Profile.vue';
+import ArticleManagementPage from './pages/ArticleManagement.vue';
+import DashboardPage from './pages/Dashboard.vue';
 import {getURI, removeActiveClassFromParentListItems, addActiveClassToParentListItem} from '../helpers.js';
 
 export default {

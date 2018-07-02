@@ -1,9 +1,31 @@
-import DeleteArticleModalTemplate from './delete-article-modal.vue.html';
+<template>
+    <modal :show="show" @close="close">
+        <div class="modal-card">
+            <div class="modal-card-head">
+                <p class="modal-card-title">Delete Article: '{{ title }}'</p>
+                <button class="delete" aria-label="close" @click="close()"></button>
+            </div>
 
+            <div class="modal-card-body">
+                Are you sure you want to delete this article?
+            </div>
+
+            <div class="modal-card-foot text-right">
+                <button class="button is-success" @click="deletePost()">
+                    Yes
+                </button>
+
+                <button class="button" @click="close()">
+                    No
+                </button>
+            </div>
+        </div>
+    </modal>
+</template>
+
+<script>
 export default {
     props: ['show'],
-
-    template: DeleteArticleModalTemplate,
 
     data: () => {
         return {
@@ -47,3 +69,4 @@ export default {
         }
     }
 }
+</script>

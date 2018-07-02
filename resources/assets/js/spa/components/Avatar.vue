@@ -1,5 +1,10 @@
-import AvatarTemplate from './avatar.vue.html';
+<template>
+    <div v-if="currentUser">
+        <img :src="getAvatarSource()" class="image avatar" :class="getAvatarClass()" alt="avatar">
+    </div>
+</template>
 
+<script>
 export default {
     props: ['user', 'avatarClass', 'size'],
 
@@ -30,7 +35,6 @@ export default {
             return avatarClass + this.sizeMap[this.size];
 
         },
-    },
-
-    template: AvatarTemplate,
+    }
 }
+</script>

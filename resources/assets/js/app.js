@@ -1,6 +1,6 @@
 import Vue from 'vue/dist/vue.common.js';
 import Router from 'reflex-routing';
-import Modal from './spa/components/Modal.js';
+import Modal from './spa/components/Modal.vue';
 import Pinned from './spa/components/Pinned.vue';
 import axios from 'axios';
 
