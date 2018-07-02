@@ -84,11 +84,7 @@
 
 <script>
 import Page from './../components/Page.js';
-import ArticlePost from './../components/ArticlePost.vue';
 import Pagination from './../components/Pagination.vue';
-
-Vue.component('ArticlePost', ArticlePost)
-Vue.component('Pagination', Pagination);
 
 export default Page.extend({
     data() {
@@ -103,6 +99,10 @@ export default Page.extend({
             featured_comment: null,
             comment: ''
         };
+    },
+
+    components: {
+        Pagination
     },
 
     methods: {

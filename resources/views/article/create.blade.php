@@ -112,7 +112,5 @@
                 $(actualTextareas[i]).val($(editors.get(i)).summernote('code'));
             }
         });
-
-        focus_caret($('input[name="title"]'));
     });
 @endpush

@@ -73,8 +73,11 @@
 <script>
 import queryString from 'query-string';
 import Page from './../components/Page.js';
+import IsBottom from './../mixins/IsBottom.js';
 
 export default Page.extend({
+    mixins: [IsBottom],
+
     data() {
         return {
             view: {
@@ -95,12 +98,11 @@ export default Page.extend({
                 search: '',
                 paginate: 5
             },
-            last_page: false
+            last_page: false,
         };
     },
 
     destroyed() {
-        this.removeScroll();
         this.resetPostData();
     },
 
@@ -109,28 +111,12 @@ export default Page.extend({
             this.fetchNextPostSet();
         },
 
-        childSetUp() {
-            this.setUpScroll();
+        customBottomCondition() {
+            return this.last_page;
         },
 
-        removeScroll() {
-            $(window).off('scroll');
-        },
-
-        setUpScroll() {
-            if ($('#bottom').isOnScreen()) {
-                this.fetchNextPostSet();
-            }
-
-            $(window).scroll((() => {
-                if (this.last_page) {
-                    return;
-                }
-
-                if ($('#bottom').isOnScreen()) {
-                    this.fetchNextPostSet();
-                }
-            }).debounce(1000));
+        bottomAction() {
+            this.fetchNextPostSet();
         },
 
         addPostsToArray(response) {
@@ -164,6 +150,10 @@ export default Page.extend({
 
             this.loadPosts(queryString.stringify(urlParameters))
                 .then(this.addPostsToArray, response => this.$root.error(response.error));
+
+            if (this.bottomVisible()) {
+                this.fetchNextPostSet();
+            }
         },
 
         resetPostData() {

@@ -2,10 +2,27 @@ import Vue from 'vue/dist/vue.common.js';
 import Router from 'reflex-routing';
 import Modal from './spa/components/Modal.vue';
 import Pinned from './spa/components/Pinned.vue';
+import ArticlePost from './spa/components/ArticlePost.vue';
+import Avatar from './spa/components/Avatar.vue';
 import axios from 'axios';
+import SPA from './spa';
 
+Vue.component('Avatar', Avatar);
 Vue.component('Modal', Modal);
 Vue.component('Pinned', Pinned);
+Vue.component('ArticlePost', ArticlePost);
+
+window.Router = Router;
+
+window.axios = axios;
+window.axios.defaults.headers.common['X-CSRF-TOKEN'] = mikeshellard.csrf_token;
+window.axios.defaults.headers.common['Authorization'] = `Bearer ${mikeshellard.api_token}`;
+window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+
+window.Vue = Vue;
+
+window.eventHub = new Vue;
+window.app = new Vue(SPA);
 
 $.fn.isOnScreen = function () {
     var viewport = {};
@@ -23,34 +40,4 @@ $(function () {
         target.toggleClass('is-active');
         $(this).toggleClass('is-active');
     });
-})
-
-/**
- * Focus caret on an element
- *
- * @param  {object} elem Element to focus upon
- * @return {void}
- */
-function focus_caret(elem) {
-    let strLength;
-    let focusElement = $(elem);
-
-    // Multiply by 2 to ensure the cursor always ends up at the end;
-    // Opera sometimes sees a carriage return as 2 characters.
-    strLength = focusElement.val().length * 2;
-
-    focusElement.focus();
-    focusElement[0].setSelectionRange(0, strLength);
-}
-
-(function(exports) {
-    exports.eventHub = new Vue;
-    exports.Vue = Vue;
-    exports.Router = Router;
-    exports.focus_caret = focus_caret;
-    exports.axios = axios;
-})(window);
-
-window.axios.defaults.headers.common['X-CSRF-TOKEN'] = mikeshellard.csrf_token;
-window.axios.defaults.headers.common['Authorization'] = `Bearer ${mikeshellard.api_token}`;
-window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+});

@@ -33,10 +33,12 @@ import ChangeEmailModal from '../modals/ChangeEmailModal.vue';
 import GravatarModal from '../modals/GravatarModal.vue';
 import Page from './../components/Page.js';
 
-Vue.component('ChangeEmailModal', ChangeEmailModal);
-Vue.component('GravatarModal', GravatarModal);
-
 export default Page.extend({
+    components: {
+        ChangeEmailModal,
+        GravatarModal
+    },
+
     data() {
         return {
             view: {

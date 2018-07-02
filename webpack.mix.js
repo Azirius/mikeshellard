@@ -28,6 +28,5 @@ mix.scripts(
 
 mix.styles('node_modules/mikeshellard-theme/dist/login.css', 'public/css/login.css');
 mix.js('resources/assets/js/app.js', 'public/js/app.js');
-mix.js('resources/assets/js/spa-loader.js', 'public/js/spa-loader.js');
 
 mix.version();

@@ -1,5 +1,9 @@
+let Vue = require('vue/dist/vue.common.js');
+
 export default Vue.extend({
     props: ['on-load'],
+
+    name: 'Page',
 
     mounted: function () {
         this.onLoad(this);

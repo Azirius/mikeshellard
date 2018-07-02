@@ -56,11 +56,6 @@
 
 <script>
 import Page from './../components/Page.js';
-import ArticlePost from './../components/ArticlePost.vue';
-import Avatar from './../components/Avatar.vue';
-
-Vue.component('Avatar', Avatar)
-Vue.component('ArticlePost', ArticlePost)
 
 export default Page.extend({
     data() {

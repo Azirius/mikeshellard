@@ -3,7 +3,7 @@
         <div class="container">
             <delete-article-modal :show="showDeleteArticleModalState" @close="hideDeleteArticleModel()"></delete-article-modal>
             
-            <pinned>
+            <pinned id="sk">
                 <div class="is-hidden-touch tabs is-toggle">
                     <div class="pull-left">
                         <ul>
@@ -94,10 +94,15 @@
 import queryString from 'query-string';
 import DeleteArticleModal from '../modals/DeleteArticleModal.vue';
 import Page from './../components/Page.js';
-
-Vue.component('DeleteArticleModal', DeleteArticleModal);
+import IsBottom from './../mixins/IsBottom.js';
 
 export default Page.extend({
+    mixins: [IsBottom],
+
+    components: {
+        DeleteArticleModal
+    },
+
     data() {
         return {
             view: {
@@ -119,12 +124,11 @@ export default Page.extend({
                 search: '',
                 paginate: 5
             },
-            last_page: false
+            last_page: false,
         };
     },
 
     destroyed() {
-        this.removeScroll();
         this.resetPostData();
         eventHub.$off('article:deleted');
     },
@@ -134,30 +138,16 @@ export default Page.extend({
             this.fetchNextPostSet();
         },
 
+        customBottomCondition() {
+            return this.last_page;
+        },
+
+        bottomAction() {
+            this.fetchNextPostSet();
+        },
+
         childSetUp() {
             eventHub.$on('article:deleted', this.removeArticle);
-
-            this.setUpScroll();
-        },
-
-        removeScroll() {
-            $(window).off('scroll');
-        },
-
-        setUpScroll() {
-            if ($('#admin-article-bottom').isOnScreen()) {
-                this.fetchNextPostSet();
-            }
-
-            $(window).scroll((() => {
-                if (this.last_page) {
-                    return;
-                }
-
-                if ($('#admin-article-bottom').isOnScreen()) {
-                    this.fetchNextPostSet();
-                }
-            }).debounce(1000))
         },
 
         addPostsToArray(response) {
@@ -189,6 +179,10 @@ export default Page.extend({
 
             axios.get('/api/v1/article?' + queryStringCompiled)
                 .then(this.addPostsToArray, response => this.$root.error(response.error));
+
+            if (this.bottomVisible()) {
+                this.fetchNextPostSet();
+            }
         },
 
         resetPostData() {

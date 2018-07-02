@@ -1,19 +1,15 @@
 <template>
-    <div v-if="currentUser">
-        <img :src="getAvatarSource()" class="image avatar" :class="getAvatarClass()" alt="avatar">
-    </div>
+    <img v-if="currentUser" :src="getAvatarSource()" class="image avatar" :class="getAvatarClass()" alt="avatar">
 </template>
 
 <script>
 export default {
     props: ['user', 'avatarClass', 'size'],
 
-    name: 'Avatar',
-
     data: function () {
         return {
             sizeMap: {
-                small: ' is-24x24',
+                small: 'is-24x24',
                 large: '' 
             },
             currentUser: null
@@ -30,7 +26,7 @@ export default {
         },
 
         getAvatarClass() {
-            var avatarClass = this.avatarClass;
+            var avatarClass = this.avatarClass || '';
 
             return avatarClass + this.sizeMap[this.size];
 

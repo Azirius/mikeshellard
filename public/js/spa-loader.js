@@ -3485,10 +3485,10 @@ Function.prototype.debounce = function (threshold) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__spa_spa_index_js__ = __webpack_require__("./resources/assets/js/spa/spa-index.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__spa__ = __webpack_require__("./resources/assets/js/spa/index.js");
 
 
-var app = new Vue(__WEBPACK_IMPORTED_MODULE_0__spa_spa_index_js__["a" /* default */]);
+var app = new Vue(__WEBPACK_IMPORTED_MODULE_0__spa__["a" /* default */]);
 
 window.app = app;
 
@@ -3670,6 +3670,278 @@ if (false) {(function () {
 
 module.exports = Component.exports
 
+
+/***/ }),
+
+/***/ "./resources/assets/js/spa/index.js":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__pages_Home_vue__ = __webpack_require__("./resources/assets/js/spa/pages/Home.vue");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__pages_Home_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__pages_Home_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__pages_Post_vue__ = __webpack_require__("./resources/assets/js/spa/pages/Post.vue");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__pages_Post_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__pages_Post_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__pages_Profile_vue__ = __webpack_require__("./resources/assets/js/spa/pages/Profile.vue");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__pages_Profile_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__pages_Profile_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__pages_ArticleManagement_vue__ = __webpack_require__("./resources/assets/js/spa/pages/ArticleManagement.vue");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__pages_ArticleManagement_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__pages_ArticleManagement_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__pages_Dashboard_vue__ = __webpack_require__("./resources/assets/js/spa/pages/Dashboard.vue");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__pages_Dashboard_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__pages_Dashboard_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__helpers_js__ = __webpack_require__("./resources/assets/js/helpers.js");
+
+
+
+
+
+
+
+/* harmony default export */ __webpack_exports__["a"] = ({
+    el: '#app-container',
+
+    data: function data() {
+        var _this = this;
+
+        return {
+            view: '',
+
+            alert: false,
+
+            notification: null,
+
+            routes: {
+                '/': function _() {
+                    return _this.setView('home');
+                },
+
+                'article/:slug': function articleSlug(slug) {
+                    return _this.setView('post', { slug: slug });
+                },
+
+                'profile/:slug': function profileSlug(slug) {
+                    return _this.setView('profile', slug);
+                },
+
+                'admin/article': function adminArticle() {
+                    return _this.setView('articleManagement');
+                },
+
+                'dashboard': function dashboard() {
+                    return _this.setView('dashboard');
+                }
+            },
+
+            router: null
+        };
+    },
+    mounted: function mounted() {
+        this.router = new Router(this.routes);
+
+        this.router.after(function (router, route, uri, response) {
+            if (!router.isInitial && null == router.current) {
+                document.location = uri;
+                return response;
+            }
+
+            if (!router.isInitial || null != router.current) {
+                $('#non-spa').hide();
+            }
+
+            Object(__WEBPACK_IMPORTED_MODULE_5__helpers_js__["c" /* removeActiveClassFromParentListItems */])();
+            Object(__WEBPACK_IMPORTED_MODULE_5__helpers_js__["a" /* addActiveClassToParentListItem */])('a[href="' + uri + '"]');
+
+            return response;
+        });
+
+        $(window).on('popstate', function () {
+            return app.route();
+        });
+
+        $('#app-container').on('click', 'a:not(.prevent)', function (e) {
+            // Hide navbar drop down on 'mobile'
+            $('.navbar-burger').removeClass('is-active');
+            $('#navMenu').removeClass('is-active');
+
+            e.preventDefault();
+            history.pushState(null, null, e.target.href);
+            app.route();
+        });
+
+        history.replaceState(null, document.title, document.location.href);
+
+        this.route();
+    },
+
+
+    components: {
+        home: __WEBPACK_IMPORTED_MODULE_0__pages_Home_vue___default.a,
+        post: __WEBPACK_IMPORTED_MODULE_1__pages_Post_vue___default.a,
+        profile: __WEBPACK_IMPORTED_MODULE_2__pages_Profile_vue___default.a,
+        articleManagement: __WEBPACK_IMPORTED_MODULE_3__pages_ArticleManagement_vue___default.a,
+        dashboard: __WEBPACK_IMPORTED_MODULE_4__pages_Dashboard_vue___default.a
+    },
+
+    methods: {
+        /**
+         * Set the alert type
+         * @param {string} type Alert type
+         */
+        setAlert: function setAlert(type) {
+            this.alert = type || false;
+        },
+
+
+        /**
+         * Fire off the actual alert
+         * @param  {string}  type         Alert type
+         * @param  {string}  notification Alert notification
+         * @return {Vue}
+         */
+        makeAlert: function makeAlert(type, notification) {
+            this.setAlert(type);
+            this.notification = notification || '';
+
+            (function () {
+                this.setAlert();
+                this.notification = null;
+            }).bind(this).debounce(2000)();
+
+            return this;
+        },
+
+
+        /**
+         * Handle an error, hands axios exceptions off to handleAxiosExceptions
+         * @param  {object} error Error response
+         * @return {void}       
+         */
+        handleError: function handleError(error) {
+            if (error.response.data) {
+                return this.handleValidationError(error);
+            }
+
+            this.handleAxiosException(error);
+        },
+        handleValidationError: function handleValidationError(error) {
+            var errors = error.response.data.errors;
+            var errorMessage = '';
+
+            for (var key in errors) {
+                var currentError = errors[key];
+                var errorLength = currentError.length;
+
+                if (typeof currentError === 'string') {
+                    errorMessage += '<p>' + currentError + '<p>';
+                } else {
+                    for (var i = 0; i < errorLength; i++) {
+                        errorMessage += currentError[i];
+                        if (i < errorLength - 1) {
+                            errorMessage += '<br>';
+                        }
+                    }
+                }
+            }
+
+            this.error(errorMessage);
+        },
+
+
+        /**
+         * Handle an Axios exception
+         * @param  {object} error Error thrown from Axios
+         * @return {void}       
+         */
+        handleAxiosException: function handleAxiosException(error) {
+            if (error.response) {
+                // The request was made and the server responded with a status code
+                // that falls out of the range of 2xx
+                console.log(error.response.data);
+                console.log(error.response.status);
+                console.log(error.response.headers);
+            } else if (error.request) {
+                // The request was made but no response was received
+                // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+                // http.ClientRequest in node.js
+                console.log(error.request);
+            } else {
+                // Something happened in setting up the request that triggered an Error
+                console.log('Error', error.message);
+            }
+            console.log(error.config);
+        },
+
+
+        /**
+         * Fires an error message
+         * @param  {string} notification Error notification
+         * @return {Vue}
+         */
+        error: function error(notification) {
+            return this.makeAlert('danger', notification || 'Sorry, something went wrong!');
+        },
+
+
+        /**
+         * Fires an info message
+         * @param  {string} notification Info notification
+         * @return {Vue}
+         */
+        info: function info(notification) {
+            return this.makeAlert('info', notification);
+        },
+
+
+        /**
+         * Fires an info message
+         * @param  {string} notification Info notification
+         * @return {Vue}
+         */
+        success: function success(notification) {
+            return this.makeAlert('success', notification);
+        },
+        user: function user() {
+            return window.mikeshellard.user;
+        },
+
+
+        /**
+         * Fire the launcher on the root on completion of child load
+         * @param  {Object} view Route to fire launch
+         * @return {void}
+         */
+        onChildLoad: function onChildLoad(view) {
+            var launcher = view.launch;
+
+            if (launcher && typeof launcher === 'function') {
+                launcher(this.params);
+            }
+        },
+        route: function route() {
+            return this.router.route(Object(__WEBPACK_IMPORTED_MODULE_5__helpers_js__["b" /* getURI */])());
+        },
+
+
+        /**
+         * Set the view
+         * @param {string} newView The view to set
+         * @param {object} params Params to send to child
+         */
+        setView: function setView(view) {
+            var params = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
+            this.view = view;
+            this.params = params;
+        },
+
+
+        /**
+         * Get current view
+         * @return {string}
+         */
+        getView: function getView() {
+            return this.view;
+        }
+    }
+});
 
 /***/ }),
 
@@ -4054,278 +4326,6 @@ if (false) {(function () {
 
 module.exports = Component.exports
 
-
-/***/ }),
-
-/***/ "./resources/assets/js/spa/spa-index.js":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__pages_Home_vue__ = __webpack_require__("./resources/assets/js/spa/pages/Home.vue");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__pages_Home_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__pages_Home_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__pages_Post_vue__ = __webpack_require__("./resources/assets/js/spa/pages/Post.vue");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__pages_Post_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__pages_Post_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__pages_Profile_vue__ = __webpack_require__("./resources/assets/js/spa/pages/Profile.vue");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__pages_Profile_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__pages_Profile_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__pages_ArticleManagement_vue__ = __webpack_require__("./resources/assets/js/spa/pages/ArticleManagement.vue");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__pages_ArticleManagement_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__pages_ArticleManagement_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__pages_Dashboard_vue__ = __webpack_require__("./resources/assets/js/spa/pages/Dashboard.vue");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__pages_Dashboard_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__pages_Dashboard_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__helpers_js__ = __webpack_require__("./resources/assets/js/helpers.js");
-
-
-
-
-
-
-
-/* harmony default export */ __webpack_exports__["a"] = ({
-    el: '#app-container',
-
-    data: function data() {
-        var _this = this;
-
-        return {
-            view: '',
-
-            alert: false,
-
-            notification: null,
-
-            routes: {
-                '/': function _() {
-                    return _this.setView('home');
-                },
-
-                'article/:slug': function articleSlug(slug) {
-                    return _this.setView('post', { slug: slug });
-                },
-
-                'profile/:slug': function profileSlug(slug) {
-                    return _this.setView('profile', slug);
-                },
-
-                'admin/article': function adminArticle() {
-                    return _this.setView('articleManagement');
-                },
-
-                'dashboard': function dashboard() {
-                    return _this.setView('dashboard');
-                }
-            },
-
-            router: null
-        };
-    },
-    mounted: function mounted() {
-        this.router = new Router(this.routes);
-
-        this.router.after(function (router, route, uri, response) {
-            if (!router.isInitial && null == router.current) {
-                document.location = uri;
-                return response;
-            }
-
-            if (!router.isInitial || null != router.current) {
-                $('#non-spa').hide();
-            }
-
-            Object(__WEBPACK_IMPORTED_MODULE_5__helpers_js__["c" /* removeActiveClassFromParentListItems */])();
-            Object(__WEBPACK_IMPORTED_MODULE_5__helpers_js__["a" /* addActiveClassToParentListItem */])('a[href="' + uri + '"]');
-
-            return response;
-        });
-
-        $(window).on('popstate', function () {
-            return app.route();
-        });
-
-        $('#app-container').on('click', 'a:not(.prevent)', function (e) {
-            // Hide navbar drop down on 'mobile'
-            $('.navbar-burger').removeClass('is-active');
-            $('#navMenu').removeClass('is-active');
-
-            e.preventDefault();
-            history.pushState(null, null, e.target.href);
-            app.route();
-        });
-
-        history.replaceState(null, document.title, document.location.href);
-
-        this.route();
-    },
-
-
-    components: {
-        home: __WEBPACK_IMPORTED_MODULE_0__pages_Home_vue___default.a,
-        post: __WEBPACK_IMPORTED_MODULE_1__pages_Post_vue___default.a,
-        profile: __WEBPACK_IMPORTED_MODULE_2__pages_Profile_vue___default.a,
-        articleManagement: __WEBPACK_IMPORTED_MODULE_3__pages_ArticleManagement_vue___default.a,
-        dashboard: __WEBPACK_IMPORTED_MODULE_4__pages_Dashboard_vue___default.a
-    },
-
-    methods: {
-        /**
-         * Set the alert type
-         * @param {string} type Alert type
-         */
-        setAlert: function setAlert(type) {
-            this.alert = type || false;
-        },
-
-
-        /**
-         * Fire off the actual alert
-         * @param  {string}  type         Alert type
-         * @param  {string}  notification Alert notification
-         * @return {Vue}
-         */
-        makeAlert: function makeAlert(type, notification) {
-            this.setAlert(type);
-            this.notification = notification || '';
-
-            (function () {
-                this.setAlert();
-                this.notification = null;
-            }).bind(this).debounce(2000)();
-
-            return this;
-        },
-
-
-        /**
-         * Handle an error, hands axios exceptions off to handleAxiosExceptions
-         * @param  {object} error Error response
-         * @return {void}       
-         */
-        handleError: function handleError(error) {
-            if (error.response.data) {
-                return this.handleValidationError(error);
-            }
-
-            this.handleAxiosException(error);
-        },
-        handleValidationError: function handleValidationError(error) {
-            var errors = error.response.data.errors;
-            var errorMessage = '';
-
-            for (var key in errors) {
-                var currentError = errors[key];
-                var errorLength = currentError.length;
-
-                if (typeof currentError === 'string') {
-                    errorMessage += '<p>' + currentError + '<p>';
-                } else {
-                    for (var i = 0; i < errorLength; i++) {
-                        errorMessage += currentError[i];
-                        if (i < errorLength - 1) {
-                            errorMessage += '<br>';
-                        }
-                    }
-                }
-            }
-
-            this.error(errorMessage);
-        },
-
-
-        /**
-         * Handle an Axios exception
-         * @param  {object} error Error thrown from Axios
-         * @return {void}       
-         */
-        handleAxiosException: function handleAxiosException(error) {
-            if (error.response) {
-                // The request was made and the server responded with a status code
-                // that falls out of the range of 2xx
-                console.log(error.response.data);
-                console.log(error.response.status);
-                console.log(error.response.headers);
-            } else if (error.request) {
-                // The request was made but no response was received
-                // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-                // http.ClientRequest in node.js
-                console.log(error.request);
-            } else {
-                // Something happened in setting up the request that triggered an Error
-                console.log('Error', error.message);
-            }
-            console.log(error.config);
-        },
-
-
-        /**
-         * Fires an error message
-         * @param  {string} notification Error notification
-         * @return {Vue}
-         */
-        error: function error(notification) {
-            return this.makeAlert('danger', notification || 'Sorry, something went wrong!');
-        },
-
-
-        /**
-         * Fires an info message
-         * @param  {string} notification Info notification
-         * @return {Vue}
-         */
-        info: function info(notification) {
-            return this.makeAlert('info', notification);
-        },
-
-
-        /**
-         * Fires an info message
-         * @param  {string} notification Info notification
-         * @return {Vue}
-         */
-        success: function success(notification) {
-            return this.makeAlert('success', notification);
-        },
-        user: function user() {
-            return window.mikeshellard.user;
-        },
-
-
-        /**
-         * Fire the launcher on the root on completion of child load
-         * @param  {Object} view Route to fire launch
-         * @return {void}
-         */
-        onChildLoad: function onChildLoad(view) {
-            var launcher = view.launch;
-
-            if (launcher && typeof launcher === 'function') {
-                launcher(this.params);
-            }
-        },
-        route: function route() {
-            return this.router.route(Object(__WEBPACK_IMPORTED_MODULE_5__helpers_js__["b" /* getURI */])());
-        },
-
-
-        /**
-         * Set the view
-         * @param {string} newView The view to set
-         * @param {object} params Params to send to child
-         */
-        setView: function setView(view) {
-            var params = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-
-            this.view = view;
-            this.params = params;
-        },
-
-
-        /**
-         * Get current view
-         * @return {string}
-         */
-        getView: function getView() {
-            return this.view;
-        }
-    }
-});
 
 /***/ }),
 
