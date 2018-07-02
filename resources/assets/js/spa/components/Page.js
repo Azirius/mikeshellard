@@ -1,4 +1,17 @@
 export default Vue.extend({
+    props: ['on-load'],
+
+    mounted: function () {
+        this.onLoad(this);
+        this.childSetUp();
+    },
+
+    methods: {
+        childSetUp() {
+
+        }
+    },
+
     computed: {
         currentUser() {
             if (0 === this.$root.user().length) {

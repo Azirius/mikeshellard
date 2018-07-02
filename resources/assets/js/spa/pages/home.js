@@ -3,8 +3,6 @@ import HomeTemplate from './home.vue.html';
 import Page from './../components/Page.js';
 
 export default Page.extend({
-    props: ['on-load'],
-
     data() {
         return {
             view: {
@@ -31,16 +29,6 @@ export default Page.extend({
 
     template: HomeTemplate,
 
-    mounted() {
-        this.onLoad(this);
-
-        let $window = $(window);
-        let $stickyEl = $('#search');
-        let elTop = $stickyEl.offset().top;
-
-        $window.scroll(() => $stickyEl.toggleClass('sticky', $window.scrollTop() > elTop));
-    },
-
     destroyed() {
         this.removeScroll();
         this.resetPostData();
@@ -50,6 +38,14 @@ export default Page.extend({
         launch() {
             this.fetchNextPostSet();
             this.setUpScroll();
+        },
+
+        childSetUp() {
+            let $window = $(window);
+            let $stickyEl = $('#search');
+            let elTop = $stickyEl.offset().top;
+
+            $window.scroll(() => $stickyEl.toggleClass('sticky', $window.scrollTop() > elTop));
         },
 
         removeScroll() {

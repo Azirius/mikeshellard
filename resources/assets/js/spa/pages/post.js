@@ -7,8 +7,6 @@ Vue.component('ArticlePost', ArticlePost)
 Vue.component('Pagination', Pagination);
 
 export default Page.extend({
-    props: ['on-load'],
-
     data() {
         return {
             view: {
@@ -24,10 +22,6 @@ export default Page.extend({
     },
 
     template: PostTemplate,
-
-    created() {
-        this.onLoad(this);
-    },
 
     methods: {
         launch(params) {

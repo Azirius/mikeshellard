@@ -561,6 +561,17 @@ window.app = app;
 
 "use strict";
 /* harmony default export */ __webpack_exports__["a"] = (Vue.extend({
+    props: ['on-load'],
+
+    mounted: function mounted() {
+        this.onLoad(this);
+        this.childSetUp();
+    },
+
+    methods: {
+        childSetUp: function childSetUp() {}
+    },
+
     computed: {
         currentUser: function currentUser() {
             if (0 === this.$root.user().length) {
@@ -884,8 +895,6 @@ module.exports = "<modal :show=\"show\" @close=\"close\">\n    <div class=\"moda
 Vue.component('DeleteArticleModal', __WEBPACK_IMPORTED_MODULE_1__modals_DeleteArticleModal_js__["a" /* default */]);
 
 /* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_3__components_Page_js__["a" /* default */].extend({
-    props: ['on-load'],
-
     data: function data() {
         return {
             view: {
@@ -914,19 +923,6 @@ Vue.component('DeleteArticleModal', __WEBPACK_IMPORTED_MODULE_1__modals_DeleteAr
 
     template: __WEBPACK_IMPORTED_MODULE_2__article_management_vue_html___default.a,
 
-    mounted: function mounted() {
-        this.onLoad(this);
-
-        var $window = $(window);
-        var $stickyEl = $('#admin-article-search');
-        var elTop = $stickyEl.offset().top;
-
-        $window.scroll(function () {
-            return $stickyEl.toggleClass('sticky', $window.scrollTop() > elTop);
-        });
-
-        eventHub.$on('article:deleted', this.removeArticle);
-    },
     destroyed: function destroyed() {
         this.removeScroll();
         this.resetPostData();
@@ -937,6 +933,18 @@ Vue.component('DeleteArticleModal', __WEBPACK_IMPORTED_MODULE_1__modals_DeleteAr
     methods: {
         launch: function launch() {
             this.fetchNextPostSet();
+        },
+        childSetUp: function childSetUp() {
+            var $window = $(window);
+            var $stickyEl = $('#admin-article-search');
+            var elTop = $stickyEl.offset().top;
+
+            $window.scroll(function () {
+                return $stickyEl.toggleClass('sticky', $window.scrollTop() > elTop);
+            });
+
+            eventHub.$on('article:deleted', this.removeArticle);
+
             this.setUpScroll();
         },
         removeScroll: function removeScroll() {
@@ -1035,7 +1043,7 @@ Vue.component('DeleteArticleModal', __WEBPACK_IMPORTED_MODULE_1__modals_DeleteAr
 /***/ "./resources/assets/js/spa/pages/article-management.vue.html":
 /***/ (function(module, exports) {
 
-module.exports = "<section class=\"section site-content\">\n    <div class=\"container\">\n        <delete-article-modal :show=\"showDeleteArticleModalState\" @close=\"hideDeleteArticleModel()\"></delete-article-modal>\n        \n        <div id=\"admin-article-search\" class=\"is-hidden-touch tabs is-toggle\">\n            <div class=\"pull-left\">\n                <ul>\n                    <li v-for=\"column in columns\" :class=\"[field == column ? 'is-active' : '']\">\n                        <a @click=\"sortBy(column)\">\n                            {{ column }}\n                            <span class=\"icon is-small\" v-show=\"field == column\">\n                                <i class=\"fas fa-arrow-circle-up\" v-show=\"field == column && reverse == false\"></i>\n                                <i class=\"fas fa-arrow-circle-down\" v-show=\"field == column && reverse == true\"></i>\n                            </span>\n                        </a>\n                    </li>\n                </ul>\n            </div>\n        \n            <div class=\"pull-right\">\n                <div class=\"field has-addons\">\n                    <div class=\"control\">\n                        <span class=\"select\">\n                            <select v-model=\"queryParams.paginate\" @change=\"rePaginate\">\n                                <option :value=\"5\">5</option>\n                                <option :value=\"10\">10</option>\n                                <option :value=\"20\">20</option>\n                                <option :value=\"100\">100</option>\n                            </select>\n                        </span>\n                    </div>\n                    <div class=\"control\">\n                        <input name=\"search\"\n                            class=\"input\"\n                            v-model=\"queryParams.search\"\n                            @keyup.enter=\"search\"\n                            placeholder=\"Find an article\">\n                    </div>\n                    <div class=\"control\">\n                        <a class=\"button is-info\">\n                            <i class=\"fa fa-search\"></i>\n                        </a>\n                    </div>\n                </div>\n            </div>\n        </div>\n        \n        <div class=\"container\">\n            <div class=\"columns\">\n                <div class=\"column is-two-thirds article-admin-column\">\n                    <div class=\"notification is-info\" v-if=\"posts.length == 0 && loading_posts == false\">\n                        There are no posts. <a href=\"/admin/article/create\">Make one!</a>\n                    </div>\n                    <div v-for=\"post in posts\">\n                        <article-post :user=\"post.user\" :post=\"post\" class=\"m-b-md\">\n                            <template slot=\"post-body\">\n                                {{ post.body_trimmed }}\n                                <br>\n                                <span class=\"has-text-grey m-t-md\">Click the title to read on.</span>\n                            </template>\n                        </article-post>\n                        <div class=\"m-b-m\" style=\"background-color: #ededed; padding: 5px; text-align: right\">\n                            <a :href=\"'/admin/article/' + post.slug + '/edit'\" class=\"button is-primary\">Edit</a>\n                            <button class=\"button is-text\" @click.stop.prevent=\"showDeleteArticleModal(post)\">Delete</button>\n                        </div>\n                    </div>\n                    <div class=\"loading-articles has-text-centered\" v-if=\"loading_posts\">\n                        <i class=\"fas fa-spinner fa-spin fa-4x\"></i>\n                        <br>\n                        <div class=\"text-info\">Loading Posts....</div>\n                    </div>\n                    <div id=\"admin-article-bottom\"></div>\n                </div>\n                <div class=\"column\">\n                    <h2 class=\"title\">Options</h2>\n                    <ul>\n                        <li>\n                            <a href=\"/admin/article/create\">\n                                <i class=\"fas fa-edit\"></i>\n                                Create new Article    \n                            </a>\n                        </li>\n                    </ul>\n                </div>\n            </div>\n        </div>\n    </div>\n</section>\n";
+module.exports = "<section class=\"section site-content\">\n    <div class=\"container\">\n        <delete-article-modal :show=\"showDeleteArticleModalState\" @close=\"hideDeleteArticleModel()\"></delete-article-modal>\n        \n        <div id=\"admin-article-search\" class=\"is-hidden-touch tabs is-toggle\">\n            <div class=\"pull-left\">\n                <ul>\n                    <li v-for=\"column in columns\" :class=\"[field == column ? 'is-active' : '']\">\n                        <a @click=\"sortBy(column)\">\n                            {{ column }}\n                            <span class=\"icon is-small\" v-show=\"field == column\">\n                                <i class=\"fas fa-arrow-circle-up\" v-show=\"field == column && reverse == false\"></i>\n                                <i class=\"fas fa-arrow-circle-down\" v-show=\"field == column && reverse == true\"></i>\n                            </span>\n                        </a>\n                    </li>\n                </ul>\n            </div>\n        \n            <div class=\"pull-right\">\n                <div class=\"field has-addons\">\n                    <div class=\"control\">\n                        <span class=\"select\">\n                            <select v-model=\"queryParams.paginate\" @change=\"rePaginate\">\n                                <option :value=\"5\">5</option>\n                                <option :value=\"10\">10</option>\n                                <option :value=\"20\">20</option>\n                                <option :value=\"100\">100</option>\n                            </select>\n                        </span>\n                    </div>\n                    <div class=\"control\">\n                        <input name=\"search\"\n                            class=\"input\"\n                            v-model=\"queryParams.search\"\n                            @keyup.enter=\"search\"\n                            placeholder=\"Find an article\">\n                    </div>\n                    <div class=\"control\">\n                        <a class=\"button is-info\">\n                            <i class=\"fa fa-search\"></i>\n                        </a>\n                    </div>\n                </div>\n            </div>\n        </div>\n        \n        <div class=\"container\">\n            <div class=\"columns\">\n                <div class=\"column is-two-thirds article-admin-column\">\n                    <div class=\"notification is-info\" v-if=\"0 === posts.length && false === loading_posts\">\n                        There are no posts. <a href=\"/admin/article/create\">Make one!</a>\n                    </div>\n                    <div v-for=\"post in posts\">\n                        <article-post :user=\"post.user\" :post=\"post\" class=\"m-b-md\">\n                            <template slot=\"post-body\">\n                                <div class=\"m-b-xs\">{{ post.body_trimmed }}</div>\n                                <a :href=\"'/article/' + post.slug\" class=\"has-text-grey\">Click to read on...</a>\n                            </template>\n                        </article-post>\n                        <div class=\"m-b-md\" style=\"background-color: #ededed; padding: 5px; text-align: right\">\n                            <a :href=\"'/admin/article/' + post.slug + '/edit'\" class=\"button is-primary\">Edit</a>\n                            <button class=\"button is-text\" @click.stop.prevent=\"showDeleteArticleModal(post)\">Delete</button>\n                        </div>\n                    </div>\n                    <div class=\"loading-articles has-text-centered\" v-if=\"loading_posts\">\n                        <i class=\"fas fa-spinner fa-spin fa-4x\"></i>\n                        <br>\n                        <div class=\"has-text-info\">Loading Posts....</div>\n                    </div>\n                    <div id=\"admin-article-bottom\"></div>\n                </div>\n                <div class=\"column\">\n                    <h2 class=\"title\">Options</h2>\n                    <ul>\n                        <li>\n                            <a href=\"/admin/article/create\">\n                                <i class=\"fas fa-edit\"></i>\n                                Create new Article    \n                            </a>\n                        </li>\n                    </ul>\n                </div>\n            </div>\n        </div>\n    </div>\n</section>\n";
 
 /***/ }),
 
@@ -1057,8 +1065,6 @@ Vue.component('ChangeEmailModal', __WEBPACK_IMPORTED_MODULE_1__modals_ChangeEmai
 Vue.component('GravatarModal', __WEBPACK_IMPORTED_MODULE_2__modals_GravatarModal_js__["a" /* default */]);
 
 /* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_3__components_Page_js__["a" /* default */].extend({
-    props: ['on-load'],
-
     data: function data() {
         return {
             view: {
@@ -1073,20 +1079,19 @@ Vue.component('GravatarModal', __WEBPACK_IMPORTED_MODULE_2__modals_GravatarModal
 
     template: __WEBPACK_IMPORTED_MODULE_0__dashboard_vue_html___default.a,
 
-    mounted: function mounted() {
-        var _this = this;
-
-        this.onLoad(this);
-        eventHub.$on('change-email-modal:updated', function () {
-            _this.$root.success('Your email was successfully updated!');
-        });
-    },
     destroyed: function destroyed() {
         eventHub.$off('change-email-modal:updated');
     },
 
 
     methods: {
+        childSetUp: function childSetUp() {
+            var _this = this;
+
+            eventHub.$on('change-email-modal:updated', function () {
+                _this.$root.success('Your email was successfully updated!');
+            });
+        },
         showChangeEmailModal: function showChangeEmailModal() {
             this.showChangeEmailModalState = true;
         },
@@ -1125,8 +1130,6 @@ module.exports = "<div>\n    <section class=\"hero is-medium is-info\">\n       
 
 
 /* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_2__components_Page_js__["a" /* default */].extend({
-    props: ['on-load'],
-
     data: function data() {
         return {
             view: {
@@ -1154,17 +1157,6 @@ module.exports = "<div>\n    <section class=\"hero is-medium is-info\">\n       
 
     template: __WEBPACK_IMPORTED_MODULE_1__home_vue_html___default.a,
 
-    mounted: function mounted() {
-        this.onLoad(this);
-
-        var $window = $(window);
-        var $stickyEl = $('#search');
-        var elTop = $stickyEl.offset().top;
-
-        $window.scroll(function () {
-            return $stickyEl.toggleClass('sticky', $window.scrollTop() > elTop);
-        });
-    },
     destroyed: function destroyed() {
         this.removeScroll();
         this.resetPostData();
@@ -1175,6 +1167,15 @@ module.exports = "<div>\n    <section class=\"hero is-medium is-info\">\n       
         launch: function launch() {
             this.fetchNextPostSet();
             this.setUpScroll();
+        },
+        childSetUp: function childSetUp() {
+            var $window = $(window);
+            var $stickyEl = $('#search');
+            var elTop = $stickyEl.offset().top;
+
+            $window.scroll(function () {
+                return $stickyEl.toggleClass('sticky', $window.scrollTop() > elTop);
+            });
         },
         removeScroll: function removeScroll() {
             $(window).off('scroll');
@@ -1261,7 +1262,7 @@ module.exports = "<div>\n    <section class=\"hero is-medium is-info\">\n       
 /***/ "./resources/assets/js/spa/pages/home.vue.html":
 /***/ (function(module, exports) {
 
-module.exports = "<section class=\"section site-content\">\n    <div class=\"container\">\n        <div id=\"search\" class=\"tabs is-toggle is-hidden-touch\">\n            <div class=\"pull-left\">\n                <ul>\n                    <li v-for=\"column in columns\" :class=\"[field == column ? 'is-active' : '']\">\n                        <a @click=\"sortBy(column)\">\n                            {{ column }}\n                            <span class=\"icon is-small\" v-show=\"field == column\">\n                                <i class=\"fas fa-arrow-circle-up\" v-show=\"field == column && reverse == false\"></i>\n                                <i class=\"fas fa-arrow-circle-down\" v-show=\"field == column && reverse == true\"></i>\n                            </span>\n                        </a>\n                    </li>\n                </ul>\n            </div>\n\n            <div class=\"pull-right\">\n                <div class=\"field has-addons\">\n                    <div class=\"control\">\n                        <span class=\"select\">\n                            <select v-model=\"params.paginate\" @change=\"rePaginate\">\n                                <option :value=\"5\">5</option>\n                                <option :value=\"10\">10</option>\n                                <option :value=\"20\">20</option>\n                                <option :value=\"100\">100</option>\n                            </select>\n                        </span>\n                    </div>\n                    <div class=\"control\">\n                        <input name=\"search\"\n                            class=\"input\"\n                            v-model=\"params.search\"\n                            @keyup.enter=\"search\"\n                            placeholder=\"Find an article\">\n                    </div>\n                    <div class=\"control\">\n                        <a class=\"button is-info\">\n                            <i class=\"fa fa-search\"></i>\n                        </a>\n                    </div>\n                </div>\n            </div>\n        </div>\n        \n        <div class=\"container\">\n            <hr/>\n            <div class=\"notification is-info\" v-if=\"posts.length == 0 && loading_posts == false\">\n                There are no posts\n            </div>\n            <div class=\"blog-container\" v-for=\"(post, index) in posts\">\n                <article-post :user=\"post.user\" :post=\"post\" class=\"m-b-lg\">\n                    <template slot=\"post-body\">\n                        {{ post.body_trimmed }}\n                        <br>\n                        <span class=\"has-text-grey m-t-md\">Click the title to read on.</span>\n                    </template>\n                </article-post>\n            </div>\n            <div class=\"loading-articles has-text-centered\" v-if=\"loading_posts\">\n                <i class=\"fas fa-spinner fa-spin fa-4x\"></i>\n                <br>\n                <div class=\"text-info\">Loading Posts....</div>\n            </div>\n            <div id=\"bottom\"></div>\n        </div>\n    </div>\n</section>\n";
+module.exports = "<section class=\"section site-content\">\n    <div class=\"container\">\n        <div id=\"search\" class=\"tabs is-toggle is-hidden-touch\">\n            <div class=\"pull-left\">\n                <ul>\n                    <li v-for=\"column in columns\" :class=\"[field == column ? 'is-active' : '']\">\n                        <a @click=\"sortBy(column)\">\n                            {{ column }}\n                            <span class=\"icon is-small\" v-show=\"field == column\">\n                                <i class=\"fas fa-arrow-circle-up\" v-show=\"field == column && reverse == false\"></i>\n                                <i class=\"fas fa-arrow-circle-down\" v-show=\"field == column && reverse == true\"></i>\n                            </span>\n                        </a>\n                    </li>\n                </ul>\n            </div>\n\n            <div class=\"pull-right\">\n                <div class=\"field has-addons\">\n                    <div class=\"control\">\n                        <span class=\"select\">\n                            <select v-model=\"params.paginate\" @change=\"rePaginate\">\n                                <option :value=\"5\">5</option>\n                                <option :value=\"10\">10</option>\n                                <option :value=\"20\">20</option>\n                                <option :value=\"100\">100</option>\n                            </select>\n                        </span>\n                    </div>\n                    <div class=\"control\">\n                        <input name=\"search\"\n                            class=\"input\"\n                            v-model=\"params.search\"\n                            @keyup.enter=\"search\"\n                            placeholder=\"Find an article\">\n                    </div>\n                    <div class=\"control\">\n                        <a class=\"button is-info\">\n                            <i class=\"fa fa-search\"></i>\n                        </a>\n                    </div>\n                </div>\n            </div>\n        </div>\n        \n        <div class=\"container\">\n            <hr/>\n            <div class=\"notification is-info\" v-if=\"0 === posts.length && false === loading_posts\">\n                There are no posts\n            </div>\n            <div class=\"blog-container\" v-for=\"(post, index) in posts\">\n                <article-post :user=\"post.user\" :post=\"post\" class=\"m-b-lg\">\n                    <template slot=\"post-body\">\n                        <div class=\"m-b-xs\">{{ post.body_trimmed }}</div>\n                        <a :href=\"'/article/' + post.slug\" class=\"has-text-grey\">Click to read on...</a>\n                    </template>\n                </article-post>\n            </div>\n            <div class=\"loading-articles has-text-centered\" v-if=\"loading_posts\">\n                <i class=\"fas fa-spinner fa-spin fa-4x\"></i>\n                <br>\n                <div class=\"has-text-info\">Loading Posts....</div>\n            </div>\n            <div id=\"bottom\"></div>\n        </div>\n    </div>\n</section>\n";
 
 /***/ }),
 
@@ -1283,8 +1284,6 @@ Vue.component('ArticlePost', __WEBPACK_IMPORTED_MODULE_2__components_ArticlePost
 Vue.component('Pagination', __WEBPACK_IMPORTED_MODULE_3__components_Pagination_js__["a" /* default */]);
 
 /* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_1__components_Page_js__["a" /* default */].extend({
-    props: ['on-load'],
-
     data: function data() {
         return {
             view: {
@@ -1301,11 +1300,6 @@ Vue.component('Pagination', __WEBPACK_IMPORTED_MODULE_3__components_Pagination_j
 
 
     template: __WEBPACK_IMPORTED_MODULE_0__post_vue_html___default.a,
-
-    created: function created() {
-        this.onLoad(this);
-    },
-
 
     methods: {
         launch: function launch(params) {
@@ -1377,8 +1371,6 @@ Vue.component('Avatar', __WEBPACK_IMPORTED_MODULE_3__components_Avatar_js__["a" 
 Vue.component('ArticlePost', __WEBPACK_IMPORTED_MODULE_2__components_ArticlePost_js__["a" /* default */]);
 
 /* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_1__components_Page_js__["a" /* default */].extend({
-    props: ['on-load'],
-
     data: function data() {
         return {
             view: {
@@ -1393,11 +1385,6 @@ Vue.component('ArticlePost', __WEBPACK_IMPORTED_MODULE_2__components_ArticlePost
 
 
     template: __WEBPACK_IMPORTED_MODULE_0__profile_vue_html___default.a,
-
-    created: function created() {
-        this.onLoad(this);
-    },
-
 
     methods: {
         launch: function launch(slug) {
@@ -1454,7 +1441,7 @@ Vue.component('ArticlePost', __WEBPACK_IMPORTED_MODULE_2__components_ArticlePost
 /***/ "./resources/assets/js/spa/pages/profile.vue.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div v-if=\"user && abilities\">\n    <section class=\"hero is-medium is-info\">\n        <div class=\"hero-body\">\n            <div class=\"container\">\n                <h1 class=\"is-1 title\">\n                    {{ user.name }}'s Profile\n                </h1>\n            </div>\n        </div>\n    </section>\n    <section class=\"section site-content\">\n        <avatar :user=\"user\" size=\"large\" avatar-class=\"is-hidden-mobile avatar-has-profile\"></avatar>\n        <!-- <img :src=\"user.gravatar.large\"\n            alt=\"Avatar\" \n            class=\"avatar is-hidden-mobile avatar-has-profile\"\n        > -->\n        <br>\n        <div class=\"container container-into-hero\">\n            <div class=\"card\">\n                <div class=\"card-content\">\n                    <div v-if=\"can('manage-articles') && posts\" class=\"m-b-lg\">\n                        <h1 class=\"title is-2 has-bottom-highlight\">{{ user.name }}'s Posts!</h1>\n                        <div v-if=\"posts.length == 0\">\n                            {{ user.name }} currently has no posts!\n                        </div>\n                        <div class=\"blog-container\" v-for=\"(post, index) in posts\">\n                            <article-post :user=\"user\" :post=\"post\">\n                                <template slot=\"post-body\">\n                                    {{ post.body_trimmed }}\n                                    <br>\n                                    <span class=\"has-text-grey m-t-md\">Click the title to read on.</span>\n                                </template>\n                            </article-post>\n                            <hr v-if=\"index + 1 < posts.length\" />\n                        </div>\n                    </div>\n                    <div>\n                        <h1 class=\"title is-2 has-bottom-highlight\">{{ user.name }}'s 10 most recent comments</h1>\n                        <div v-if=\"0 === user.comments.length\" class=\"notification is-info\">\n                            {{ user.name }} has not actually commented on anything!\n                        </div>\n                        <div v-for=\"(comment, index) in user.comments\" class=\"m-t-lg\" :class=\"[1 === (index % 2) ? 'has-text-left' : 'has-text-right']\">\n                            <p class=\"blog-post-meta\">\n                                <i class=\"fa fa-calendar\"></i> Comment Published <span v-text=\"comment.nice_created_at\"></span>\n                            </p>\n                            <p class=\"m-t-md\">\n                                {{ comment.body }}\n                            </p>\n                            <small class=\"is-muted m-t-md\">\n                                Posted on <a :href=\"'/article/' + comment.article.slug\">{{ comment.article.title }}</a>\n                            </small>\n                        </div>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </section>\n</div>\n";
+module.exports = "<div v-if=\"user && abilities\">\n    <section class=\"hero is-medium is-info\">\n        <div class=\"hero-body\">\n            <div class=\"container\">\n                <h1 class=\"is-1 title\">\n                    {{ user.name }}'s Profile\n                </h1>\n            </div>\n        </div>\n    </section>\n    <section class=\"section site-content\">\n        <avatar :user=\"user\" size=\"large\" avatar-class=\"is-hidden-mobile avatar-has-profile\"></avatar>\n        <!-- <img :src=\"user.gravatar.large\"\n            alt=\"Avatar\" \n            class=\"avatar is-hidden-mobile avatar-has-profile\"\n        > -->\n        <br>\n        <div class=\"container container-into-hero\">\n            <div class=\"card\">\n                <div class=\"card-content\">\n                    <div v-if=\"can('manage-articles') && posts\" class=\"m-b-lg\">\n                        <h1 class=\"title is-2 has-bottom-highlight\">{{ user.name }}'s Posts!</h1>\n                        <div v-if=\"posts.length == 0\">\n                            {{ user.name }} currently has no posts!\n                        </div>\n                        <div class=\"blog-container\" v-for=\"(post, index) in posts\">\n                            <article-post :user=\"user\" :post=\"post\">\n                                <template slot=\"post-body\">\n                                    <div class=\"m-b-xs\">{{ post.body_trimmed }}</div>\n                                    <a :href=\"'/article/' + post.slug\" class=\"has-text-grey\">Click to read on...</a>\n                                </template>\n                            </article-post>\n                            <hr v-if=\"index + 1 < posts.length\" />\n                        </div>\n                    </div>\n                    <div>\n                        <h1 class=\"title is-2 has-bottom-highlight\">{{ user.name }}'s 10 most recent comments</h1>\n                        <div v-if=\"0 === user.comments.length\" class=\"notification is-info\">\n                            {{ user.name }} has not actually commented on anything!\n                        </div>\n                        <div v-for=\"(comment, index) in user.comments\" class=\"m-t-lg\" :class=\"[1 === (index % 2) ? 'has-text-left' : 'has-text-right']\">\n                            <p class=\"blog-post-meta\">\n                                <i class=\"fa fa-calendar\"></i> Comment Published <span v-text=\"comment.nice_created_at\"></span>\n                            </p>\n                            <p class=\"m-t-md\">\n                                {{ comment.body }}\n                            </p>\n                            <small class=\"is-muted m-t-md\">\n                                Posted on <a :href=\"'/article/' + comment.article.slug\">{{ comment.article.title }}</a>\n                            </small>\n                        </div>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </section>\n</div>\n";
 
 /***/ }),
 

@@ -11,7 +11,6 @@ const { mix } = require('laravel-mix');
  |
  */
 mix.browserSync({
-    // proxy: 'mikeshellard.test',
     proxy: 'http://mikeshellard.test/',
     host: 'mikeshellard.test',
     open: 'external',
@@ -30,6 +29,5 @@ mix.scripts(
 mix.styles('node_modules/mikeshellard-theme/dist/login.css', 'public/css/login.css');
 mix.js('resources/assets/js/app.js', 'public/js/app.js');
 mix.js('resources/assets/js/spa-loader.js', 'public/js/spa-loader.js');
-mix.js('resources/assets/js/pagination-page-only.js', 'public/js/pagination-page-only.js');
 
 mix.version();

@@ -1,4 +1,4 @@
-import Vue from 'vue';
+import Vue from 'vue/dist/vue.common.js';
 import Router from 'reflex-routing';
 import Modal from './spa/components/Modal.js';
 import axios from 'axios';

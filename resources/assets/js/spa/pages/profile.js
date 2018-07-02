@@ -7,8 +7,6 @@ Vue.component('Avatar', Avatar)
 Vue.component('ArticlePost', ArticlePost)
 
 export default Page.extend({
-    props: ['on-load'],
-
     data() {
         return {
             view: {
@@ -22,10 +20,6 @@ export default Page.extend({
     },
 
     template: ProfileTemplate,
-
-    created() {
-        this.onLoad(this);
-    },
 
     methods: {
         launch(slug) {

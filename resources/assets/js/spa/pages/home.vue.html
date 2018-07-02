@@ -45,22 +45,21 @@
         
         <div class="container">
             <hr/>
-            <div class="notification is-info" v-if="posts.length == 0 && loading_posts == false">
+            <div class="notification is-info" v-if="0 === posts.length && false === loading_posts">
                 There are no posts
             </div>
             <div class="blog-container" v-for="(post, index) in posts">
                 <article-post :user="post.user" :post="post" class="m-b-lg">
                     <template slot="post-body">
-                        {{ post.body_trimmed }}
-                        <br>
-                        <span class="has-text-grey m-t-md">Click the title to read on.</span>
+                        <div class="m-b-xs">{{ post.body_trimmed }}</div>
+                        <a :href="'/article/' + post.slug" class="has-text-grey">Click to read on...</a>
                     </template>
                 </article-post>
             </div>
             <div class="loading-articles has-text-centered" v-if="loading_posts">
                 <i class="fas fa-spinner fa-spin fa-4x"></i>
                 <br>
-                <div class="text-info">Loading Posts....</div>
+                <div class="has-text-info">Loading Posts....</div>
             </div>
             <div id="bottom"></div>
         </div>

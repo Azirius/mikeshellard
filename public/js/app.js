@@ -13641,8 +13641,8 @@ module.exports = g;
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__("./node_modules/vue/dist/vue.common.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_dist_vue_common_js__ = __webpack_require__("./node_modules/vue/dist/vue.common.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_dist_vue_common_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue_dist_vue_common_js__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_reflex_routing__ = __webpack_require__("./node_modules/reflex-routing/dist/main.module.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_reflex_routing___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_reflex_routing__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__spa_components_Modal_js__ = __webpack_require__("./resources/assets/js/spa/components/Modal.js");
@@ -13653,7 +13653,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 
-__WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('Modal', __WEBPACK_IMPORTED_MODULE_2__spa_components_Modal_js__["a" /* default */]);
+__WEBPACK_IMPORTED_MODULE_0_vue_dist_vue_common_js___default.a.component('Modal', __WEBPACK_IMPORTED_MODULE_2__spa_components_Modal_js__["a" /* default */]);
 
 $.fn.isOnScreen = function () {
     var viewport = {};
@@ -13692,8 +13692,8 @@ function focus_caret(elem) {
 }
 
 (function (exports) {
-    exports.eventHub = new __WEBPACK_IMPORTED_MODULE_0_vue___default.a();
-    exports.Vue = __WEBPACK_IMPORTED_MODULE_0_vue___default.a;
+    exports.eventHub = new __WEBPACK_IMPORTED_MODULE_0_vue_dist_vue_common_js___default.a();
+    exports.Vue = __WEBPACK_IMPORTED_MODULE_0_vue_dist_vue_common_js___default.a;
     exports.Router = __WEBPACK_IMPORTED_MODULE_1_reflex_routing___default.a;
     exports.focus_caret = focus_caret;
     exports.axios = __WEBPACK_IMPORTED_MODULE_3_axios___default.a;

@@ -12038,12 +12038,3 @@ div.navbar-start > a.navbar-item.is-active {
   border: 3px solid #fff;
 }
 
-.avatar-has-profile {
-  position: relative;
-  z-index: 2;
-  float: left;
-  left: 75%;
-  margin-top: -260px;
-  border: 3px solid #fff;
-}
-

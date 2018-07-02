@@ -7,8 +7,6 @@ Vue.component('ChangeEmailModal', ChangeEmailModal);
 Vue.component('GravatarModal', GravatarModal);
 
 export default Page.extend({
-    props: ['on-load'],
-
     data() {
         return {
             view: {
@@ -22,16 +20,15 @@ export default Page.extend({
 
     template: DashboardTemplate,
 
-    mounted() {
-        this.onLoad(this);
-        eventHub.$on('change-email-modal:updated', () => {this.$root.success('Your email was successfully updated!')});
-    },
-
     destroyed() {
         eventHub.$off('change-email-modal:updated');
     },
 
     methods: {
+        childSetUp() {
+            eventHub.$on('change-email-modal:updated', () => {this.$root.success('Your email was successfully updated!')});
+        },
+
         showChangeEmailModal() {
             this.showChangeEmailModalState = true;
         },

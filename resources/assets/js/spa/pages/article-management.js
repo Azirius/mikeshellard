@@ -6,8 +6,6 @@ import Page from './../components/Page.js';
 Vue.component('DeleteArticleModal', DeleteArticleModal);
 
 export default Page.extend({
-    props: ['on-load'],
-
     data() {
         return {
             view: {
@@ -35,18 +33,6 @@ export default Page.extend({
 
     template: ArticleManagementTemplate,
 
-    mounted() {
-        this.onLoad(this);
-        
-        let $window = $(window);
-        let $stickyEl = $('#admin-article-search');
-        let elTop = $stickyEl.offset().top;
-
-        $window.scroll(() => $stickyEl.toggleClass('sticky', $window.scrollTop() > elTop));
-
-        eventHub.$on('article:deleted', this.removeArticle);
-    },
-
     destroyed() {
         this.removeScroll();
         this.resetPostData();
@@ -56,6 +42,17 @@ export default Page.extend({
     methods: {
         launch() {
             this.fetchNextPostSet();
+        },
+
+        childSetUp() {
+            let $window = $(window);
+            let $stickyEl = $('#admin-article-search');
+            let elTop = $stickyEl.offset().top;
+
+            $window.scroll(() => $stickyEl.toggleClass('sticky', $window.scrollTop() > elTop));
+
+            eventHub.$on('article:deleted', this.removeArticle);
+
             this.setUpScroll();
         },
 
