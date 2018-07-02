@@ -37,15 +37,10 @@ export default Page.extend({
     methods: {
         launch() {
             this.fetchNextPostSet();
-            this.setUpScroll();
         },
 
         childSetUp() {
-            let $window = $(window);
-            let $stickyEl = $('#search');
-            let elTop = $stickyEl.offset().top;
-
-            $window.scroll(() => $stickyEl.toggleClass('sticky', $window.scrollTop() > elTop));
+            this.setUpScroll();
         },
 
         removeScroll() {

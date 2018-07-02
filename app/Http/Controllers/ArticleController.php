@@ -28,7 +28,6 @@ class ArticleController extends Controller
     public function create()
     {   
         $pages = Article::preparePages(collect(['body' => old('body'), 'subtitle' => old('subtitle')]));
-
         return view('article.create', compact('pages'));
     }
 

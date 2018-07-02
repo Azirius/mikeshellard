@@ -67,7 +67,7 @@
 
                         <div class="field is-grouped">
                             <div class="control">
-                                <button class="button is-link is-submit">Add Article</button>
+                                <button class="button is-link is-submit">Update Article</button>
                             </div>
                             <div class="control">
                                 <a href="/admin/article" class="button is-text is-cancel">Cancel</a>

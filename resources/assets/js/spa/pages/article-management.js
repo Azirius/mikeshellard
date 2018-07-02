@@ -45,12 +45,6 @@ export default Page.extend({
         },
 
         childSetUp() {
-            let $window = $(window);
-            let $stickyEl = $('#admin-article-search');
-            let elTop = $stickyEl.offset().top;
-
-            $window.scroll(() => $stickyEl.toggleClass('sticky', $window.scrollTop() > elTop));
-
             eventHub.$on('article:deleted', this.removeArticle);
 
             this.setUpScroll();

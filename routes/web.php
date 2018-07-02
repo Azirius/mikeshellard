@@ -39,3 +39,21 @@ Route::get('profile/{user}', 'ProfileController@show');
 Route::get('pagination.html', function () {
     return view('pagination');
 });
+
+Route::get('test-fuck', function () {
+    $request = collect(
+        [
+            'subtitle' => ['one', 'two', 'three'],
+            'body' => ['body 1', 'body 2', 'body 3']
+        ]
+    );
+
+    $pages = collect($request->get('subtitle'))->map(function ($currentReq, $index) use ($request) {
+        return ['subtitle' => $currentReq, 'body' => $request->get('body')[$index]];
+    });
+
+    dd($pages);
+
+    // var_dump($subtitleArray);
+    // var_dump($subtitleBody);
+});

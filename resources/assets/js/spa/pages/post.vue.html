@@ -4,9 +4,9 @@
             <article-post :user="author" :post="post">
                 <template slot="post-body">
                     <pagination :items="post.pages" :per-page="1" class="m-b-md">
-                            <template slot="pagination-item" slot-scope="page">
-                                <h3 class="subtitle" v-text="page.item.subtitle"></h3>
-                                <p class="blog-post" v-html="page.item.body"></p>
+                            <template slot="pagination-item" slot-scope="{item}">
+                                <h3 class="subtitle" v-text="item.subtitle"></h3>
+                                <p class="blog-post" v-html="item.body"></p>
                             </template>
                     </pagination>
                 </template>

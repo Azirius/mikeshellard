@@ -2,48 +2,50 @@
     <div class="container">
         <delete-article-modal :show="showDeleteArticleModalState" @close="hideDeleteArticleModel()"></delete-article-modal>
         
-        <div id="admin-article-search" class="is-hidden-touch tabs is-toggle">
-            <div class="pull-left">
-                <ul>
-                    <li v-for="column in columns" :class="[field == column ? 'is-active' : '']">
-                        <a @click="sortBy(column)">
-                            {{ column }}
-                            <span class="icon is-small" v-show="field == column">
-                                <i class="fas fa-arrow-circle-up" v-show="field == column && reverse == false"></i>
-                                <i class="fas fa-arrow-circle-down" v-show="field == column && reverse == true"></i>
+        <pinned>
+            <div class="is-hidden-touch tabs is-toggle">
+                <div class="pull-left">
+                    <ul>
+                        <li v-for="column in columns" :class="[field == column ? 'is-active' : '']">
+                            <a @click="sortBy(column)">
+                                {{ column }}
+                                <span class="icon is-small" v-show="field == column">
+                                    <i class="fas fa-arrow-circle-up" v-show="field == column && reverse == false"></i>
+                                    <i class="fas fa-arrow-circle-down" v-show="field == column && reverse == true"></i>
+                                </span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            
+                <div class="pull-right">
+                    <div class="field has-addons">
+                        <div class="control">
+                            <span class="select">
+                                <select v-model="queryParams.paginate" @change="rePaginate">
+                                    <option :value="5">5</option>
+                                    <option :value="10">10</option>
+                                    <option :value="20">20</option>
+                                    <option :value="100">100</option>
+                                </select>
                             </span>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        
-            <div class="pull-right">
-                <div class="field has-addons">
-                    <div class="control">
-                        <span class="select">
-                            <select v-model="queryParams.paginate" @change="rePaginate">
-                                <option :value="5">5</option>
-                                <option :value="10">10</option>
-                                <option :value="20">20</option>
-                                <option :value="100">100</option>
-                            </select>
-                        </span>
-                    </div>
-                    <div class="control">
-                        <input name="search"
-                            class="input"
-                            v-model="queryParams.search"
-                            @keyup.enter="search"
-                            placeholder="Find an article">
-                    </div>
-                    <div class="control">
-                        <a class="button is-info">
-                            <i class="fa fa-search"></i>
-                        </a>
+                        </div>
+                        <div class="control">
+                            <input name="search"
+                                class="input"
+                                v-model="queryParams.search"
+                                @keyup.enter="search"
+                                placeholder="Find an article">
+                        </div>
+                        <div class="control">
+                            <a class="button is-info">
+                                <i class="fa fa-search"></i>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </pinned>
         
         <div class="container">
             <div class="columns">

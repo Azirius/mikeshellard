@@ -1,9 +1,11 @@
 import Vue from 'vue/dist/vue.common.js';
 import Router from 'reflex-routing';
 import Modal from './spa/components/Modal.js';
+import Pinned from './spa/components/Pinned.vue';
 import axios from 'axios';
 
 Vue.component('Modal', Modal);
+Vue.component('Pinned', Pinned);
 
 $.fn.isOnScreen = function () {
     var viewport = {};

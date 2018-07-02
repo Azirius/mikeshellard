@@ -29,15 +29,11 @@ class Article extends Model
 
     public static function preparePages($request)
     {
-        $pages = collect();
-        $subtitles = collect($request->only('subtitle'))->values()->flatten()->toArray();
-        $i = 0;
+        $pages = collect($request->get('subtitle'))->map(function ($currentReq, $index) use ($request) {
+            return ['subtitle' => $currentReq, 'body' => $request->get('body')[$index]];
+        })->toArray();
 
-        collect($request->only('body'))->flatten()->each(function ($value, $index) use ($pages, $subtitles, $i) {
-            $pages[] = ['body' => $value, 'subtitle' => $subtitles[$i++]];
-        });
-
-        return $pages->toArray();
+        return $pages;
     }
 
     public function getCommentCountAttribute()
