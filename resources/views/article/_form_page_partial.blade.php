@@ -18,12 +18,6 @@
         @if ($errors->first('body.' . $index))
         <div class="help is-danger has-text-left">{{ $errors->first('body.' . $index, 'You need to provide a body for this page.') }}</div>
         @endif
-        <textarea type="text" 
-            class="summernote textarea" 
-            name="body[]" 
-            placeholder="Post content"
-        >
-            {{ old('body.' . $index, $page->body) }}
-        </textarea>
+        <editor name="body[]">{{ old('body.' . $index, $page->body) }}</editor>
     </div>
 </div>

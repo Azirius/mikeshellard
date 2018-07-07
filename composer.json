@@ -12,7 +12,8 @@
         "laravel/tinker": "~1.0",
         "pusher/pusher-php-server": "^2.6",
         "reflex/query-filters": "1.2.3",
-        "silber/bouncer": "v1.0.0-rc.1"
+        "silber/bouncer": "v1.0.0-rc.1",
+        "stevebauman/purify": "^2.0"
     },
     "require-dev": {
         "ahuggins/open-on-make": "^0.0.16",

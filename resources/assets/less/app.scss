@@ -12,3 +12,8 @@
 // $family-primary: $family-serif;
 
 @import "../mikeshellard-theme/src/app.scss";
+
+.column.is-vcentered {
+  margin-top: auto;
+  margin-bottom: auto;
+}

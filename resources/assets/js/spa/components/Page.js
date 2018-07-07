@@ -30,7 +30,7 @@ export default Vue.extend({
         },
 
         csrfToken() {
-            return mikeshellard.crsf_token;
+            return mikeshellard.csrf_token;
         }
     },
 });

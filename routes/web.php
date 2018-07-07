@@ -1,5 +1,7 @@
 <?php
 
+use Stevebauman\Purify\Facades\Purify;
+
 Route::group(['middleware' => 'can:manage-articles'], function () {
     Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
         Route::resource('article', 'ArticleController');
@@ -40,20 +42,13 @@ Route::get('pagination.html', function () {
     return view('pagination');
 });
 
-Route::get('test-fuck', function () {
-    $request = collect(
-        [
-            'subtitle' => ['one', 'two', 'three'],
-            'body' => ['body 1', 'body 2', 'body 3']
-        ]
-    );
+Route::post('test', function () {
+    echo Purify::clean(request()->test);
+    // $transformer = new QuillTransformer(request()->test);
 
-    $pages = collect($request->get('subtitle'))->map(function ($currentReq, $index) use ($request) {
-        return ['subtitle' => $currentReq, 'body' => $request->get('body')[$index]];
-    });
-
-    dd($pages);
-
-    // var_dump($subtitleArray);
-    // var_dump($subtitleBody);
+    // echo $transformer->transformToHtml();
+    // echo '<pre>';
+    // print_r(var_dump($transformer->original()));
+    // echo '</pre>';
+    // // dd([$transformer->transformToHtml(), $transformer->original()]);
 });

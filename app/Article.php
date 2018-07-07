@@ -27,15 +27,6 @@ class Article extends Model
         });
     }
 
-    public static function preparePages($request)
-    {
-        $pages = collect($request->get('subtitle'))->map(function ($currentReq, $index) use ($request) {
-            return ['subtitle' => $currentReq, 'body' => $request->get('body')[$index]];
-        })->toArray();
-
-        return $pages;
-    }
-
     public function getCommentCountAttribute()
     {
         return $this->comments()->count();
@@ -101,7 +92,7 @@ class Article extends Model
 
     public function getBodyTrimmedAttribute()
     {
-        return str_limit($this->pages[0]->body, 100);
+        return count($this->pages) ? str_limit($this->pages[0]->body, 100) : 'No body here...';
     }
 
     public function scopeNewest($builder)

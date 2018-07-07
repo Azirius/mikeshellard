@@ -16,11 +16,9 @@ class ArticleRequest extends Request
     public function rules()
     {
         $rules = [
-            'title' => 'required|unique:articles',
-            // 'body'  => 'required|not_empty',
-            'subtitle.*'  => 'required',
-            'body.*'  => 'required|not_empty',
-            'score' => 'nullable|numeric|digits_between:0,10',
+            'title'             => 'required|unique:articles',
+            'pages.*.subtitle'  => 'required',
+            'pages.*.body'      => 'required|not_empty',
         ];
 
         $article = $this->route()->parameter('article');
@@ -32,19 +30,24 @@ class ArticleRequest extends Request
         return $rules;
     }
 
+    public function messages()
+    {
+        return [
+            'pages.*.subtitle.*'  =>  'Each and every page needs a subtitle.',
+            'pages.*.body.*'      =>  'The body cannot be empty!',
+        ];
+    }
+
     public function persist(User $user, Article $article = null)
     {
-        $pages = Article::preparePages($this);
-
         if ($article && $article->exists()) {
-            $article->updatePages($pages);
-            $article->update($this->except(['body', 'subtitle']));
-            return $article;
+            $article->updatePages($this->pages);
+            $article->update($this->except(['pages']));
+            return $article->fresh();
         }
 
-        $article = $user->articles()->create($this->except(['body', 'subtitle']));
-
-        $article->addPages($pages);
+        $article = $user->articles()->create($this->except(['pages']));
+        $article->addPages($this->pages);
 
         return $article;
     }

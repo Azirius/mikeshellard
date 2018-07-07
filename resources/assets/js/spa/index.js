@@ -1,5 +1,6 @@
 import HomePage from './pages/Home.vue';
 import PostPage from './pages/Post.vue';
+import EditPostPage from './pages/EditPost.vue';
 import ProfilePage from './pages/Profile.vue';
 import ArticleManagementPage from './pages/ArticleManagement.vue';
 import DashboardPage from './pages/Dashboard.vue';
@@ -24,6 +25,8 @@ export default {
                 'profile/:slug': slug => this.setView('profile', slug),
 
                 'admin/article': () => this.setView('articleManagement'),
+                
+                'admin/article/:slug/edit': slug => this.setView('editPost', slug),
 
                 'dashboard': () => this.setView('dashboard')
             },
@@ -71,6 +74,7 @@ export default {
     components: {
         home: HomePage,
         post: PostPage,
+        editPost: EditPostPage,
         profile: ProfilePage,
         articleManagement: ArticleManagementPage,
         dashboard: DashboardPage

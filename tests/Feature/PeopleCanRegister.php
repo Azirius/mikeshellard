@@ -40,7 +40,7 @@ class PeopleCanRegister extends TestCase
             'email' =>  'john@example.com',
         ]);
 
-        $response->assertRedirect('/register/created');
+        $response->assertRedirect('/registration/created');
 
         $this->assertDatabaseHas('users', [
             'name' => 'John',

@@ -3,7 +3,7 @@
         <div class="container">
             <delete-article-modal :show="showDeleteArticleModalState" @close="hideDeleteArticleModel()"></delete-article-modal>
             
-            <pinned id="sk">
+            <pinned>
                 <div class="is-hidden-touch tabs is-toggle">
                     <div class="pull-left">
                         <ul>

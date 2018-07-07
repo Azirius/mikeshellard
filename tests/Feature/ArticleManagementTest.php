@@ -2,29 +2,59 @@
 
 namespace Tests\Feature;
 
+use Bouncer;
 use App\User;
 use App\Article;
 use Tests\TestCase;
+use App\ArticlePage;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class ArticleManagementTest extends TestCase
 {
     use RefreshDatabase;
 
+    protected function createAdminRole()
+    {
+        Bouncer::allow('admin')->to('manage-articles');
+        Bouncer::allow('admin')->to('manage-users');
+    }
+
+    protected function createAdminUser()
+    {
+        $this->createAdminRole();
+
+        factory(User::class)->create()->each(function ($user) {
+            Bouncer::assign(['admin', 'subscriber'])->to($user);
+        });
+
+        return User::first();
+    }
+
+    protected function createAStandardUser()
+    {
+        return factory(User::class)->create();
+    }
+
     /** @test */
     function can_create_an_article_while_authorised()
     {
-        $user = factory(User::class)->create();
+        $user = $this->createAdminUser();
 
         $response = $this->actingAs($user)->post('/admin/article', [
             'title' => 'Example Title',
-            'body' => 'Some text',
+            'pages' =>  [[
+                'body'      => 'Some text',
+                'subtitle'  =>  'Subtitle Text',
+            ]]
         ]);
 
         $response->assertRedirect('/admin/article/example-title/edit');
         $this->assertDatabaseHas('articles', [
-            'title' => 'Example Title',
-            'body' => 'Some text'
+            'title' => 'Example Title'
+        ]);
+        $this->assertDatabaseHas('article_pages', [
+            'body'  =>  'Some text',
+            'subtitle'  =>  'Subtitle Text',
         ]);
     }
 
@@ -33,21 +63,23 @@ class ArticleManagementTest extends TestCase
     {
         $response = $this->post('/admin/article', [
             'title' => 'Example Title',
-            'body' => 'Some text',
+            'pages' =>  [[
+                'body'      => 'Some text',
+                'subtitle'  =>  'Subtitle Text',
+            ]]
         ]);
 
         $response->assertRedirect('/login');
 
         $this->assertDatabaseMissing('articles', [
             'title' => 'Example Title',
-            'body' => 'Some text',
         ]);
     }
 
     /** @test */
     function can_delete_an_article_while_authorised()
     {
-        $user = factory(User::class)->create();
+        $user = $this->createAdminUser();
         $article = factory(Article::class)->create(['title' => 'Example Title']);
 
         $response = $this->actingAs($user)->delete('/admin/article/example-title');
@@ -59,37 +91,44 @@ class ArticleManagementTest extends TestCase
     /** @test */
     function cannot_delete_articles_unauthorised()
     {
-        $article = factory(Article::class)->create([
+        factory(Article::class)->create([
             'title' => 'Example Title',
-            'body' => 'Some text',
-        ]);
+        ])->each(function ($article) {
+            factory(ArticlePage::class)->create([
+                'article_id'    =>  $article->id
+            ]);
+        });
 
         $response = $this->delete('/admin/article/example-title');
 
         $response->assertRedirect('/login');
         $this->assertDatabaseHas('articles', [
             'title' => 'Example Title',
-            'body' => 'Some text',
         ]);
     }
 
     /** @test */
     function can_edit_an_article_while_authorised()
     {
-        $user = factory(User::class)->create();
+        $user = $this->createAdminUser();
         $article = factory(Article::class)->create([
             'title' => 'Example Title',
-            'body' => 'Some text',
-        ]);
+        ])->each(function ($article) {
+            factory(ArticlePage::class)->create([
+                'article_id'    =>  $article->id,
+            ]);
+        });
 
         $response = $this->actingAs($user)->put('/admin/article/example-title', [
             'title' => 'Some New Title',
-            'body' => 'Hello, World',
+            'pages' =>  [[
+                'body'      => 'Some text',
+                'subtitle'  =>  'Subtitle Text',
+            ]]
         ]);
 
         $this->assertDatabaseHas('articles', [
             'title' => 'Some New Title',
-            'body' => 'Hello, World',
         ]);
     }
 
@@ -98,41 +137,23 @@ class ArticleManagementTest extends TestCase
     {
         $article = factory(Article::class)->create([
             'title' => 'Example Title',
-            'body' => 'Some text',
         ]);
+
         $this->assertDatabaseHas('articles', [
             'title' => 'Example Title',
-            'body' => 'Some text',
         ]);
 
         $response = $this->put('admin/article/example-title', [
             'title' => 'Some New Title',
-            'body' => 'Hello, World',
+            'pages' =>  [[
+                'body'      => 'Some text',
+                'subtitle'  =>  'Subtitle Text',
+            ]],
         ]);
 
         $response->assertRedirect('/login');
         $this->assertDatabaseHas('articles', [
             'title' => 'Example Title',
-            'body' => 'Some text',
         ]);
-    }
-
-    /** @test */
-    function can_make_an_article_into_a_review()
-    {
-        $article = factory(Article::class)->create([
-            'title' => 'Example Title',
-            'body' => 'Some text',
-        ]);
-
-        $response = $this->get('/reviews/example-title');
-
-        $response->assertStatus(404);
-
-        $article->update(['score' => 5]);
-
-        $response = $this->get('/reviews/example-title');
-
-        $response->assertStatus(200);
     }
 }

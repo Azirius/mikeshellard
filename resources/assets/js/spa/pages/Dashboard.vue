@@ -31,12 +31,14 @@
 <script>
 import ChangeEmailModal from '../modals/ChangeEmailModal.vue';
 import GravatarModal from '../modals/GravatarModal.vue';
+import Editor from './../components/Editor.vue';
 import Page from './../components/Page.js';
 
 export default Page.extend({
     components: {
         ChangeEmailModal,
-        GravatarModal
+        GravatarModal,
+        Editor
     },
 
     data() {

@@ -23,7 +23,7 @@ class CommentRequest extends Request
     public function messages()
     {
         return [
-            'body.*'  =>  'You cannot leave an empty comment!',
+            'body'  =>  'You cannot leave an empty comment!',
         ];
     }
 

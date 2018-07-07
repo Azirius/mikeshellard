@@ -6,13 +6,13 @@
         <div class="control m-b-md">
             <label class="label">Subtitle</label>
             <input type="text" 
-                name="" 
+                name="subtitle[]" 
                 class="input"
                 placeholder="Subtitle"
             >
         </div>
         <div class="control">
-            <textarea type="text" class="textarea" name="" placeholder="Post content"></textarea>
+            <editor name="body[]"></editor>
         </div>
     </div>
     <section class="hero is-medium is-info">
@@ -28,6 +28,7 @@
         <div class="container container-into-hero">
             <div class="card">
                 <div class="card-content">
+                    {{ json_encode(request()->old()) }}
                     <form action="/admin/article/{{ $article->slug }}" method="post">
                         {{ csrf_field() }}
                         {{ method_field('PUT') }}
@@ -83,7 +84,6 @@
 
 @push('page-scripts')
     $(function() {
-        var actual = $('textarea[name="body[]"]');
         var clonableTextarea = $('#clonable-textarea');
 
         $('#addPage').click(function (e) {
@@ -92,31 +92,14 @@
             elementBeingAdded.removeClass('is-hidden')
                 .removeAttr('id');
             $('#pages-container .field:last-child').after(elementBeingAdded);
-            var textareaBeingAdded = elementBeingAdded.find('textarea');
-            textareaBeingAdded.addClass('summernote')
-                .attr('name', 'body[]') 
-                .summernote({height: 500});
+            
+            {{-- elementBeingAdded.find('textarea').attr('name', 'body[]'); --}}
 
             var inputBeingAdded = elementBeingAdded.find('.input');
-            inputBeingAdded.attr('name', 'subtitle[]');
+            {{-- inputBeingAdded.attr('name', 'subtitle[]'); --}}
         });
 
-        actual.each((index, element) => {
-            $(element).attr('required', false).hide();
-        });
-
-        var editor = $('.summernote').summernote({height: 500});
-
-        editor.summernote('code', actual.val());
-
-        actual.parents('form:first').on('submit', function(e) {
-            var editors = $('.summernote');
-            var editorCount = editors.length;
-            var actualTextareas = $('textarea[name="body[]"]');
-            
-            for (var i = 0; i < editorCount; i++) {
-                $(actualTextareas[i]).val($(editors.get(i)).summernote('code'));
-            }
+        $(window).on('submit', function(e) {
         });
     });
 @endpush

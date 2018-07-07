@@ -39,7 +39,7 @@
             </div>
 
             <div v-if="!! featured_comment" class="featured-comment">
-                <h2 class="subtitle">Featured Comment</h2>
+                <h2 class="subtitle">Featured Comment by {{ featured_comment.authors_name }}</h2>
                 <p class="blog-post-meta">
                     <img :src="featured_comment.user.gravatar.medium" class="image is-64x64 m-r-md is-pulled-left avatar">
                     <a :href="'/profile/' + featured_comment.authors_slug">{{ featured_comment.authors_name }}</a>
@@ -146,7 +146,8 @@ export default Page.extend({
 
         fetchPost(slug) {
             axios.get('/api/v1/article/' + slug)
-                .then(this.setPostData, response => this.$root.error(response.error));
+                .then(this.setPostData)
+                .catch(this.$root.handleError);
         }
     }
 });

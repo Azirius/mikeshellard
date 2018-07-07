@@ -11,12 +11,12 @@
     <title>Mike Shellard</title>
 
     <!-- Theme CSS -->
+    <link href="{{ mix('css/summernote-lite.css') }}" rel="stylesheet">
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
     <link rel="stylesheet" 
         href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" 
         integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" 
         crossorigin="anonymous">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote-lite.css" rel="stylesheet">
 
     <script>
         window.mikeshellard = {
@@ -86,11 +86,8 @@
     </div>
 </body>
 <script src="{{ mix('js/vendor.js') }}"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote-lite.js"></script>
 <script src="{{ mix('js/app.js') }}"></script>
 @stack('loaded-scripts')
-{{-- <script src="{{ mix('js/spa-loader.js') }}"></script> --}}
-
 <script>
 @stack('page-scripts')
 @if (session('status'))

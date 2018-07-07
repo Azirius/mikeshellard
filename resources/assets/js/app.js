@@ -1,5 +1,6 @@
 import Vue from 'vue/dist/vue.common.js';
 import Router from 'reflex-routing';
+import Editor from './spa/components/Editor.vue';
 import Modal from './spa/components/Modal.vue';
 import Pinned from './spa/components/Pinned.vue';
 import ArticlePost from './spa/components/ArticlePost.vue';
@@ -7,6 +8,7 @@ import Avatar from './spa/components/Avatar.vue';
 import axios from 'axios';
 import SPA from './spa';
 
+Vue.component('Editor', Editor);
 Vue.component('Avatar', Avatar);
 Vue.component('Modal', Modal);
 Vue.component('Pinned', Pinned);
