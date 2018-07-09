@@ -7,7 +7,7 @@
                         <pagination :items="post.pages" :per-page="1" class="m-b-md">
                                 <template slot="pagination-item" slot-scope="{item}">
                                     <h3 class="subtitle" v-text="item.subtitle"></h3>
-                                    <p class="blog-post" v-html="item.body"></p>
+                                    <p class="blog-post is-clearfix" v-html="item.body"></p>
                                 </template>
                         </pagination>
                     </template>

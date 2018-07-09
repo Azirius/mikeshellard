@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use App\User;
 use App\Article;
 use Illuminate\Support\Facades\Auth;
+use Stevebauman\Purify\Facades\Purify;
 
 class ArticleRequest extends Request
 {
@@ -17,6 +18,7 @@ class ArticleRequest extends Request
     {
         $rules = [
             'title'             => 'required|unique:articles',
+            'pages'             => 'min:1',
             'pages.*.subtitle'  => 'required',
             'pages.*.body'      => 'required|not_empty',
         ];
@@ -33,6 +35,7 @@ class ArticleRequest extends Request
     public function messages()
     {
         return [
+            'pages.min' => 'There must be a minimum of one page',
             'pages.*.subtitle.*'  =>  'Each and every page needs a subtitle.',
             'pages.*.body.*'      =>  'The body cannot be empty!',
         ];
@@ -40,14 +43,20 @@ class ArticleRequest extends Request
 
     public function persist(User $user, Article $article = null)
     {
+        $pages = collect($this->pages)->map(function ($page)
+        {
+            $page['body'] = Purify::clean($page['body']);
+            return $page;
+        })->toArray();
+
         if ($article && $article->exists()) {
-            $article->updatePages($this->pages);
+            $article->updatePages($pages);
             $article->update($this->except(['pages']));
             return $article->fresh();
         }
 
         $article = $user->articles()->create($this->except(['pages']));
-        $article->addPages($this->pages);
+        $article->addPages($pages);
 
         return $article;
     }

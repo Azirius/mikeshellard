@@ -4,7 +4,7 @@
             <div class="hero-body">
                 <div class="container">
                     <h1 class="title is-1">
-                        Editing '{{ post.title }}'
+                        Creating New Article
                     </h1>
                 </div>
             </div>
@@ -57,7 +57,7 @@
 
                         <div class="field is-grouped">
                             <div class="control">
-                                <button class="button is-link is-submit" @click="updateArticle">Update Article</button>
+                                <button class="button is-link is-submit" @click="createArticle">Create Article</button>
                             </div>
                             <div class="control">
                                 <a href="/admin/article" class="button is-text is-cancel">Cancel</a>
@@ -77,18 +77,18 @@ export default Page.extend({
     data() {
         return {
             view: {
-                name: 'edit-article',
-                title: 'Edit Article'
+                name: 'create-article',
+                title: 'Create Article'
             },
-            post: null,
-            pages: {},
+            post: { title: null },
+            pages: [],
             errors: {},
         }
     },
 
     methods: {
-        launch(slug) {
-            this.fetchPost(slug);
+        launch() {
+            this.addPage();
         },
 
         addPage() {
@@ -106,33 +106,8 @@ export default Page.extend({
                 return;
             }
             
-            
-            let data = this.getPostData();
-            data.pages.splice(data.pages.indexOf(page), 1);
-            this.sendPostToServer(data)
-                .then(() => {
-                    this.$root.success('Page removed successfully');
-                    this.pages.splice(this.pages.indexOf(page), 1);
-                })
-                .catch(this.$root.handleError);
-        },
-
-        loadPost(slug) {
-            return axios.get('/api/v1/article/' + slug);
-        },
-
-        fetchPost(slug) {
-            this.loadPost(slug)
-                .then(this.setPostData)
-                .catch(this.$root.handleError);
-        },
-
-        setPostData(response) {
-            this.post = response.data;
-            this.pages = response.data.pages.map(page => {
-                page.errors = {subtitle: null, body: null}
-                return page;
-            });
+            this.pages.splice(this.pages.indexOf(page), 1);
+            this.success('Page removed successfully');
         },
 
         getPostData() {
@@ -178,19 +153,24 @@ export default Page.extend({
 
                 return page;
             });
+
+            this.error('Something went wrong with your submission!');
         },
 
         sendPostToServer(postData) {
-            return axios.put('/api/v1/article/' + this.post.slug, postData);
+            return axios.post('/api/v1/article', postData);
         },
 
-        updateArticle() {
+        fireSuccess(response) {
+            this.success('Article created successfully');
+            this.route('/article/' + response.data.article.slug);
+        },
+
+        createArticle() {
             this.sendPostToServer(this.getPostData())
-                .then(() => this.$root.success('Article updated successfully'))
+                .then(this.fireSuccess)
                 .catch(this.mapErrors);
         }
     },
-
-
 });
 </script>

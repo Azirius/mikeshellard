@@ -1,6 +1,7 @@
 import HomePage from './pages/Home.vue';
 import PostPage from './pages/Post.vue';
 import EditPostPage from './pages/EditPost.vue';
+import NewPostPage from './pages/NewPost.vue';
 import ProfilePage from './pages/Profile.vue';
 import ArticleManagementPage from './pages/ArticleManagement.vue';
 import DashboardPage from './pages/Dashboard.vue';
@@ -17,6 +18,8 @@ export default {
 
             notification: null,
 
+            abilities: {},
+
             routes: {
                 '/': () => this.setView('home'),
 
@@ -28,10 +31,14 @@ export default {
                 
                 'admin/article/:slug/edit': slug => this.setView('editPost', slug),
 
+                'admin/article/create': () => this.setView('newPost'),
+
                 'dashboard': () => this.setView('dashboard')
             },
 
             router: null,
+
+            loading: false
         }
     },
 
@@ -54,9 +61,13 @@ export default {
             return response;
         });
 
+        // this.router.after(() => this.loading = false);
+
         $(window).on('popstate', () => app.route());
 
         $('#app-container').on('click', 'a:not(.prevent)', function (e) {
+            this.loading = e.target.pathname !== document.location.pathname;
+
             // Hide navbar drop down on 'mobile'
             $('.navbar-burger').removeClass('is-active');
             $('#navMenu').removeClass('is-active');
@@ -64,23 +75,70 @@ export default {
             e.preventDefault();
             history.pushState(null, null, e.target.href);
             app.route();
-        });
+        }.bind(this));
 
         history.replaceState(null, document.title, document.location.href);
 
         this.route();
+
+        if (this.user()) {
+            this.fetchUserAbilities(this.user().slug);
+        }
     },
 
     components: {
         home: HomePage,
         post: PostPage,
         editPost: EditPostPage,
+        newPost: NewPostPage,
         profile: ProfilePage,
         articleManagement: ArticleManagementPage,
         dashboard: DashboardPage
     },
 
     methods: {
+        mapUserAbilities(response) {
+            return response.data.map(abilitiy => {
+                return abilitiy.name;
+            });
+        },
+
+        loadUserAbilities(slug) {
+            return axios.get('/api/v1/user/' + slug + '/abilities');
+        },
+
+        fetchUserAbilities(slug) {
+            this.loadUserAbilities(slug)
+                .then(response => this.abilities[slug] = this.mapUserAbilities(response), response => this.error(response.error));
+        },
+
+        can(abilitiy, userSlug) {
+            var abilities = null;
+
+            if (! userSlug) {
+                if (0 === this.user().length) {
+                    return false;
+                }
+
+                userSlug = this.user().slug;
+            }
+
+
+            if (false === (userSlug in this.abilities)) {
+                this.fetchUserAbilities(userSlug);
+            }
+
+            abilities = this.abilities[userSlug] || null;
+
+            if (! abilities) {
+                return false;
+            }
+
+            return !! abilities.find(currentAbility => {
+                return abilitiy === currentAbility;
+            });
+        },
+
         /**
          * Set the alert type
          * @param {string} type Alert type
@@ -195,6 +253,10 @@ export default {
         },
 
         user() {
+            if (0 === window.mikeshellard.user.length) {
+                return null;
+            }
+
             return window.mikeshellard.user;
         },
 
@@ -209,6 +271,8 @@ export default {
             if (launcher && typeof launcher === 'function') {
                 launcher(this.params);
             }
+
+            this.loading = false;
         },
 
         route() {

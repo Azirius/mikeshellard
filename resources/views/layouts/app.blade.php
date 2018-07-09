@@ -12,6 +12,7 @@
 
     <!-- Theme CSS -->
     <link href="{{ mix('css/summernote-lite.css') }}" rel="stylesheet">
+    <link href="{{ mix('css/fontawesome-free-all.css') }}" rel="stylesheet">
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
     <link rel="stylesheet" 
         href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" 
@@ -20,7 +21,7 @@
 
     <script>
         window.mikeshellard = {
-            user: {!! collect(auth()->user())->only('name', 'id', 'email', 'gravatar')->toJson() !!},
+            user: {!! collect(auth()->user())->only('name', 'id', 'email', 'gravatar', 'slug')->toJson() !!},
             api_token: '{!! collect(auth()->user())->get('api_token') !!}',
             csrf_token: '{{ csrf_token() }}'
         };
@@ -43,7 +44,7 @@
               ></div>
             </div>
         </transition>
-        
+
         <transition name="fade" mode="out-in">
             <component :is="view"
                      ref="spa"
@@ -51,6 +52,15 @@
                      class="site-container"
             ></component>
         </transition>
+
+        
+        <transition name="fade" mode="out-in">
+            <div class="has-text-centered m-t-xxl m-b-xxl" v-if="loading" style="z-index: 4">
+                <div class="is-loading"></div>
+                <div class="m-xl is-clearfix has-text-info has-text-weight-bold">The page is loading!</div>
+            </div>
+        </transition>
+
         
         <footer class="footer">
             <div class="container">

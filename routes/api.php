@@ -4,6 +4,7 @@ Route::group(['prefix' => 'v1'], function () {
     Route::resource('user', 'Api\UserController', ['only' => ['show']]);
     Route::put('user/update-email', 'Api\UserController@updateEmail');
     Route::get('user/{user}/abilities', 'Api\UserController@getUsersAbilities');
+    Route::get('user/{user}/posts', 'Api\UserController@getUsersPosts');
     
     Route::resource('article', 'Api\ArticleController', ['only' => ['index', 'show']]);
 

@@ -17,7 +17,7 @@ class CreateArticlePagesTable extends Migration
             $table->increments('id');
             $table->integer('article_id');
             $table->string('subtitle');
-            $table->string('body');
+            $table->longText('body');
             $table->timestamps();
         });
     }

@@ -1,6 +1,7 @@
 <template>
-    <div v-if="user && abilities">
-        <section class="hero is-medium is-info">
+<div>
+    <div v-if="user">
+        <section class="hero is-medium is-info has-hero-background">
             <div class="hero-body">
                 <div class="container">
                     <h1 class="is-1 title">
@@ -15,21 +16,27 @@
             <div class="container container-into-hero">
                 <div class="card">
                     <div class="card-content">
-                        <div v-if="can('manage-articles') && posts" class="m-b-lg">
+                        <div class="m-b-lg">
                             <h1 class="title is-2 has-bottom-highlight">{{ user.name }}'s Posts!</h1>
-                            <div v-if="0 === posts.length">
-                                {{ user.name }} currently has no posts!
+                            <div v-if="posts">
+                                <div v-if="0 === posts.length">
+                                    {{ user.name }} currently has no posts!
+                                </div>
+                                <div class="blog-container" v-for="(post, index) in posts">
+                                    <article-post :user="user" :post="post">
+                                        <template slot="post-body">
+                                            <div class="m-b-xs is-clearfix" v-html="post.body_trimmed"></div>
+                                            <a :href="'/article/' + post.slug" class="has-text-grey">Click to read on...</a>
+                                        </template>
+                                    </article-post>
+                                    <hr v-if="index + 1 < posts.length" />
+                                </div>
                             </div>
-                            <div class="blog-container" v-for="(post, index) in posts">
-                                <article-post :user="user" :post="post">
-                                    <template slot="post-body">
-                                        <div class="m-b-xs">{{ post.body_trimmed }}</div>
-                                        <a :href="'/article/' + post.slug" class="has-text-grey">Click to read on...</a>
-                                    </template>
-                                </article-post>
-                                <hr v-if="index + 1 < posts.length" />
+                            <div v-else class="is-loading">
+                                Posts are loading...
                             </div>
                         </div>
+
                         <div>
                             <h1 class="title is-2 has-bottom-highlight">{{ user.name }}'s 10 most recent comments</h1>
                             <div v-if="0 === user.comments.length" class="notification is-info">
@@ -52,6 +59,10 @@
             </div>
         </section>
     </div>
+    <div class="is-loading has-text-centered" v-else>
+        Profile is loading...
+    </div>
+</div>
 </template>
 
 <script>
@@ -66,57 +77,41 @@ export default Page.extend({
             },
             user: null,
             posts: null,
-            abilities: null
         };
     },
 
     methods: {
         launch(slug) {
             this.fetchUser(slug);
-            this.fetchUserAbilities(slug);
+            this.$root.fetchUserAbilities(slug);
+            this.fetchUserPosts(slug);
         },
 
         setUserData(response) {
             this.user = response.data;
-            this.posts = response.data.articles;
         },
 
         loadUser(slug) {
             return axios.get('/api/v1/user/' + slug);
         },
 
+        setPostData(response) {
+            this.posts = response.data;
+        },
+
+        loadUserPosts(slug) {
+            return axios.get('/api/v1/user/' + slug + '/posts');
+        },
+
         fetchUser(slug) {
             this.loadUser(slug)
-                .then(this.setUserData, response => this.$root.error(response.error));
+                .then(this.setUserData, response => this.error(response.error));
+
         },
 
-        setUserAbilities(response) {
-            var abilities = response.data.map(abilitiy => {
-                return abilitiy.name;
-            });
-
-            this.abilities = abilities;
-        },
-
-        loadUserAbilities(slug) {
-            return axios.get('/api/v1/user/' + slug + '/abilities');
-        },
-
-        fetchUserAbilities(slug) {
-            this.loadUserAbilities(slug)
-                .then(this.setUserAbilities, response => this.$root.error(response.error));
-        },
-
-        can(abilitiy) {
-            var canUser = false;
-
-            this.abilities.forEach(currentAbility => {
-                if (abilitiy === currentAbility) {
-                    canUser = true;
-                }
-            });
-
-            return canUser;
+        fetchUserPosts(slug) {
+            this.loadUserPosts(slug)
+                .then(this.setPostData, response => this.error(response.error));
         }
     }
 });

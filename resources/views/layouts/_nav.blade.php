@@ -1,4 +1,4 @@
-        <nav class="navbar is-info highlight-top-bar" role="navigation">
+        <nav class="navbar is-info highlight-top-bar sticky" role="navigation">
             <div class="navbar-brand">
                 <a href="/" class="navbar-item is-size-4">
                     Mike Shellard

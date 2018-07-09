@@ -35,26 +35,6 @@ export function extend(to, from) {
 }
 
 /**
- * Create an instance of summernote
- * @param  {string} id ID of textarea to transform
- * @return {object}
- */
-export function createSummernote(id) {
-    var editor = $(`#${id}`).summernote({
-        minHeight: 300,
-        defaultFontName: 'Tahoma',
-        disableResizeEditor: true,
-        dialogsInBody: true
-    });
-
-    $('.note-editor').css({'height': '100%'});
-    $('.note-editing-area').css({'height': 'inherit'})
-    $('.note-resizebar').hide();
-
-    return editor;
-}
-
-/**
  * Debounce
  *
  * Usage: function(){}.debounce(threshold);

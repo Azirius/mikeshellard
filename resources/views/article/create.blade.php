@@ -28,89 +28,12 @@
         <div class="container container-into-hero">
             <div class="card">
                 <div class="card-content">
-                    <form action="/admin/article" method="post">
-                        {{ csrf_field() }}
-
-                        <div class="field">
-                            <div class="control">
-                                <label class="label" for="title">Title</label>
-                                <input type="text" class="input is-l{{ $errors->first('title', ' is-danger') }}" value="{{ old('title') }}" name="title" placeholder="Title">
-                                @if ($errors->first('title'))
-                                <div class="help is-danger">
-                                    {{ $errors->first('title') }}
-                                </div>
-                                @endif
-                            </div>
-                        </div>
-                        
-                        <div id="pages-container">
-                            @if (0 === count($pages))
-                                @include('article._form_page_partial', ['index' => 0, 'page' => new App\ArticlePage])
-                            @else
-                                @foreach($pages as $index => $page)
-                                    @include('article._form_page_partial', ['index' => $index, 'page' => new App\ArticlePage($page)])
-                                @endforeach
-                            @endif
-                        </div>
-
-                        <div class="field has-hero-background m-t-md">
-                            <div class="control">
-                                <button class="button is-info" style="background-color: transparent !important" id="addPage">Add Page</button>
-                            </div>
-                        </div>
-
-                        <div class="field is-grouped">
-                            <div class="control">
-                                <button class="button is-link is-submit">Add Article</button>
-                            </div>
-                            <div class="control">
-                                <a href="/admin/article" class="button is-text is-cancel">Cancel</a>
-                            </div>
-                        </div>
-                    </form>
+                    <div class="notification notification-info">
+                        This page relies on JavaScript
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 </div>
 @endsection
-
-@push('page-scripts')
-    $(function() {
-        var actual = $('textarea[name="body[]"]');
-        var clonableTextarea = $('#clonable-textarea');
-
-        $('#addPage').click(function (e) {
-            e.preventDefault();
-            var elementBeingAdded = clonableTextarea.clone();
-            elementBeingAdded.removeClass('is-hidden')
-                .removeAttr('id');
-            $('#pages-container .field:last-child').after(elementBeingAdded);
-            var textareaBeingAdded = elementBeingAdded.find('textarea');
-            textareaBeingAdded.addClass('summernote')
-                .attr('name', 'body[]') 
-                .summernote({height: 500});
-
-            var inputBeingAdded = elementBeingAdded.find('.input');
-            inputBeingAdded.attr('name', 'subtitle[]');
-        });
-
-        actual.each((index, element) => {
-            $(element).attr('required', false).hide();
-        });
-
-        var editor = $('.summernote').summernote({height: 500});
-
-        editor.summernote('code', actual.val());
-
-        actual.parents('form:first').on('submit', function(e) {
-            var editors = $('.summernote');
-            var editorCount = editors.length;
-            var actualTextareas = $('textarea[name="body[]"]');
-            
-            for (var i = 0; i < editorCount; i++) {
-                $(actualTextareas[i]).val($(editors.get(i)).summernote('code'));
-            }
-        });
-    });
-@endpush

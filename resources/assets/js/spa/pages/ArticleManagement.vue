@@ -57,7 +57,7 @@
                         <div v-for="post in posts">
                             <article-post :user="post.user" :post="post" class="m-b-md">
                                 <template slot="post-body">
-                                    <div class="m-b-xs">{{ post.body_trimmed }}</div>
+                                    <div class="m-b-xs is-clearfix" v-html="post.body_trimmed"></div>
                                     <a :href="'/article/' + post.slug" class="has-text-grey">Click to read on...</a>
                                 </template>
                             </article-post>

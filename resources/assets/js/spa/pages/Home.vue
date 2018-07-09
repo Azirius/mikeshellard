@@ -5,12 +5,12 @@
                 <div class="tabs is-toggle is-hidden-touch">
                     <div class="pull-left">
                         <ul>
-                            <li v-for="column in columns" :class="[field == column ? 'is-active' : '']">
-                                <a @click="sortBy(column)">
+                            <li v-for="(column, index) in columns" :class="[field == index ? 'is-active' : '']">
+                                <a @click="sortBy(index)">
                                     {{ column }}
-                                    <span class="icon is-small" v-show="field == column">
-                                        <i class="fas fa-arrow-circle-up" v-show="field == column && reverse == false"></i>
-                                        <i class="fas fa-arrow-circle-down" v-show="field == column && reverse == true"></i>
+                                    <span class="icon is-small" v-show="field == index">
+                                        <i class="fas fa-arrow-circle-up" v-show="field == index && reverse == false"></i>
+                                        <i class="fas fa-arrow-circle-down" v-show="field == index && reverse == true"></i>
                                     </span>
                                 </a>
                             </li>
@@ -54,7 +54,7 @@
                 <div class="blog-container" v-for="(post, index) in posts">
                     <article-post :user="post.user" :post="post" class="m-b-lg">
                         <template slot="post-body">
-                            <div class="m-b-xs">{{ post.body_trimmed }}</div>
+                            <div class="m-b-xs is-clearfix" v-html="post.body_trimmed"></div>
                             <a :href="'/article/' + post.slug" class="has-text-grey">Click to read on...</a>
                         </template>
                     </article-post>
@@ -89,9 +89,9 @@ export default Page.extend({
             field: 'Created',
             reverse: true,
             columns: {
-                published: 'Created',
-                title: 'Title',
-                author: 'Name'
+                Created: 'Created',
+                Title: 'Title',
+                Name: 'Author Name'
             },
             params: {
                 page: 1,

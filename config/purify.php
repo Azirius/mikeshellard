@@ -54,7 +54,7 @@ return [
         |
         */
 
-        'HTML.Doctype' => 'XHTML 1.0 Strict',
+        'HTML.Doctype' => 'HTML 4.01 Transitional', //'XHTML 1.0 Strict',
 
         /*
         |--------------------------------------------------------------------------
@@ -67,7 +67,7 @@ return [
         |
         */
 
-        'HTML.Allowed' => 'h1,h2,h3,h4,h5,h6,b,strong,i,em,a[href|title],ul,ol,li,p[style],br,span,img[width|height|alt|src]',
+        'HTML.Allowed' => 'h1[class],h2[class],h3[class],h4[class],h5[class],h6[class],b,strong,i,em,a[href|title],ul,ol,li,p[style],br,span,img[width|height|alt|src|style]',
 
         /*
         |--------------------------------------------------------------------------
@@ -97,8 +97,13 @@ return [
         | http://htmlpurifier.org/live/configdoc/plain.html#CSS.AllowedProperties
         |
         */
+        'CSS.Trusted' => true,
 
-        'CSS.AllowedProperties' => 'font,font-size,font-weight,font-style,font-family,text-decoration,padding-left,color,background-color,text-align',
+        'CSS.MaxImgLength' => null,
+
+        'CSS.AllowedProperties' => 
+            'float,font,font-size,font-weight,font-style,font-family,text-decoration,padding-left,color,background-color,text-align,width,height',
+
 
         /*
         |--------------------------------------------------------------------------
@@ -115,6 +120,8 @@ return [
         */
 
         'AutoFormat.AutoParagraph' => false,
+
+        'URI.AllowedSchemes' => ['data' => true],
 
         /*
         |--------------------------------------------------------------------------

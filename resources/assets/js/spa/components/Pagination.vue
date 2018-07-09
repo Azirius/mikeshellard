@@ -3,8 +3,8 @@
         <div class="pagination-focus">
             <slot v-for="item in itemsToDisplay" :item="item" name="pagination-item"></slot>
         </div>
-        <br>
-        <nav class="pagination" role="navigation" aria-label="pagination">
+        <nav class="pagination" role="navigation" aria-label="pagination" v-if="pages > 1">
+            <br>
             <ul class="pagination-list">
                 <li>
                     <a class="pagination-link" @click="goToFirstPage" :disabled="isOnFirstPage()">First Page</a>

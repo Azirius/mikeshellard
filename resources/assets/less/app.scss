@@ -13,7 +13,20 @@
 
 @import "../mikeshellard-theme/src/app.scss";
 
-.column.is-vcentered {
-  margin-top: auto;
-  margin-bottom: auto;
+* {
+    &.is-loading {
+        position: relative;
+        pointer-events: none;
+        opacity: 0.5;
+        &:after {
+            @include loader;
+            position: absolute;
+            top: 10%;
+            // top: calc(50% - 2.5em);
+            left: calc(50% - 2.5em);
+            width: 5em;
+            height: 5em;
+            border-width: 0.25em;
+        }
+    }
 }

@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Support\Collection;
 use Reflex\QueryFiltering\Filterable;
+use Stevebauman\Purify\Facades\Purify;
 use Illuminate\Database\Eloquent\Model;
 
 class Article extends Model
@@ -16,7 +17,7 @@ class Article extends Model
 
     protected $with = ['user', 'comments', 'pages'];
 
-    protected $appends = ['nice_created_at', 'nice_updated_at', 'body_trimmed', 'featured_comment', 'comment_count'];
+    protected $appends = ['nice_updated_at', 'nice_created_at', 'body_trimmed', 'featured_comment', 'comment_count'];
 
     public static function boot()
     {
@@ -92,7 +93,7 @@ class Article extends Model
 
     public function getBodyTrimmedAttribute()
     {
-        return count($this->pages) ? str_limit($this->pages[0]->body, 100) : 'No body here...';
+        return count($this->pages) ? Purify::clean($this->pages[0]->body) : 'No body here...';
     }
 
     public function scopeNewest($builder)
