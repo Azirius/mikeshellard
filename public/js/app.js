@@ -1652,11 +1652,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['user', 'post'],
 
-    name: 'ArticlePost'
+    name: 'ArticlePost',
+
+    methods: {
+        can: function can(abilitiy, userSlug) {
+            return this.$root.can(abilitiy, userSlug);
+        }
+    }
 });
 
 /***/ }),
@@ -23769,7 +23776,7 @@ var render = function() {
         })
       ]),
       _vm._v(" "),
-      _c("p", { staticClass: "blog-post-meta" }, [
+      _c("p", { staticClass: "blog-post-meta m-b-sm" }, [
         _c("i", { staticClass: "fa fa-user" }),
         _vm._v(" "),
         _c("a", {
@@ -23795,8 +23802,21 @@ var render = function() {
                 ? "s"
                 : ""
             ) +
-            "\n    "
-        )
+            "\n        "
+        ),
+        _vm.can("manage-articles")
+          ? _c("span", [
+              _c("i", { staticClass: "fa fa-pen-square" }),
+              _vm._v(" "),
+              _c(
+                "a",
+                {
+                  attrs: { href: "/admin/article/" + _vm.post.slug + "/edit" }
+                },
+                [_vm._v("Edit")]
+              )
+            ])
+          : _vm._e()
       ]),
       _vm._v(" "),
       _vm._t("post-body")
@@ -35958,7 +35978,7 @@ module.exports = Component.exports
             var abilities = null;
 
             if (!userSlug) {
-                if (0 === this.user().length) {
+                if (!this.user()) {
                     return false;
                 }
 

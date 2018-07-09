@@ -116,7 +116,7 @@ export default {
             var abilities = null;
 
             if (! userSlug) {
-                if (0 === this.user().length) {
+                if (! this.user()) {
                     return false;
                 }
 

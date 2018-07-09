@@ -16,11 +16,11 @@ class UserController extends Controller
      * @param  User   $user user instance
      * @return User
      */
-    public function show($user)
+    public function show(User $user)
     {
-        return User::whereSlug($user)->with(['comments' => function ($query) {
+        return $user->load(['comments' => function ($query) {
             return $query->with('article:id,title,slug,nice_updated_at,nice_created_at')->limit(10)->get();
-        }])->limit(1)->first();
+        }]);
     }
 
     public function getUsersAbilities(User $user)
