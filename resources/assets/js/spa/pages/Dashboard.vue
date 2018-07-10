@@ -58,7 +58,7 @@ export default Page.extend({
 
     methods: {
         childSetUp() {
-            eventHub.$on('change-email-modal:updated', () => {this.$root.success('Your email was successfully updated!')});
+            eventHub.$on('change-email-modal:updated', () => this.success('Your email was successfully updated!'));
         },
 
         showChangeEmailModal() {

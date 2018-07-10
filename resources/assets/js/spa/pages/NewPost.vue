@@ -88,6 +88,7 @@ export default Page.extend({
 
     methods: {
         launch() {
+            this.isLoading(false);
             this.addPage();
         },
 

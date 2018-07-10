@@ -106,8 +106,8 @@ export default Page.extend({
     },
 
     methods: {
-        launch(params) {
-            this.fetchPost(params.slug);
+        launch(slug) {
+            this.fetchPost(slug);
         },
 
         setPostData(response) {
@@ -115,6 +115,7 @@ export default Page.extend({
             this.author = this.post.user;
             this.comments = this.post.comments;
             this.featured_comment = this.post.featured_comment;
+            this.isLoading(false);
         },
 
         pushComment(response) {

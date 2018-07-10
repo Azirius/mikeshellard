@@ -23,7 +23,7 @@ export default {
             routes: {
                 '/': () => this.setView('home'),
 
-                'article/:slug': slug => this.setView('post', {slug}),
+                'article/:slug': slug => this.setView('post', slug),
 
                 'profile/:slug': slug => this.setView('profile', slug),
 
@@ -60,8 +60,6 @@ export default {
 
             return response;
         });
-
-        // this.router.after(() => this.loading = false);
 
         $(window).on('popstate', () => app.route());
 
@@ -271,8 +269,6 @@ export default {
             if (launcher && typeof launcher === 'function') {
                 launcher(this.params);
             }
-
-            this.loading = false;
         },
 
         route() {

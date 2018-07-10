@@ -52,12 +52,12 @@
                      class="site-container"
             ></component>
         </transition>
-
         
         <transition name="fade" mode="out-in">
             <div class="has-text-centered m-t-xxl m-b-xxl" v-if="loading" style="z-index: 4">
                 <div class="is-loading"></div>
-                <div class="m-xl is-clearfix has-text-info has-text-weight-bold">The page is loading!</div>
+                <br>
+                <div class="m-xl has-text-info has-text-weight-bold">The page is loading!</div>
             </div>
         </transition>
 

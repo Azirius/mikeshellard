@@ -128,6 +128,7 @@ export default Page.extend({
         },
 
         setPostData(response) {
+            this.isLoading(false);
             this.post = response.data;
             this.pages = response.data.pages.map(page => {
                 page.errors = {subtitle: null, body: null}

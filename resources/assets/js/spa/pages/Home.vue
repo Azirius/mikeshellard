@@ -60,11 +60,10 @@
                     </article-post>
                 </div>
                 <div class="loading-articles has-text-centered" v-if="loading_posts">
-                    <i class="fas fa-spinner fa-spin fa-4x"></i>
+                    <span class="is-loading"></span>
                     <br>
-                    <div class="has-text-info">Loading Posts....</div>
+                    <div class="has-text-info m-xl">Loading Posts....</div>
                 </div>
-                <div id="bottom"></div>
             </div>
         </div>
     </section>    
@@ -109,6 +108,7 @@ export default Page.extend({
     methods: {
         launch() {
             this.fetchNextPostSet();
+            this.isLoading(false);
         },
 
         customBottomCondition() {

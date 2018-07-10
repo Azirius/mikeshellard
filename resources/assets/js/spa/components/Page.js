@@ -49,6 +49,10 @@ export default Vue.extend({
          */
         success(notification) {
             return this.$root.success(notification);
+        },
+
+        isLoading(loading) {
+            this.$root.loading = loading;
         }
     },
 

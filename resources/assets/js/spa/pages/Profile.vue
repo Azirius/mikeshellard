@@ -32,8 +32,12 @@
                                     <hr v-if="index + 1 < posts.length" />
                                 </div>
                             </div>
-                            <div v-else class="is-loading">
-                                Posts are loading...
+                            <div v-else>
+                                <div class="has-text-centered m-t-xxl m-b-xxl" style="z-index: 4">
+                                    <div class="is-loading"></div>
+                                    <br>
+                                    <div class="m-xl has-text-info has-text-weight-bold">Profile is loading!</div>
+                                </div>
                             </div>
                         </div>
 
@@ -58,9 +62,6 @@
                 </div>
             </div>
         </section>
-    </div>
-    <div class="is-loading has-text-centered" v-else>
-        Profile is loading...
     </div>
 </div>
 </template>
@@ -89,6 +90,7 @@ export default Page.extend({
 
         setUserData(response) {
             this.user = response.data;
+            this.isLoading(false);
         },
 
         loadUser(slug) {
