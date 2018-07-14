@@ -5,6 +5,9 @@ import NewPostPage from './pages/NewPost.vue';
 import ProfilePage from './pages/Profile.vue';
 import ArticleManagementPage from './pages/ArticleManagement.vue';
 import DashboardPage from './pages/Dashboard.vue';
+import AboutMePage from './pages/AboutMe.vue';
+import AboutMeAudioPage from './pages/AboutMeAudio.vue';
+import PageNotFound from './pages/PageNotFound.vue';
 import {getURI, removeActiveClassFromParentListItems, addActiveClassToParentListItem} from '../helpers.js';
 
 export default {
@@ -21,19 +24,25 @@ export default {
             abilities: {},
 
             routes: {
-                '/': () => this.setView('home'),
+                '/': () => this.setView('HomePage'),
 
-                'article/:slug': slug => this.setView('post', slug),
+                'article/:slug': slug => this.setView('PostPage', slug),
 
-                'profile/:slug': slug => this.setView('profile', slug),
+                'profile/:slug': slug => this.setView('ProfilePage', slug),
 
-                'admin/article': () => this.setView('articleManagement'),
+                'admin/article': () => this.setView('ArticleManagementPage'),
                 
-                'admin/article/:slug/edit': slug => this.setView('editPost', slug),
+                'admin/article/:slug/edit': slug => this.setView('EditPostPage', slug),
 
-                'admin/article/create': () => this.setView('newPost'),
+                'admin/article/create': () => this.setView('NewPostPage'),
+                
+                'about-me/audio-gear': () => this.setView('AboutMeAudioPage'),
 
-                'dashboard': () => this.setView('dashboard')
+                'about-me': () => this.setView('AboutMePage'),
+
+                'dashboard': () => this.setView('DashboardPage'),
+
+                '404': () => this.setView('PageNotFound'),
             },
 
             router: null,
@@ -50,20 +59,20 @@ export default {
                 document.location = uri;
                 return response;
             }
-
-            if (! router.isInitial || null != router.current) {
-                $('#non-spa').hide();
-            }
-
+            
             removeActiveClassFromParentListItems();
             addActiveClassToParentListItem(`a[href="${uri}"]`);
+
+            if (null === response) {
+                return router.redirect('/404');
+            }
 
             return response;
         });
 
-        $(window).on('popstate', () => app.route());
+        $(window).on('popstate', () => this.route());
 
-        $('#app-container').on('click', 'a:not(.prevent)', function (e) {
+        $('#app-container').on('click', 'a:not(.prevent)', (e) => {
             this.loading = e.target.pathname !== document.location.pathname;
 
             // Hide navbar drop down on 'mobile'
@@ -72,8 +81,8 @@ export default {
 
             e.preventDefault();
             history.pushState(null, null, e.target.href);
-            app.route();
-        }.bind(this));
+            this.route();
+        });
 
         history.replaceState(null, document.title, document.location.href);
 
@@ -85,13 +94,16 @@ export default {
     },
 
     components: {
-        home: HomePage,
-        post: PostPage,
-        editPost: EditPostPage,
-        newPost: NewPostPage,
-        profile: ProfilePage,
-        articleManagement: ArticleManagementPage,
-        dashboard: DashboardPage
+        HomePage,
+        PostPage,
+        EditPostPage,
+        NewPostPage,
+        ProfilePage,
+        ArticleManagementPage,
+        DashboardPage,
+        AboutMePage,
+        AboutMeAudioPage,
+        PageNotFound,
     },
 
     methods: {

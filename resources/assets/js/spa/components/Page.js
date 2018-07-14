@@ -7,12 +7,11 @@ export default Vue.extend({
 
     mounted: function () {
         this.onLoad(this);
-        this.childSetUp();
     },
 
     methods: {
-        childSetUp() {
-
+        launch() {
+            this.isLoading(false);
         },
 
         can(abilitiy, slug) {

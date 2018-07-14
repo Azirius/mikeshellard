@@ -8,7 +8,7 @@ class Comment extends Model
 {
     protected $fillable = ['body', 'user_id', 'article_id'];
 
-    protected $appends = ['nice_created_at', 'nice_updated_at', 'authors_name', 'authors_slug'];
+    protected $appends = ['authors_name', 'authors_slug', 'nice_created_at', 'nice_updated_at'];
 
     public function feature()
     {

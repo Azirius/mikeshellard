@@ -35,6 +35,37 @@ export function extend(to, from) {
 }
 
 /**
+ * Key exists in array
+ * @param  {string} key   Key to lookup
+ * @param  {array}  array Object to look in
+ * @return {boolean}       
+ */
+export function exists(key, array) {
+    return is_object(array) && key in array;
+}
+
+/**
+ * Assert something is an object
+ * @param  {mixed}   thing      Thing to check
+ * @return {Boolean}            
+ */
+export function is_object(thing) {
+    return is_type(thing, 'object');
+}
+
+/**
+ * Assert something is something
+ * @param  {mixed}   thing      Thing to check
+ * @param  {string}  assertThis Type to check against
+ * @return {Boolean}            
+ */
+export function is_type(thing, assertThis) {
+    let typeString = Object.prototype.toString.call(thing);
+
+    return typeString.toLowerCase() === '[object ' + assertThis.toLowerCase() + ']';
+}
+
+/**
  * Debounce
  *
  * Usage: function(){}.debounce(threshold);
