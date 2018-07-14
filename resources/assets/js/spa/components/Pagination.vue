@@ -3,21 +3,21 @@
         <div class="pagination-focus">
             <slot v-for="item in itemsToDisplay" :item="item" name="pagination-item"></slot>
         </div>
-        <nav class="pagination m-t-md is-centered" role="navigation" aria-label="pagination" v-if="pages > 1">
+        <nav class="pagination m-t-md is-centered" role="navigation" aria-label="pagination" v-if="pages.length > 1">
             <ul class="pagination-list">
-                <li>
+                <li v-if="showPreviousButton">
                     <a class="pagination-previous prevent" @click="goToPreviousPage" :disabled="isOnFirstPage()">&laquo;</a>
                 </li>
-                <li>
+                <li v-if="showFirstButton">
                     <a class="pagination-previous prevent" @click="goToFirstPage" :disabled="isOnFirstPage()">First Page</a>
                 </li>
-                <li v-for="page in pages" :key="page">
-                    <a class="pagination-link prevent" :class="{'is-current': (page) === currentPage}" @click="goToThisPage(page)" v-text="page"></a>
+                <li v-if="showNumberedList" v-for="page in pages" :key="page.value">
+                    <a class="pagination-link prevent" :class="{'is-current': page.value === currentPage}" @click="goToThisPage(page.value)" v-text="page.label"></a>
                 </li>
-                <li>
+                <li v-if="showLastButton">
                     <a class="pagination-next prevent" @click="goToLastPage" :disabled="isOnLastPage()">Last Page</a>
                 </li>
-                <li>
+                <li v-if="showNextButton">
                     <a class="pagination-next prevent" @click="goToNextPage" :disabled="isOnAllButLastPage()">&raquo;</a>
                 </li>
             </ul>
@@ -32,14 +32,46 @@
         props: {
             items: {
                 type: [Array, Object],
-                default: Array
+                default: Array,
             },
-            perPage: Number
+
+            perPage: Number,
+
+            listLength: {
+                type: Number,
+                default: 4,
+                validator: (value) => 0 === (value % 2), 
+            },
+
+            showPreviousButton: {
+                type: Boolean,
+                default: true,
+            },
+
+            showNextButton: {
+                type: Boolean,
+                default: true,
+            },
+
+            showLastButton: {
+                type: Boolean,
+                default: true,
+            },
+
+            showFirstButton: {
+                type: Boolean,
+                default: true,
+            },
+
+            showNumberedList: {
+                type: Boolean,
+                default: true,
+            },
         },
     
         data() {
             return {
-                currentPage: 1,
+                currentPage: 0,
             };
         },
     
@@ -65,19 +97,41 @@
             },
     
             pages() {
-                return Math.ceil(this.itemCount / this.perPage);
+                var start = this.currentPage - this.offset;
+                var end = this.currentPage + this.offset;
+
+                if (this.totalPages <= this.listLength) {
+                    start = 0;
+                    end = this.totalPages;
+                } else if (this.currentPage <= this.offset) {
+                    start = 0;
+                    end = this.listLength;
+                } else if ((this.currentPage + this.offset) >= this.totalPages) {
+                    start = this.totalPages - this.listLength;
+                    end = this.totalPages;
+                }
+
+                return this.generateRange(start, end);
+            },
+
+            offset() {
+                return Math.ceil(this.listLength / 2);
             },
     
             lastPage() {
-                return this.pages;
+                return this.totalPages - 1;
             },
     
             firstPage() {
-                return 1;
+                return 0;
+            },
+
+            totalPages() {
+                return Math.ceil(this.itemCount / this.perPage);
             },
     
             itemsToDisplay() {
-                var from = (this.currentPage-1) * this.perPage;
+                var from = (this.currentPage) * this.perPage;
                 var to = from + this.perPage;
                 
                 return this.pageItems.slice(from, to);
@@ -85,6 +139,15 @@
         },
     
         methods: {
+            generateRange(start, end) {
+                return Array(end - start).fill().map((_, idx) => {
+                    return { 
+                        value: start + idx, 
+                        label: (start + idx) + 1 
+                    } 
+                });
+            },
+
             goToFirstPage() {
                 this.setPage(this.firstPage);
             },
@@ -94,30 +157,23 @@
             },
     
             goToNextPage() {
-                if ((this.currentPage + 1) > this.lastPage) {
-                    return;
-                }
-    
                 this.setPage(this.currentPage + 1);
             },
     
             goToPreviousPage() {
-                if (this.currentPage === 1) {
-                    return;
-                }
-                
                 this.setPage(this.currentPage - 1);
             },
     
             goToThisPage(page) {
-                if (page < 1 || page > this.lastPage) {
-                    return;
-                }
-    
                 this.setPage(page);
             },
     
             setPage(page) {
+                if (page >= this.totalPages
+                    || page < 0) {
+                    return;
+                }
+                
                 this.currentPage = page;
             },
     

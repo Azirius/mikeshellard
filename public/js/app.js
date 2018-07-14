@@ -1885,12 +1885,46 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             type: [Array, Object],
             default: Array
         },
-        perPage: Number
+
+        perPage: Number,
+
+        listLength: {
+            type: Number,
+            default: 4,
+            validator: function validator(value) {
+                return 0 === value % 2;
+            }
+        },
+
+        showPreviousButton: {
+            type: Boolean,
+            default: true
+        },
+
+        showNextButton: {
+            type: Boolean,
+            default: true
+        },
+
+        showLastButton: {
+            type: Boolean,
+            default: true
+        },
+
+        showFirstButton: {
+            type: Boolean,
+            default: true
+        },
+
+        showNumberedList: {
+            type: Boolean,
+            default: true
+        }
     },
 
     data: function data() {
         return {
-            currentPage: 1
+            currentPage: 0
         };
     },
 
@@ -1919,16 +1953,36 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             return this.pageItems.length;
         },
         pages: function pages() {
-            return Math.ceil(this.itemCount / this.perPage);
+            var start = this.currentPage - this.offset;
+            var end = this.currentPage + this.offset;
+
+            if (this.totalPages <= this.listLength) {
+                start = 0;
+                end = this.totalPages;
+            } else if (this.currentPage <= this.offset) {
+                start = 0;
+                end = this.listLength;
+            } else if (this.currentPage + this.offset >= this.totalPages) {
+                start = this.totalPages - this.listLength;
+                end = this.totalPages;
+            }
+
+            return this.generateRange(start, end);
+        },
+        offset: function offset() {
+            return Math.ceil(this.listLength / 2);
         },
         lastPage: function lastPage() {
-            return this.pages;
+            return this.totalPages - 1;
         },
         firstPage: function firstPage() {
-            return 1;
+            return 0;
+        },
+        totalPages: function totalPages() {
+            return Math.ceil(this.itemCount / this.perPage);
         },
         itemsToDisplay: function itemsToDisplay() {
-            var from = (this.currentPage - 1) * this.perPage;
+            var from = this.currentPage * this.perPage;
             var to = from + this.perPage;
 
             return this.pageItems.slice(from, to);
@@ -1936,6 +1990,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
 
     methods: {
+        generateRange: function generateRange(start, end) {
+            return Array(end - start).fill().map(function (_, idx) {
+                return {
+                    value: start + idx,
+                    label: start + idx + 1
+                };
+            });
+        },
         goToFirstPage: function goToFirstPage() {
             this.setPage(this.firstPage);
         },
@@ -1943,27 +2005,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.setPage(this.lastPage);
         },
         goToNextPage: function goToNextPage() {
-            if (this.currentPage + 1 > this.lastPage) {
-                return;
-            }
-
             this.setPage(this.currentPage + 1);
         },
         goToPreviousPage: function goToPreviousPage() {
-            if (this.currentPage === 1) {
-                return;
-            }
-
             this.setPage(this.currentPage - 1);
         },
         goToThisPage: function goToThisPage(page) {
-            if (page < 1 || page > this.lastPage) {
-                return;
-            }
-
             this.setPage(page);
         },
         setPage: function setPage(page) {
+            if (page >= this.totalPages || page < 0) {
+                return;
+            }
+
             this.currentPage = page;
         },
         isOnFirstPage: function isOnFirstPage() {
@@ -22913,7 +22967,7 @@ var render = function() {
       2
     ),
     _vm._v(" "),
-    _vm.pages > 1
+    _vm.pages.length > 1
       ? _c(
           "nav",
           {
@@ -22925,68 +22979,80 @@ var render = function() {
               "ul",
               { staticClass: "pagination-list" },
               [
-                _c("li", [
-                  _c(
-                    "a",
-                    {
-                      staticClass: "pagination-previous prevent",
-                      attrs: { disabled: _vm.isOnFirstPage() },
-                      on: { click: _vm.goToPreviousPage }
-                    },
-                    [_vm._v("«")]
-                  )
-                ]),
+                _vm.showPreviousButton
+                  ? _c("li", [
+                      _c(
+                        "a",
+                        {
+                          staticClass: "pagination-previous prevent",
+                          attrs: { disabled: _vm.isOnFirstPage() },
+                          on: { click: _vm.goToPreviousPage }
+                        },
+                        [_vm._v("«")]
+                      )
+                    ])
+                  : _vm._e(),
                 _vm._v(" "),
-                _c("li", [
-                  _c(
-                    "a",
-                    {
-                      staticClass: "pagination-previous prevent",
-                      attrs: { disabled: _vm.isOnFirstPage() },
-                      on: { click: _vm.goToFirstPage }
-                    },
-                    [_vm._v("First Page")]
-                  )
-                ]),
+                _vm.showFirstButton
+                  ? _c("li", [
+                      _c(
+                        "a",
+                        {
+                          staticClass: "pagination-previous prevent",
+                          attrs: { disabled: _vm.isOnFirstPage() },
+                          on: { click: _vm.goToFirstPage }
+                        },
+                        [_vm._v("First Page")]
+                      )
+                    ])
+                  : _vm._e(),
                 _vm._v(" "),
                 _vm._l(_vm.pages, function(page) {
-                  return _c("li", { key: page }, [
-                    _c("a", {
-                      staticClass: "pagination-link prevent",
-                      class: { "is-current": page === _vm.currentPage },
-                      domProps: { textContent: _vm._s(page) },
-                      on: {
-                        click: function($event) {
-                          _vm.goToThisPage(page)
-                        }
-                      }
-                    })
-                  ])
+                  return _vm.showNumberedList
+                    ? _c("li", { key: page.value }, [
+                        _c("a", {
+                          staticClass: "pagination-link prevent",
+                          class: {
+                            "is-current": page.value === _vm.currentPage
+                          },
+                          domProps: { textContent: _vm._s(page.label) },
+                          on: {
+                            click: function($event) {
+                              _vm.goToThisPage(page.value)
+                            }
+                          }
+                        })
+                      ])
+                    : _vm._e()
                 }),
                 _vm._v(" "),
-                _c("li", [
-                  _c(
-                    "a",
-                    {
-                      staticClass: "pagination-next prevent",
-                      attrs: { disabled: _vm.isOnLastPage() },
-                      on: { click: _vm.goToLastPage }
-                    },
-                    [_vm._v("Last Page")]
-                  )
-                ]),
+                _vm.showLastButton
+                  ? _c("li", [
+                      _c(
+                        "a",
+                        {
+                          staticClass: "pagination-next prevent",
+                          attrs: { disabled: _vm.isOnLastPage() },
+                          on: { click: _vm.goToLastPage }
+                        },
+                        [_vm._v("Last Page")]
+                      )
+                    ])
+                  : _vm._e(),
                 _vm._v(" "),
-                _c("li", [
-                  _c(
-                    "a",
-                    {
-                      staticClass: "pagination-next prevent",
-                      attrs: { disabled: _vm.isOnAllButLastPage() },
-                      on: { click: _vm.goToNextPage }
-                    },
-                    [_vm._v("»")]
-                  )
-                ])
+                _vm.showNextButton
+                  ? _c("li", [
+                      _c(
+                        "a",
+                        {
+                          staticClass: "pagination-next prevent",
+                          attrs: { disabled: _vm.isOnAllButLastPage() },
+                          on: { click: _vm.goToNextPage }
+                        },
+                        [_vm._v("»")]
+                      )
+                    ])
+                  : _vm._e()
               ],
               2
             )
