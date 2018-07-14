@@ -41,6 +41,7 @@ mix.scripts(
 );
 mix.styles('node_modules/summernote/dist/summernote-lite.css', 'public/css/summernote-lite.css');
 mix.styles('node_modules/@fortawesome/fontawesome-free/css/all.css', 'public/css/fontawesome-free-all.css');
+mix.copy('node_modules/@fortawesome/fontawesome-free/webfonts', 'public/webfonts');
 mix.copy('node_modules/summernote/dist/font', 'public/css/font');
 mix.styles('node_modules/mikeshellard-theme/dist/login.css', 'public/css/login.css');
 mix.js('resources/assets/js/app.js', 'public/js/app.js');

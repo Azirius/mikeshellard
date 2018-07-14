@@ -7,12 +7,12 @@
                 <div class="is-hidden-touch tabs is-toggle">
                     <div class="pull-left">
                         <ul>
-                            <li v-for="column in columns" :class="[field == column ? 'is-active' : '']">
-                                <a @click="sortBy(column)">
+                            <li v-for="(column, index) in columns" :class="[field == index ? 'is-active' : '']">
+                                <a @click="sortBy(index)">
                                     {{ column }}
-                                    <span class="icon is-small" v-show="field == column">
-                                        <i class="fas fa-arrow-circle-up" v-show="field == column && reverse == false"></i>
-                                        <i class="fas fa-arrow-circle-down" v-show="field == column && reverse == true"></i>
+                                    <span class="icon is-small" v-show="field == index">
+                                        <i class="fas fa-arrow-circle-up" v-show="field == index && reverse == false"></i>
+                                        <i class="fas fa-arrow-circle-down" v-show="field == index && reverse == true"></i>
                                     </span>
                                 </a>
                             </li>
@@ -72,17 +72,39 @@
                             <div class="has-text-info m-xl">Loading Posts....</div>
                         </div>
                     </div>
-                    <div class="column">
-                        <h2 class="title">Options</h2>
-                        <ul>
-                            <li>
-                                <a href="/admin/article/create">
-                                    <i class="fas fa-edit"></i>
-                                    Create new Article    
-                                </a>
-                            </li>
+                    <aside class="menu column">
+                        <p class="menu-label">
+                            General
+                        </p>
+                        <ul class="menu-list">
+                            <li><a href="/admin/dashboard">Dashboard</a></li>
                         </ul>
-                    </div>
+
+                        <p class="menu-label">
+                            Article Management
+                        </p>
+                        <ul class="menu-list">
+                            <li><a href="/admin/article">Overview</a></li>
+                            <li><a href="/admin/article/create">Publish New Article</a></li>
+                        </ul>
+
+                        <p class="menu-label">
+                            User Management
+                        </p>
+                        <ul class="menu-list">
+                            <li><a href="/admin/user">Overview</a></li>
+                            <li><a href="/admin/user/create">Create a New User</a></li>
+                        </ul>
+
+                        <p class="menu-label">
+                            Role &amp; Permission Managment
+                        </p>
+                        <ul class="menu-list">
+                            <li><a href="/admin/authorisation">Overview</a></li>
+                            <li><a href="/admin/authorisation/permission/create">Create New Permission</a></li>
+                            <li><a href="/admin/authorisation/role/create">Create New Permission</a></li>
+                        </ul>
+                    </aside>
                 </div>
             </div>
         </div>
@@ -105,7 +127,7 @@ export default Page.extend({
     data() {
         return {
             view: {
-                name: 'article-management',
+                name: 'ArticleManagement',
                 title: 'Article Management'
             },
             showDeleteArticleModalState: false,
@@ -114,9 +136,9 @@ export default Page.extend({
             field: 'Created',
             reverse: true,
             columns: {
-                published: 'Created',
-                title: 'Title',
-                author: 'Name'
+                Created: 'Created',
+                Title: 'Title',
+                Name: 'Author Name'
             },
             queryParams: {
                 page: 1,
@@ -134,6 +156,8 @@ export default Page.extend({
 
     methods: {
         launch() {
+            eventHub.$on('article:deleted', this.removeArticle);
+            this.fetchNextPostSet();
             this.isLoading(false);
         },
 
@@ -145,16 +169,11 @@ export default Page.extend({
             this.fetchNextPostSet();
         },
 
-        childSetUp() {
-            this.fetchNextPostSet();
-            eventHub.$on('article:deleted', this.removeArticle);
-        },
-
         addPostsToArray(response) {
             let posts = response.data.data;
 
             if (! posts || 0 === posts.length) {
-                this.$root.info('You have reached the last page!');
+                this.info('You have reached the last page!');
                 this.last_page = true;
             } else {
                 posts.forEach(post => this.posts.push(post));
@@ -219,7 +238,7 @@ export default Page.extend({
         removeArticle(article) {
             var index = this.posts.indexOf(article);
             this.posts.splice(index, 1);
-            this.$root.success('Article successfully deleted!');
+            this.success('Article successfully deleted!');
         },
     }
 });

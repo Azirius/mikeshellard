@@ -18,9 +18,7 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        return $user->load(['comments' => function ($query) {
-            return $query->with('article:id,title,slug,nice_updated_at,nice_created_at')->limit(10)->get();
-        }]);
+        return $user;
     }
 
     public function getUsersAbilities(User $user)
@@ -31,6 +29,11 @@ class UserController extends Controller
     public function getUsersPosts(User $user)
     {
         return $user->articles;
+    }
+
+    public function getUsersComments(User $user)
+    {
+        return $user->comments()->with('article:id,title,slug,created_at')->limit(10)->get();
     }
 
     public function updateEmail()

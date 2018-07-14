@@ -77,7 +77,7 @@ export default Page.extend({
     data() {
         return {
             view: {
-                name: 'create-article',
+                name: 'NewPost',
                 title: 'Create Article'
             },
             post: { title: null },

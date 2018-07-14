@@ -80,7 +80,7 @@ export default Page.extend({
     data() {
         return {
             view: {
-                name: 'home',
+                name: 'HomePage',
                 title: 'Home'
             },
             posts: [],
@@ -123,7 +123,7 @@ export default Page.extend({
             let posts = response.data.data;
 
             if (! posts || 0 === posts.length) {
-                this.$root.info('You have reached the last page!');
+                this.info('You have reached the last page!');
                 this.last_page = true;
             } else {
                 posts.forEach(post => this.posts.push(post));
@@ -149,7 +149,7 @@ export default Page.extend({
             urlParameters[this.field] = this.reverse ? 'desc' : 'asc';
 
             this.loadPosts(queryString.stringify(urlParameters))
-                .then(this.addPostsToArray, response => this.$root.error(response.error));
+                .then(this.addPostsToArray, response => this.error(response.error));
 
             if (this.bottomVisible()) {
                 this.fetchNextPostSet();

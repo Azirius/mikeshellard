@@ -17,7 +17,7 @@ class Article extends Model
 
     protected $with = ['user', 'comments', 'pages'];
 
-    protected $appends = ['nice_updated_at', 'nice_created_at', 'body_trimmed', 'featured_comment', 'comment_count'];
+    protected $appends = ['body_trimmed', 'featured_comment', 'comment_count', 'nice_created_at'];
 
     public static function boot()
     {

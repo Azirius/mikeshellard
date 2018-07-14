@@ -45,12 +45,12 @@
                                     My Profile
                                 </a>
                                 @can('manage-articles')
-                                <a href="{{ url(route('admin.article.index')) }}" class="navbar-item">
+                                <a href="/admin/article" class="navbar-item">
                                     <i class="fa fa-btn fa-archive"></i>
                                     &nbsp;
                                     Article Management
                                 </a>
-                                <a href="{{ url(route('admin.article.create')) }}" class="navbar-item">
+                                <a href="/admin/article/create" class="navbar-item">
                                     <i class="fa fa-btn fa-edit"></i>
                                     &nbsp;
                                     Add Article
